@@ -19,13 +19,16 @@ import com.revrobotics.spark.SparkBase.ControlType;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private static SparkFlex intakeMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_ID,
+    private static SparkFlex intakeWheelsMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_ID,
             MotorType.kBrushless);
 
     private static SparkFlex intakeRotatorMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_ID,
             MotorType.kBrushless);
     private static SparkClosedLoopController intakeRotatorPIDController;
     public static SparkFlexConfig intakeRotatorConfig = new SparkFlexConfig();
+
+    private static SparkClosedLoopController intakeWheelsMotorPIDController;
+    public static SparkFlexConfig intakeWheelsMotorConfig = new SparkFlexConfig();
 
     public IntakeSubsystem() {
         intakeRotatorConfig.closedLoop.pid(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_P,
@@ -34,18 +37,25 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeRotatorMotor.configure(intakeRotatorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         intakeRotatorPIDController = intakeRotatorMotor.getClosedLoopController();
+
+        intakeWheelsMotorConfig.closedLoop.pid(Constants.ShooterConstants.SHOOTER_MOTOR_P,
+                Constants.ShooterConstants.SHOOTER_MOTOR_I,
+                Constants.ShooterConstants.SHOOTER_MOTOR_D);
+        intakeWheelsMotor.configure(intakeWheelsMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
+                com.revrobotics.PersistMode.kNoPersistParameters);
+       intakeWheelsMotorPIDController = intakeWheelsMotor.getClosedLoopController();
     }
 
     public void startIntakeMotor() {
-        intakeMotor.set(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM);
+        intakeWheelsMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM, ControlType.kVelocity);
     }
 
     public void reverseIntakeMotor() {
-        intakeMotor.set(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM * -1);
+        intakeWheelsMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM * -1, ControlType.kVelocity);
     }
 
     public void stopIntakeMotor() {
-        intakeMotor.set(0);
+        intakeWheelsMotor.set(0);
     }
 
     public Command startIntakeMotorCommand() {
