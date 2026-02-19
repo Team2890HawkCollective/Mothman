@@ -270,37 +270,6 @@ public class RobotContainer {
         drivebase.setMotorBrake(brake);
     }
 
-    public Command aimAtHopperCommand(DoubleSupplier xSup, DoubleSupplier ySup) {
-        try (PIDController aimPIDs = new PIDController(0.3, 0, 0.001)) {
-            aimPIDs.setTolerance(1.0);
-
-            return Commands.run(() -> {
-
-                double xSpeed = xSup.getAsDouble();
-                double ySpeed = ySup.getAsDouble();
-
-                double rot = 0.0;
-
-                if (LimelightHelpers.getTV("limelight")) {
-                    double tx = LimelightHelpers.getTX("limelight");
-                    rot = aimPIDs.calculate(tx, 0);
-                    rot = MathUtil.clamp(rot, -1.5, 1.5);
-                }
-
-                drivebase.drive(new Translation2d(xSpeed, ySpeed), rot, false);
-            },
-                    drivebase);
-        }
-    }
-
-    public SwerveSubsystem getSwerveDriveBase() {
-        return drivebase;
-    }
-
-    public CommandXboxController getDriverXbox() {
-        return driverXbox;
-    }
-
     public SequentialCommandGroup fullShootFuelSystemCommand = new SequentialCommandGroup(
             // m_ShooterSubsystem.moveActuatorCommand(Constants.ShooterConstants.DESIRED_POTENTIOMETER_DISTANCE),
             m_ShooterSubsystem.shootFuelCommand(), m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly());

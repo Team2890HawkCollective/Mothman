@@ -37,11 +37,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void startIntakeMotor() {
-        intakeMotor.set(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_SPEED);
+        intakeMotor.set(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM);
     }
 
     public void reverseIntakeMotor() {
-        intakeMotor.set(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_SPEED * -1);
+        intakeMotor.set(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM * -1);
     }
 
     public void stopIntakeMotor() {

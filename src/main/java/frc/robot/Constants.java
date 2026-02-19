@@ -63,29 +63,32 @@ public final class Constants {
     }
 
     public static class ShooterConstants {
-        private static GenericEntry shooterVelocity = programmingTab.add("Desired Shooter Velocity", -0.5)
+        private static GenericEntry shooterVelocity = programmingTab.add("Desired Shooter RPM", -1000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
-        public static double SHOOTER_VELOCITY = -0.6;
+        public static double SHOOTER_RPM = -0.6;
         public static double SHOOTER_POWER = -0.45;
 
         public static void getShooterVelocity() {
-            SHOOTER_VELOCITY = shooterVelocity.getDouble(-0.5);
+            SHOOTER_RPM = shooterVelocity.getDouble(-1000);
         }
 
         public static final int CENTER_SHOOTER_MOTOR_ID = 42;
         public static final int LEFT_SHOOTER_MOTOR_ID = 41;
         public static final int RIGHT_SHOOTER_MOTOR_ID = 40;
         public static final int INDEXER_MOTOR_ID = 43;
-        public static double INDEXER_MOTOR_SPEED = 0.6;
+        public static double INDEXER_AND_RAMP_MOTOR_RPM;
 
-        private static GenericEntry indexerAndRampSpeed = programmingTab.add("Desired Ramp + Indexer Speed", 0.6)
+        public static double SHOOTER_MOTOR_P = 0.001;
+        public static double SHOOTER_MOTOR_I = 0;
+        public static double SHOOTER_MOTOR_D = 0;
+        private static GenericEntry indexerAndRampRPM = programmingTab.add("Desired Ramp + Indexer Speed", 1000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
         // this method called in robot periodic so values updated in elastic are
         // constantly read and applied to RAMP_MOTOR_SPEED
-        public static void getRampMotorSpeed() {
-            INDEXER_MOTOR_SPEED = indexerAndRampSpeed.getDouble(.6);
+        public static void getIndexerAndRampMotorRPM() {
+            INDEXER_AND_RAMP_MOTOR_RPM = indexerAndRampRPM.getDouble(1000);
         }
 
         public static final int LEFT_ACTUATOR_PWM_PORT = 1;
@@ -97,13 +100,12 @@ public final class Constants {
     }
 
     public static class IntakeConstants {
-        private static GenericEntry intakeSpeed = programmingTab.add("Desired Intake Speed", -0.4)
+        private static GenericEntry intakeRPM = programmingTab.add("Desired Intake RPM", -1000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
-
-        public static double INTAKE_WHEELS_MOTOR_SPEED;
+        public static double INTAKE_WHEELS_MOTOR_RPM;
 
         public static void getIntakeWheelsSpeed() {
-            INTAKE_WHEELS_MOTOR_SPEED = intakeSpeed.getDouble(-0.4);
+            INTAKE_WHEELS_MOTOR_RPM = intakeRPM.getDouble(-1000);
         }
 
         public static final int INTAKE_WHEELS_MOTOR_ID = 50;
