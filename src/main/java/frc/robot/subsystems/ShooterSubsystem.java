@@ -96,7 +96,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setShooterMotorsRPM() {
         centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
         leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
-        rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
+        //rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
     }
 
     public double getShooterMotorRPM() {
@@ -127,10 +127,12 @@ public class ShooterSubsystem extends SubsystemBase {
      
 
     public void stopShooters() {
+
         centerShooterMotor.set(0);
         leftShooterMotor.set(0);
-        rightShooterMotor.set(0);
+        //rightShooterMotor.set(0);
         indexerAndRampMotor.set(0);
+
     }
 
     public Command stopShooterCommand() {

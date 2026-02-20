@@ -89,11 +89,20 @@ public class Robot extends TimedRobot {
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
 
-       // Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
+        // Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
         Constants.IntakeConstants.getIntakeWheelsSpeed();
         Constants.ShooterConstants.getShooterVelocity();
         Constants.LimeLight.LIMELIGHT_TY = table.getEntry("ty").getDouble(0);
-        //distanceFromLimelight.setDouble(TargetingSubsystems.getDistanceFromAprilTag());
+        // distanceFromLimelight.setDouble(TargetingSubsystems.getDistanceFromAprilTag());
+        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.ORANGE_PHOTON_CAM,
+                Constants.TargetingConstants.ORANGE_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
+        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.BLACK_PHOTON_CAM,
+                Constants.TargetingConstants.BLACK_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
+        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.RED_PHOTON_CAM,
+                Constants.TargetingConstants.RED_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
+        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.PURPLE_PHOTON_CAM,
+                Constants.TargetingConstants.PURPLE_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
+
     }
 
     /**

@@ -46,12 +46,7 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants;
 
 public class TargetingSubsystems extends SubsystemBase {
-    
-    PhotonCamera photonVision = new PhotonCamera("Arducam_OV9281_USB_Camera");
-    Transform3d BACK_LEFT_CAMERA_OFFSETS = new Transform3d(new Translation3d(0, 0, 0), new Rotation3d(0, 0, 0));
-    PhotonPoseEstimator photonEstimator = new PhotonPoseEstimator(
-            AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark),
-            BACK_LEFT_CAMERA_OFFSETS);
+
     PIDController photonAimPIDController = new PIDController(0.3, 0, 0.001);
 
     public TargetingSubsystems() {
@@ -60,25 +55,25 @@ public class TargetingSubsystems extends SubsystemBase {
 
     Pose2d currentRobotPose;
 
-    public List<Waypoint> rightClimbWaypoints;
+    public List<Waypoint> pathWaypoints;
 
-    public Command pathPlanToRightClimbPoseCommand(SwerveSubsystem swerveDrive) {
-        GoalEndState goalEndState = new GoalEndState(0, Constants.TargetingConstants.RIGHT_CLIMB_POSE.getRotation());
-        PathConstraints goToClimbConstraints = new PathConstraints(3.0, 3.0, 3.0, 6.0, 12.0);
+    public Command pathPlanToPoseCommand(Pose2d desiredPose, SwerveSubsystem swerveDrive) {
+        GoalEndState goalEndState = new GoalEndState(0, desiredPose.getRotation());
+        PathConstraints pathConstraints = new PathConstraints(3.0, 3.0, 3.0, 6.0, 12.0);
         currentRobotPose = swerveDrive.getPose();
-        rightClimbWaypoints = PathPlannerPath.waypointsFromPoses(
-                currentRobotPose, Constants.TargetingConstants.RIGHT_CLIMB_POSE);
+        pathWaypoints = PathPlannerPath.waypointsFromPoses(
+                currentRobotPose, desiredPose);
 
-        PathPlannerPath goToClimbPath = new PathPlannerPath(rightClimbWaypoints, goToClimbConstraints, null,
+        PathPlannerPath goToDesiredPose = new PathPlannerPath(pathWaypoints, pathConstraints, null,
                 goalEndState);
-        goToClimbPath.preventFlipping = true;
+        goToDesiredPose.preventFlipping = true;
 
-        return swerveDrive.getAutonomousCommand("goToClimbPath");
+        return swerveDrive.getAutonomousCommand("goToDesiredPose");
     }
 
     public Command aimAndRangeToPose(Pose2d desiredPose, SwerveSubsystem swerveDrive) {
         return new RunCommand(() -> {
-         currentRobotPose = swerveDrive.getPose();
+            currentRobotPose = swerveDrive.getPose();
 
             Transform2d errorFromDesiredPose = desiredPose.minus(currentRobotPose);
 
@@ -96,33 +91,32 @@ public class TargetingSubsystems extends SubsystemBase {
             double ySpeed = yController.calculate(currentRobotPose.getY(), desiredPose.getY());
             double angleSpeed = angleController.calculate(currentRobotPose.getRotation().getRadians(),
                     desiredPose.getRotation().getRadians());
-            
+
             swerveDrive.drive(new Translation2d(xSpeed, ySpeed), angleSpeed, true);
         }, swerveDrive);
     }
 
-    Command photonAimAtClimb(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) { 
+    Command photonAimAtClimb(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) {
         return new RunCommand(() -> {
-        double rot = 0.0;
-        var result = photonVision.getLatestResult();
-        if (result.hasTargets()) {
-            double yawError = result.getBestTarget().getYaw();
-            rot = photonAimPIDController.calculate(yawError, 0);
-        }
+            double rot = 0.0;
+            var result = Constants.TargetingConstants.RED_PHOTON_CAM.getLatestResult();
+            if (result.hasTargets()) {
+                double yawError = result.getBestTarget().getYaw();
+                rot = photonAimPIDController.calculate(yawError, 0);
+            }
 
-        rot = MathUtil.clamp(rot, -3.0, 3.0);
+            rot = MathUtil.clamp(rot, -3.0, 3.0);
 
-        swerveDrive.drive(new Translation2d(driverXbox.getLeftY() * -1,
-                driverXbox.getLeftX() * -1), rot, true);
-    }, swerveDrive);
-}
-
-
-    public PhotonPoseEstimator getPhotonPoseEstimator() {
-        return photonEstimator;
+            swerveDrive.drive(new Translation2d(driverXbox.getLeftY() * -1,
+                    driverXbox.getLeftX() * -1), rot, true);
+        }, swerveDrive);
     }
 
-    // static public NetworkTable table =
+    public PhotonPoseEstimator getPhotonPoseEstimator(PhotonPoseEstimator poseEstimator) {
+        return poseEstimator;
+    }
+
+    /* // static public NetworkTable table =
     // NetworkTableInstance.getDefault().getTable(Constants.LimeLight.LIMELIGHT_NAME);
     // static public NetworkTableEntry ty = table.getEntry("ty");
     // static double targetOffsetAngle_Vertical = ty.getDouble(0.0);
@@ -150,9 +144,10 @@ public class TargetingSubsystems extends SubsystemBase {
                 / Math.tan(angleToGoalRadians);
         return distanceFromLimelightToGoalInches;
     }
+        */
 
-    public void updateRobotPose(SwerveSubsystem swerveDrive) {
-         Optional<EstimatedRobotPose> result = photonEstimator.update(photonVision.getLatestResult());
+    public static void updateRobotPose(PhotonCamera camera, PhotonPoseEstimator poseEstimator, SwerveSubsystem swerveDrive) {
+        Optional<EstimatedRobotPose> result = poseEstimator.update(camera.getLatestResult());
 
         if (result.isPresent()) {
             EstimatedRobotPose estimatedPose = result.get();
@@ -160,9 +155,9 @@ public class TargetingSubsystems extends SubsystemBase {
                     .addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
         }
     }
+
     @Override
     public void periodic() {
-
         /*
          * Shuffleboard.getTab("Vision").add("Photon Vision Yaw Value",
          * photonVision.getLatestResult().getBestTarget().getYaw());
@@ -177,6 +172,5 @@ public class TargetingSubsystems extends SubsystemBase {
          * "Arducam_OV9281_USB_Camera",
          * "http://photonvision.local:5800");
          */
-    } 
+    }
 }
-

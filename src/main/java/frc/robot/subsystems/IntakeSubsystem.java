@@ -55,7 +55,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void stopIntakeMotor() {
-        intakeWheelsMotor.set(0);
+        intakeWheelsMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM * -1, ControlType.kVelocity);
     }
 
     public Command startIntakeMotorCommand() {

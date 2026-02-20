@@ -4,11 +4,16 @@
 
 package frc.robot;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
@@ -90,13 +95,6 @@ public final class Constants {
         public static void getIndexerAndRampMotorRPM() {
             INDEXER_AND_RAMP_MOTOR_RPM = indexerAndRampRPM.getDouble(1000);
         }
-
-        public static final int LEFT_ACTUATOR_PWM_PORT = 1;
-        public static final int RIGHT_ACTUATOR_PWM_PORT = 3;
-
-        public static double DESIRED_POTENTIOMETER_DISTANCE;
-
-        // TO DO: need to equation that calculates desired potentiometer distance
     }
 
     public static class IntakeConstants {
@@ -111,7 +109,7 @@ public final class Constants {
         public static final int INTAKE_WHEELS_MOTOR_ID = 50;
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
         public static final double INTAKE_COLLECT_ENCODER_VALUE = 4.1290459632873535;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = 2.2550222873687744;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = 1.2550222873687744;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = 0;
 
         public static class IntakeRotatorPID {
@@ -131,34 +129,41 @@ public final class Constants {
 
     }
 
-    public static class LimeLight {
-
-        public static final String LIMELIGHT_NAME = "limelight";
-
-        // public static final int[] ALL_REEF_APRILTAGS = { 6, 7, 8, 9, 10, 11, 17, 18,
-        // 19, 20, 21, 22 };
-
-        public static final AprilTagFieldLayout APRILTAG_FIELD_LAYOUT = AprilTagFieldLayout
-                .loadField(AprilTagFields.k2026RebuiltAndymark);
-
-        public static final double BUMPER_WIDTH = Units.inchesToMeters(0.0); // Get This Value // Original: 2.75
-        // public static final double ROBOT_WIDTH = Units.inchesToMeters(30 +
-        // BUMPER_WIDTH); // Tis a square, don't need this
-        public static final double ROBOT_SIDE_LENGTH = Units.inchesToMeters(27);
-        // public static final Transform2d HALF_ROBOT = new
-        // Transform2d(ROBOT_SIDE_LENGTH / 3.0, 0, new Rotation2d());
-
-        public static double LIMELIGHT_TY;
-    }
-
     public static class TargetingConstants {
         public static final Pose2d RIGHT_CLIMB_POSE = new Pose2d(1.075, 4.75, Rotation2d.fromDegrees(90));
         public static final Pose2d LEFT_CLIMB_POSE = new Pose2d(1.075, 2.75, Rotation2d.fromDegrees(-90));
+
+        public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
+        public static final PhotonCamera BLACK_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
+        public static final PhotonCamera RED_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
+        public static final PhotonCamera PURPLE_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
+
+        public static final Transform3d ORANGE_ROBOT_TO_CAM = new Transform3d(new Translation3d(0, 0, 0),
+                new Rotation3d(0, 0, 0));
+        public static final Transform3d BLACK_ROBOT_TO_CAM = new Transform3d(new Translation3d(0, 0, 0),
+                new Rotation3d(0, 0, 0));
+        public static final Transform3d RED_ROBOT_TO_CAM = new Transform3d(new Translation3d(0, 0, 0),
+                new Rotation3d(0, 0, 0));
+        public static final Transform3d PURPLE_ROBOT_TO_CAM = new Transform3d(new Translation3d(0, 0, 0),
+                new Rotation3d(0, 0, 0));
+
+        public static final PhotonPoseEstimator ORANGE_PHOTON_ESTIMATOR = new PhotonPoseEstimator(
+                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark),
+                ORANGE_ROBOT_TO_CAM);
+        public static final PhotonPoseEstimator BLACK_PHOTON_ESTIMATOR = new PhotonPoseEstimator(
+                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark),
+                BLACK_ROBOT_TO_CAM);
+        public static final PhotonPoseEstimator RED_PHOTON_ESTIMATOR = new PhotonPoseEstimator(
+                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark),
+                RED_ROBOT_TO_CAM);
+        public static final PhotonPoseEstimator PURPLE_PHOTON_ESTIMATOR = new PhotonPoseEstimator(
+                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark),
+                PURPLE_ROBOT_TO_CAM);
     }
 
     public static class ClimberConstants {
         public static final int CLIMB_MOTOR_ID = 60;
-        public static final int RATCHET_PWM_PORT = 0;
+        public static final int RATCHET_PWM_PORT = 9;
 
         public static final double RATCHET_UNLOCK_ANGLE = 0;
         public static final double RATCHET_LOCK_ANGLE = 180;
