@@ -63,9 +63,6 @@ public class Robot extends TimedRobot {
         if (isSimulation()) {
             DriverStation.silenceJoystickConnectionWarning(true);
         }
-
-        table = NetworkTableInstance.getDefault().getTable(Constants.LimeLight.LIMELIGHT_NAME);
-        distanceFromLimelight = Shuffleboard.getTab("Programming").add("Distance from Limelight", 0).getEntry();
     }
 
     /**
@@ -92,8 +89,6 @@ public class Robot extends TimedRobot {
         // Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
         Constants.IntakeConstants.getIntakeWheelsSpeed();
         Constants.ShooterConstants.getShooterVelocity();
-        Constants.LimeLight.LIMELIGHT_TY = table.getEntry("ty").getDouble(0);
-        // distanceFromLimelight.setDouble(TargetingSubsystems.getDistanceFromAprilTag());
         TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.ORANGE_PHOTON_CAM,
                 Constants.TargetingConstants.ORANGE_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
         TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.BLACK_PHOTON_CAM,
