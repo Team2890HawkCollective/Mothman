@@ -98,6 +98,11 @@ public final class Constants {
     }
 
     public static class IntakeConstants {
+        private static GenericEntry intakeSpeed = programmingTab.add("Desired Intake Speed", -0.65)
+                .withWidget(BuiltInWidgets.kNumberBar).getEntry();
+
+        public static double INTAKE_WHEELS_MOTOR_SPEED;
+
         private static GenericEntry intakeRPM = programmingTab.add("Desired Intake RPM", -1000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
         public static double INTAKE_WHEELS_MOTOR_RPM;
@@ -108,20 +113,31 @@ public final class Constants {
 
         public static final int INTAKE_WHEELS_MOTOR_ID = 50;
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
+    
+
+        public static class IntakeRotatorPID {
+            public static final double INTAKE_ROTATOR_P = 0.01;
+            public static final double INTAKE_ROTATOR_I = 0;
+            public static final double INTAKE_ROTATOR_D = 0;
+        }
+
         public static final double INTAKE_COLLECT_ENCODER_VALUE = 4.1290459632873535;
         public static final double INTAKE_MIDDLE_ENCODER_VALUE = 1.2550222873687744;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = 0;
-
-        public static class IntakeRotatorPID {
-            public static final double INTAKE_ROTATOR_P = 0.05;
-            public static final double INTAKE_ROTATOR_I = 0;
-            public static final double INTAKE_ROTATOR_D = 0.001;
         }
-
-    }
 
     public static class RampConstants {
         public static final int RAMP_MOTOR_ID = 45;
+        // create object and a new widget under programming tab in Elastic where object
+        // retrieves value from widget
+        private static GenericEntry rampSpeed = programmingTab.add("Desired Ramp Speed", 0.4)
+                .withWidget(BuiltInWidgets.kNumberBar).getEntry();
+
+        // this method called in robot periodic so values updated in elastic are
+        // constantly read and applied to RAMP_MOTOR_SPEED
+        public static void getRampMotorSpeed() {
+            RAMP_MOTOR_SPEED = rampSpeed.getDouble(0.4);
+        }
         public static double RAMP_MOTOR_SPEED = .6;
 
         // create object and a new widget under programming tab in Elastic where object

@@ -80,7 +80,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void retractIntake() {
-        intakeRotatorPIDController.setSetpoint(0, ControlType.kPosition);
+        intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE, ControlType.kPosition);
     }
 
     public Command retractIntakeCommand() {

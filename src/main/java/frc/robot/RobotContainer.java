@@ -300,5 +300,4 @@ public class RobotContainer {
                         // m_ShooterSubsystem.moveActuatorCommand(Constants.ShooterConstants.DESIRED_POTENTIOMETER_DISTANCE),
                         m_ShooterSubsystem.shootFuelCommand(),
                         m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly());
-
 }
