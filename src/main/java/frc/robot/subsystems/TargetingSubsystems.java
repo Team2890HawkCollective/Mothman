@@ -92,7 +92,7 @@ public class TargetingSubsystems extends SubsystemBase {
             double angleSpeed = angleController.calculate(currentRobotPose.getRotation().getRadians(),
                     desiredPose.getRotation().getRadians());
 
-            swerveDrive.drive(new Translation2d(xSpeed, ySpeed), angleSpeed, true);
+            swerveDrive.drive(new Translation2d(xSpeed, ySpeed), angleSpeed, false);
         }, swerveDrive);
     }
 
@@ -108,7 +108,7 @@ public class TargetingSubsystems extends SubsystemBase {
             rot = MathUtil.clamp(rot, -3.0, 3.0);
 
             swerveDrive.drive(new Translation2d(driverXbox.getLeftY() * -1,
-                    driverXbox.getLeftX() * -1), rot, true);
+                    driverXbox.getLeftX() * -1), rot, false);
         }, swerveDrive);
     }
 

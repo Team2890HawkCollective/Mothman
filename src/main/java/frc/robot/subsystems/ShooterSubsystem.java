@@ -104,33 +104,29 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setIndexerAndRampMotorRPM() {
-        // if (LimelightHelpers.getTX("limelight") < 1.5 &&
-        // LimelightHelpers.getTX("limelight") > -1.5) {
         indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM, ControlType.kVelocity);
-        // } else
-        // indexerMotor.set(0);
     }
 
-    /* public Command shootFuelCommand() {
-        return run(() -> startShooterMotors())
+    public Command shootFuelCommand() {
+        return run(() -> setShooterMotorsRPM())
                 .until(() -> {
-                    return (getShooterMotorVelocity() >= Constants.ShooterConstants.SHOOTER_VELOCITY);
+                    return (getShooterMotorRPM() >= Constants.ShooterConstants.SHOOTER_RPM);
                 })
-                .andThen(() -> startIndexerMotor());
-    } */
+                .andThen(() -> setIndexerAndRampMotorRPM());
+    } 
 
     
-      public Command shootFuelCommand() {
+     /* public Command shootFuelCommand() {
       return runOnce(() -> setShooterMotorsRPM()).andThen(new WaitCommand(2))
       .andThen(() -> setIndexerAndRampMotorRPM());
-      };
+      }; */
      
 
     public void stopShooters() {
 
         centerShooterMotor.set(0);
         leftShooterMotor.set(0);
-        //rightShooterMotor.set(0);
+        rightShooterMotor.set(0);
         indexerAndRampMotor.set(0);
 
     }

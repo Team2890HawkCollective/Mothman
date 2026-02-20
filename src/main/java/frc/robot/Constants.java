@@ -71,8 +71,7 @@ public final class Constants {
         private static GenericEntry shooterVelocity = programmingTab.add("Desired Shooter RPM", -1000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
-        public static double SHOOTER_RPM = -0.6;
-        public static double SHOOTER_POWER = -0.45;
+        public static double SHOOTER_RPM;
 
         public static void getShooterVelocity() {
             SHOOTER_RPM = shooterVelocity.getDouble(-1000);
@@ -87,6 +86,7 @@ public final class Constants {
         public static double SHOOTER_MOTOR_P = 0.001;
         public static double SHOOTER_MOTOR_I = 0;
         public static double SHOOTER_MOTOR_D = 0;
+
         private static GenericEntry indexerAndRampRPM = programmingTab.add("Desired Ramp + Indexer Speed", 1000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
@@ -113,7 +113,6 @@ public final class Constants {
 
         public static final int INTAKE_WHEELS_MOTOR_ID = 50;
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
-    
 
         public static class IntakeRotatorPID {
             public static final double INTAKE_ROTATOR_P = 0.01;
@@ -124,7 +123,7 @@ public final class Constants {
         public static final double INTAKE_COLLECT_ENCODER_VALUE = 4.1290459632873535;
         public static final double INTAKE_MIDDLE_ENCODER_VALUE = 1.2550222873687744;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = 0;
-        }
+    }
 
     public static class RampConstants {
         public static final int RAMP_MOTOR_ID = 45;
@@ -138,6 +137,7 @@ public final class Constants {
         public static void getRampMotorSpeed() {
             RAMP_MOTOR_SPEED = rampSpeed.getDouble(0.4);
         }
+
         public static double RAMP_MOTOR_SPEED = .6;
 
         // create object and a new widget under programming tab in Elastic where object
