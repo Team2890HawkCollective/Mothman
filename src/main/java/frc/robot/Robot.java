@@ -89,11 +89,19 @@ public class Robot extends TimedRobot {
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
 
+<<<<<<< HEAD
         Constants.RampConstants.getRampMotorSpeed();
         Constants.IntakeConstants.getIntakeWheelsSpeed();
         Constants.ShooterConstants.getShooterVelocity();
         Constants.LimeLight.LIMELIGHT_TY = table.getEntry("ty").getDouble(0);
         distanceFromLimelight.setDouble(TargetingSubsystems.getDistanceFromAprilTag());
+=======
+       // Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
+        Constants.IntakeConstants.getIntakeWheelsSpeed();
+        Constants.ShooterConstants.getShooterVelocity();
+        Constants.LimeLight.LIMELIGHT_TY = table.getEntry("ty").getDouble(0);
+        //distanceFromLimelight.setDouble(TargetingSubsystems.getDistanceFromAprilTag());
+>>>>>>> a50d67d7f53337b144e2b1afb5f7b644747fb21f
     }
 
     /**
