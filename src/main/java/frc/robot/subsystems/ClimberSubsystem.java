@@ -3,10 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.Servo;
-<<<<<<< HEAD
-=======
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
->>>>>>> a50d67d7f53337b144e2b1afb5f7b644747fb21f
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,11 +38,6 @@ public class ClimberSubsystem extends SubsystemBase{
 
     public static void toggleRatchet(boolean toggle) {
     if (toggle == true) {
-<<<<<<< HEAD
-      climberRatchet.set(Constants.ClimberConstants.RATCHET_LOCK_ANGLE);
-    } else
-      climberRatchet.set(Constants.ClimberConstants.RATCHET_UNLOCK_ANGLE);
-=======
       climberRatchet.setAngle(Constants.ClimberConstants.RATCHET_LOCK_ANGLE);
     } else
       climberRatchet.setAngle(Constants.ClimberConstants.RATCHET_UNLOCK_ANGLE);
@@ -59,6 +51,5 @@ public class ClimberSubsystem extends SubsystemBase{
   public void periodic()
   {
     SmartDashboard.putNumber("Ratchet Position" , climberRatchet.getPosition());
->>>>>>> a50d67d7f53337b144e2b1afb5f7b644747fb21f
   }
 }
