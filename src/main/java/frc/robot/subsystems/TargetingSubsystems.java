@@ -2,10 +2,12 @@ package frc.robot.subsystems;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonUtils;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -47,10 +49,10 @@ import frc.robot.Constants;
 
 public class TargetingSubsystems extends SubsystemBase {
 
-    PIDController photonAimPIDController = new PIDController(0.3, 0, 0.001);
+    PIDController photonAimPIDController = new PIDController(3, 0, 0.001);
 
     public TargetingSubsystems() {
-        photonAimPIDController.enableContinuousInput(-180, 180);
+        photonAimPIDController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     Pose2d currentRobotPose;
@@ -83,16 +85,32 @@ public class TargetingSubsystems extends SubsystemBase {
 
             PIDController xController = new PIDController(1.5, 0, 0);
             PIDController yController = new PIDController(1.5, 0, 0);
-            PIDController angleController = new PIDController(3.0, 0, 0);
-
-            angleController.enableContinuousInput(-Math.PI, Math.PI);
 
             double xSpeed = xController.calculate(currentRobotPose.getX(), desiredPose.getX());
             double ySpeed = yController.calculate(currentRobotPose.getY(), desiredPose.getY());
-            double angleSpeed = angleController.calculate(currentRobotPose.getRotation().getRadians(),
+            double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(),
                     desiredPose.getRotation().getRadians());
 
             swerveDrive.drive(new Translation2d(xSpeed, ySpeed), angleSpeed, false);
+        }, swerveDrive);
+    }
+
+    public Command aimAtHub(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) {
+        return new RunCommand(() -> {
+            currentRobotPose = swerveDrive.getPose();
+
+            // Transform2d errorFromDesiredPose = desiredPose.minus(currentRobotPose);
+
+            Rotation2d angleDifference = PhotonUtils.getYawToPose(currentRobotPose,
+                    Constants.TargetingConstants.HUB_POSE);
+
+            double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(),
+                    angleDifference.getRadians());
+
+            angleSpeed = MathUtil.clamp(angleSpeed, -3.0, 3.0);
+
+            swerveDrive.drive(new Translation2d(driverXbox.getLeftX() * -1, -driverXbox.getLeftY() * -1), angleSpeed,
+                    false);
         }, swerveDrive);
     }
 
@@ -107,8 +125,8 @@ public class TargetingSubsystems extends SubsystemBase {
 
             rot = MathUtil.clamp(rot, -3.0, 3.0);
 
-            swerveDrive.drive(new Translation2d(driverXbox.getLeftY() * -1,
-                    driverXbox.getLeftX() * -1), rot, false);
+            swerveDrive.drive(new Translation2d(driverXbox.getLeftX() * -1,
+                    driverXbox.getLeftY() * -1), rot, false);
         }, swerveDrive);
     }
 
@@ -116,37 +134,45 @@ public class TargetingSubsystems extends SubsystemBase {
         return poseEstimator;
     }
 
-    /* // static public NetworkTable table =
-    // NetworkTableInstance.getDefault().getTable(Constants.LimeLight.LIMELIGHT_NAME);
-    // static public NetworkTableEntry ty = table.getEntry("ty");
-    // static double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+    /*
+     * // static public NetworkTable table =
+     * //
+     * NetworkTableInstance.getDefault().getTable(Constants.LimeLight.LIMELIGHT_NAME
+     * );
+     * // static public NetworkTableEntry ty = table.getEntry("ty");
+     * // static double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+     * 
+     * // how many degrees back is your limelight rotated from perfectly vertical?
+     * static double limelightMountAngleDegrees = 25.0;
+     * 
+     * // distance from the center of the Limelight lens to the floor
+     * static double limelightLensHeightInches = 27.5;
+     * 
+     * // distance from the target to the floor
+     * static double goalHeightInches = 44;
+     * 
+     * static double angleToGoalDegrees = limelightMountAngleDegrees +
+     * Constants.LimeLight.LIMELIGHT_TY;
+     * static double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+     * 
+     * // calculate distance
+     * static double distanceFromLimelightToGoalInches = (goalHeightInches -
+     * limelightLensHeightInches)
+     * / Math.tan(angleToGoalRadians);
+     * 
+     * public static double getDistanceFromAprilTag() {
+     * angleToGoalDegrees = limelightMountAngleDegrees +
+     * Constants.LimeLight.LIMELIGHT_TY;
+     * angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+     * distanceFromLimelightToGoalInches = (goalHeightInches -
+     * limelightLensHeightInches)
+     * / Math.tan(angleToGoalRadians);
+     * return distanceFromLimelightToGoalInches;
+     * }
+     */
 
-    // how many degrees back is your limelight rotated from perfectly vertical?
-    static double limelightMountAngleDegrees = 25.0;
-
-    // distance from the center of the Limelight lens to the floor
-    static double limelightLensHeightInches = 27.5;
-
-    // distance from the target to the floor
-    static double goalHeightInches = 44;
-
-    static double angleToGoalDegrees = limelightMountAngleDegrees + Constants.LimeLight.LIMELIGHT_TY;
-    static double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-
-    // calculate distance
-    static double distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)
-            / Math.tan(angleToGoalRadians);
-
-    public static double getDistanceFromAprilTag() {
-        angleToGoalDegrees = limelightMountAngleDegrees + Constants.LimeLight.LIMELIGHT_TY;
-        angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-        distanceFromLimelightToGoalInches = (goalHeightInches - limelightLensHeightInches)
-                / Math.tan(angleToGoalRadians);
-        return distanceFromLimelightToGoalInches;
-    }
-        */
-
-    public static void updateRobotPose(PhotonCamera camera, PhotonPoseEstimator poseEstimator, SwerveSubsystem swerveDrive) {
+    public static void updateRobotPose(PhotonCamera camera, PhotonPoseEstimator poseEstimator,
+            SwerveSubsystem swerveDrive) {
         Optional<EstimatedRobotPose> result = poseEstimator.update(camera.getLatestResult());
 
         if (result.isPresent()) {
