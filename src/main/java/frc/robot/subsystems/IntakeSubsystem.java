@@ -38,9 +38,9 @@ public class IntakeSubsystem extends SubsystemBase {
                 com.revrobotics.PersistMode.kNoPersistParameters);
         intakeRotatorPIDController = intakeRotatorMotor.getClosedLoopController();
 
-        intakeWheelsMotorConfig.closedLoop.pid(Constants.ShooterConstants.SHOOTER_MOTOR_P,
-                Constants.ShooterConstants.SHOOTER_MOTOR_I,
-                Constants.ShooterConstants.SHOOTER_MOTOR_D);
+        intakeWheelsMotorConfig.closedLoop.pid(Constants.IntakeConstants.INTAKE_MOTOR_P,
+                Constants.IntakeConstants.INTAKE_MOTOR_I,
+                Constants.IntakeConstants.INTAKE_MOTOR_D);
         intakeWheelsMotor.configure(intakeWheelsMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
        intakeWheelsMotorPIDController = intakeWheelsMotor.getClosedLoopController();
@@ -55,7 +55,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void stopIntakeMotor() {
-        intakeWheelsMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM * -1, ControlType.kVelocity);
+        intakeWheelsMotor.set(0);
     }
 
     public Command startIntakeMotorCommand() {

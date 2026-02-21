@@ -87,8 +87,10 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
 
         // Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
-        Constants.IntakeConstants.getIntakeWheelsSpeed();
-        Constants.ShooterConstants.getShooterVelocity();
+        Constants.IntakeConstants.updateIntakeWheelsRPM();
+        Constants.ShooterConstants.updateShooterRPM();
+        Constants.ShooterConstants.updateIndexerAndRampMotorRPM();
+        
         TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.ORANGE_PHOTON_CAM,
                 Constants.TargetingConstants.ORANGE_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
         TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.BLACK_PHOTON_CAM,

@@ -175,7 +175,7 @@ public class RobotContainer {
                 Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
                                 driveDirectAngleKeyboard);
 
-                driverXbox.leftTrigger().onTrue(m_IntakeSubsystem.startIntakeMotorCommand())
+                driverXbox.leftTrigger().whileTrue(m_IntakeSubsystem.startIntakeMotorCommand())
                                 .onFalse(m_IntakeSubsystem.stopIntakeMotorCommand());
                 driverXbox.leftBumper().whileTrue(m_IntakeSubsystem.reverseIntakeMotorCommand())
                                 .onFalse(m_IntakeSubsystem.stopIntakeMotorCommand());
@@ -202,13 +202,6 @@ public class RobotContainer {
                                 .andThen(m_IntakeSubsystem.deployintakeCommand()));
                 // driverXbox.a().whileTrue(aimAtHopperCommand(() -> -driverXbox.getLeftY(),
                 // () -> -driverXbox.getLeftX()));
-                if (driverXbox.getRightY() < -0.4) {
-                        m_ClimberSubsystem.liftRobotCommand();
-                } else if (driverXbox.getRightY() > 0.4) {
-                        m_ClimberSubsystem.lowerRobotCommand();
-                } else {
-                        m_ClimberSubsystem.stopClimberCommand();
-                }
 
                 // driverXbox.b().whileTrue(m_TargetingSubsystems.aimAndRangeToPose(Constants.TargetingConstants.LEFT_CLIMB_POSE));
 

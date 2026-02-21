@@ -68,13 +68,13 @@ public final class Constants {
     }
 
     public static class ShooterConstants {
-        private static GenericEntry shooterVelocity = programmingTab.add("Desired Shooter RPM", -1000)
+        private static GenericEntry shooterRPM = programmingTab.add("Desired Shooter RPM", -5000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
         public static double SHOOTER_RPM;
 
-        public static void getShooterVelocity() {
-            SHOOTER_RPM = shooterVelocity.getDouble(-1000);
+        public static void updateShooterRPM() {
+            SHOOTER_RPM = shooterRPM.getDouble(-5000);
         }
 
         public static final int CENTER_SHOOTER_MOTOR_ID = 42;
@@ -87,27 +87,24 @@ public final class Constants {
         public static double SHOOTER_MOTOR_I = 0;
         public static double SHOOTER_MOTOR_D = 0;
 
-        private static GenericEntry indexerAndRampRPM = programmingTab.add("Desired Ramp + Indexer Speed", 1000)
+        private static GenericEntry indexerAndRampRPM = programmingTab.add("Desired Ramp + Indexer Speed", 2000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
         // this method called in robot periodic so values updated in elastic are
         // constantly read and applied to RAMP_MOTOR_SPEED
-        public static void getIndexerAndRampMotorRPM() {
-            INDEXER_AND_RAMP_MOTOR_RPM = indexerAndRampRPM.getDouble(1000);
+        public static void updateIndexerAndRampMotorRPM() {
+            INDEXER_AND_RAMP_MOTOR_RPM = indexerAndRampRPM.getDouble(2000);
         }
     }
 
     public static class IntakeConstants {
-        private static GenericEntry intakeSpeed = programmingTab.add("Desired Intake Speed", -0.65)
-                .withWidget(BuiltInWidgets.kNumberBar).getEntry();
-
         public static double INTAKE_WHEELS_MOTOR_SPEED;
 
         private static GenericEntry intakeRPM = programmingTab.add("Desired Intake RPM", -1000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
         public static double INTAKE_WHEELS_MOTOR_RPM;
 
-        public static void getIntakeWheelsSpeed() {
+        public static void updateIntakeWheelsRPM() {
             INTAKE_WHEELS_MOTOR_RPM = intakeRPM.getDouble(-1000);
         }
 
@@ -119,31 +116,20 @@ public final class Constants {
             public static final double INTAKE_ROTATOR_I = 0;
             public static final double INTAKE_ROTATOR_D = 0;
         }
+        public static final double INTAKE_MOTOR_P = 0.01;
+                public static final double INTAKE_MOTOR_I = 0;
+                        public static final double INTAKE_MOTOR_D = 0;
 
         public static final double INTAKE_COLLECT_ENCODER_VALUE = 4.1290459632873535;
         public static final double INTAKE_MIDDLE_ENCODER_VALUE = 1.2550222873687744;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = 0;
     }
 
-    public static class RampConstants {
-        public static final int RAMP_MOTOR_ID = 45;
-        // create object and a new widget under programming tab in Elastic where object
-        // retrieves value from widget
-        private static GenericEntry rampSpeed = programmingTab.add("Desired Ramp Speed", 0.4)
-                .withWidget(BuiltInWidgets.kNumberBar).getEntry();
-
-        // this method called in robot periodic so values updated in elastic are
-        // constantly read and applied to RAMP_MOTOR_SPEED
-        public static void getRampMotorSpeed() {
-            RAMP_MOTOR_SPEED = rampSpeed.getDouble(0.4);
-        }
-
-        public static double RAMP_MOTOR_SPEED = .6;
 
         // create object and a new widget under programming tab in Elastic where object
         // retrieves value from widget
 
-    }
+
 
     public static class TargetingConstants {
         public static final Pose2d RIGHT_CLIMB_POSE = new Pose2d(1.075, 4.75, Rotation2d.fromDegrees(90));
@@ -153,6 +139,8 @@ public final class Constants {
         public static final PhotonCamera BLACK_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
         public static final PhotonCamera RED_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
         public static final PhotonCamera PURPLE_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
+
+        public static final Pose2d HUB_POSE = new Pose2d(4.625, 4.03, new Rotation2d());
 
         public static final Transform3d ORANGE_ROBOT_TO_CAM = new Transform3d(new Translation3d(0, 0, 0),
                 new Rotation3d(0, 0, 0));
