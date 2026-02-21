@@ -171,16 +171,21 @@ public class TargetingSubsystems extends SubsystemBase {
      * }
      */
 
-    public static void updateRobotPose(PhotonCamera camera, PhotonPoseEstimator poseEstimator,
-            SwerveSubsystem swerveDrive) {
-        Optional<EstimatedRobotPose> result = poseEstimator.update(camera.getLatestResult());
+    public static Optional<EstimatedRobotPose> visionEst = Optional.empty();
 
-        if (result.isPresent()) {
-            EstimatedRobotPose estimatedPose = result.get();
+    public static void updateRobotPose(PhotonCamera camera, PhotonPoseEstimator poseEstimator, SwerveSubsystem swerveDrive) {
+     /*  for (var result : camera.getAllUnreadResults()) {
+            visionEst = poseEstimator.estimateCoprocMultiTagPose(result);
+            
+            if (visionEst.isPresent()) {
+            EstimatedRobotPose estimatedPose = visionEst.get();
             swerveDrive.getSwerveDrive()
                     .addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
         }
-    }
+
+        
+    }*/
+}
 
     @Override
     public void periodic() {

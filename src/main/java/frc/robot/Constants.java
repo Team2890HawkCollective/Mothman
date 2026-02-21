@@ -68,60 +68,66 @@ public final class Constants {
     }
 
     public static class ShooterConstants {
-        private static GenericEntry shooterRPM = programmingTab.add("Desired Shooter RPM", -5000)
+        private static GenericEntry shooterRPM = programmingTab.add("Desired Shooter RPM", -4000)
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
         public static double SHOOTER_RPM;
 
         public static void updateShooterRPM() {
-            SHOOTER_RPM = shooterRPM.getDouble(-5000);
+            SHOOTER_RPM = shooterRPM.getDouble(-4000);
         }
 
         public static final int CENTER_SHOOTER_MOTOR_ID = 42;
         public static final int LEFT_SHOOTER_MOTOR_ID = 41;
         public static final int RIGHT_SHOOTER_MOTOR_ID = 40;
         public static final int INDEXER_MOTOR_ID = 43;
-        public static double INDEXER_AND_RAMP_MOTOR_RPM;
 
-        public static double SHOOTER_MOTOR_P = 0.001;
+        public static double SHOOTER_MOTOR_P = 0.0018;
         public static double SHOOTER_MOTOR_I = 0;
         public static double SHOOTER_MOTOR_D = 0;
 
-        private static GenericEntry indexerAndRampRPM = programmingTab.add("Desired Ramp + Indexer Speed", 2000)
-                .withWidget(BuiltInWidgets.kNumberBar).getEntry();
+        public static double INDEXER_MOTOR_P = 0.0001;
+        public static double INDEXER_MOTOR_I = 0;
+        public static double INDEXER_MOTOR_D = 0;
+
+
+        /*private static GenericEntry indexerAndRampRPM = programmingTab.add("Desired Ramp + Indexer RPM", 2000)
+                .withWidget(BuiltInWidgets.kNumberBar).getEntry();*/
+
+
+        public static double INDEXER_AND_RAMP_MOTOR_RPM = 10000;
 
         // this method called in robot periodic so values updated in elastic are
         // constantly read and applied to RAMP_MOTOR_SPEED
-        public static void updateIndexerAndRampMotorRPM() {
+        /*public static void updateIndexerAndRampMotorRPM() {
             INDEXER_AND_RAMP_MOTOR_RPM = indexerAndRampRPM.getDouble(2000);
-        }
+        }*/
     }
 
     public static class IntakeConstants {
-        public static double INTAKE_WHEELS_MOTOR_SPEED;
 
-        private static GenericEntry intakeRPM = programmingTab.add("Desired Intake RPM", -1000)
-                .withWidget(BuiltInWidgets.kNumberBar).getEntry();
-        public static double INTAKE_WHEELS_MOTOR_RPM;
+        /* private static GenericEntry intakeRPM = programmingTab.add("Desired Intake RPM", -1000)
+                .withWidget(BuiltInWidgets.kNumberBar).getEntry(); */
+        public static double INTAKE_WHEELS_MOTOR_RPM = -7000;
 
-        public static void updateIntakeWheelsRPM() {
+        /*public static void updateIntakeWheelsRPM() {
             INTAKE_WHEELS_MOTOR_RPM = intakeRPM.getDouble(-1000);
-        }
+        }*/
 
         public static final int INTAKE_WHEELS_MOTOR_ID = 50;
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
 
         public static class IntakeRotatorPID {
-            public static final double INTAKE_ROTATOR_P = 0.01;
+            public static final double INTAKE_ROTATOR_P = 0.03;
             public static final double INTAKE_ROTATOR_I = 0;
             public static final double INTAKE_ROTATOR_D = 0;
         }
-        public static final double INTAKE_MOTOR_P = 0.01;
-                public static final double INTAKE_MOTOR_I = 0;
-                        public static final double INTAKE_MOTOR_D = 0;
+        public static final double INTAKE_MOTOR_P = 0.0001;
+        public static final double INTAKE_MOTOR_I = 0;
+        public static final double INTAKE_MOTOR_D = 0;
 
-        public static final double INTAKE_COLLECT_ENCODER_VALUE = 4.1290459632873535;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = 1.2550222873687744;
+        public static final double INTAKE_COLLECT_ENCODER_VALUE = 5;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -2.5;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = 0;
     }
 
@@ -135,10 +141,10 @@ public final class Constants {
         public static final Pose2d RIGHT_CLIMB_POSE = new Pose2d(1.075, 4.75, Rotation2d.fromDegrees(90));
         public static final Pose2d LEFT_CLIMB_POSE = new Pose2d(1.075, 2.75, Rotation2d.fromDegrees(-90));
 
-        public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
-        public static final PhotonCamera BLACK_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
-        public static final PhotonCamera RED_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
-        public static final PhotonCamera PURPLE_PHOTON_CAM = new PhotonCamera("Arducam_OV9281_USB_Camera");
+        public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Rear Left Camera");
+        public static final PhotonCamera BLACK_PHOTON_CAM = new PhotonCamera("Rear Right Camera");
+        public static final PhotonCamera RED_PHOTON_CAM = new PhotonCamera("Front Left Camera");
+        public static final PhotonCamera PURPLE_PHOTON_CAM = new PhotonCamera("Front Right Camera");
 
         public static final Pose2d HUB_POSE = new Pose2d(4.625, 4.03, new Rotation2d());
 

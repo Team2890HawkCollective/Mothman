@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.photonvision.targeting.PhotonPipelineResult;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.networktables.GenericEntry;
@@ -36,6 +38,7 @@ public class Robot extends TimedRobot {
     private static NetworkTable table;
     private static GenericEntry distanceFromLimelight;
 
+
     public Robot() {
         instance = this;
     }
@@ -63,6 +66,8 @@ public class Robot extends TimedRobot {
         if (isSimulation()) {
             DriverStation.silenceJoystickConnectionWarning(true);
         }
+
+        m_robotContainer.getSwerveDrive().zeroGyroWithAlliance();
     }
 
     /**
@@ -86,10 +91,10 @@ public class Robot extends TimedRobot {
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
 
-        // Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
-        Constants.IntakeConstants.updateIntakeWheelsRPM();
+        //Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
+        //Constants.IntakeConstants.updateIntakeWheelsRPM();
         Constants.ShooterConstants.updateShooterRPM();
-        Constants.ShooterConstants.updateIndexerAndRampMotorRPM();
+        //Constants.ShooterConstants.updateIndexerAndRampMotorRPM();
         
         TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.ORANGE_PHOTON_CAM,
                 Constants.TargetingConstants.ORANGE_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());

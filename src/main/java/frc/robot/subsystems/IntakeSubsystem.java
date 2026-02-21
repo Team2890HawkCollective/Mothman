@@ -31,9 +31,14 @@ public class IntakeSubsystem extends SubsystemBase {
     public static SparkFlexConfig intakeWheelsMotorConfig = new SparkFlexConfig();
 
     public IntakeSubsystem() {
-        intakeRotatorConfig.closedLoop.pid(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_P,
-                Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_I,
-                Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_D);
+        intakeRotatorConfig.closedLoop
+        .p(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_P)
+        .i(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_I)
+        .d(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_D)
+
+        .p(.06, ClosedLoopSlot.kSlot1)
+        .i(0, ClosedLoopSlot.kSlot1)
+        .d(0, ClosedLoopSlot.kSlot1);
         intakeRotatorMotor.configure(intakeRotatorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         intakeRotatorPIDController = intakeRotatorMotor.getClosedLoopController();
@@ -43,7 +48,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 Constants.IntakeConstants.INTAKE_MOTOR_D);
         intakeWheelsMotor.configure(intakeWheelsMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
-       intakeWheelsMotorPIDController = intakeWheelsMotor.getClosedLoopController();
+        intakeWheelsMotorPIDController = intakeWheelsMotor.getClosedLoopController();
     }
 
     public void startIntakeMotor() {
@@ -71,8 +76,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void deployIntake() {
-        intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE,
-                ControlType.kPosition);
+        intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     public Command deployintakeCommand() {
@@ -80,7 +84,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void retractIntake() {
-        intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE, ControlType.kPosition);
+        intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE, ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
     public Command retractIntakeCommand() {

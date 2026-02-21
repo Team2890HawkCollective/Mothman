@@ -50,6 +50,6 @@ public class ClimberSubsystem extends SubsystemBase{
   @Override
   public void periodic()
   {
-    SmartDashboard.putNumber("Ratchet Position" , climberRatchet.getPosition());
+    SmartDashboard.putNumber("Ratchet Position" , climberRatchet.getAngle());
   }
 }
