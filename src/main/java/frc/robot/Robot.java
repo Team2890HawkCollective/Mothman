@@ -4,22 +4,11 @@
 
 package frc.robot;
 
-import org.photonvision.targeting.PhotonPipelineResult;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.TargetingSubsystems;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,8 +24,6 @@ public class Robot extends TimedRobot {
     private RobotContainer m_robotContainer;
 
     private Timer disabledTimer;
-    private static NetworkTable table;
-    private static GenericEntry distanceFromLimelight;
 
 
     public Robot() {
@@ -95,16 +82,6 @@ public class Robot extends TimedRobot {
         //Constants.IntakeConstants.updateIntakeWheelsRPM();
         Constants.ShooterConstants.updateShooterRPM();
         //Constants.ShooterConstants.updateIndexerAndRampMotorRPM();
-        
-        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.ORANGE_PHOTON_CAM,
-                Constants.TargetingConstants.ORANGE_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
-        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.BLACK_PHOTON_CAM,
-                Constants.TargetingConstants.BLACK_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
-        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.RED_PHOTON_CAM,
-                Constants.TargetingConstants.RED_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
-        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.PURPLE_PHOTON_CAM,
-                Constants.TargetingConstants.PURPLE_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
-
     }
 
     /**

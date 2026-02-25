@@ -1,66 +1,65 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 
-import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkBase.ControlType;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private static SparkFlex intakeWheelsMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_ID,
-            MotorType.kBrushless);
+    private static SparkFlex intakeWheelsMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_ID, MotorType.kBrushless);
 
-    private static SparkFlex intakeRotatorMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_ID,
-            MotorType.kBrushless);
-    private static SparkClosedLoopController intakeRotatorPIDController;
-    public static SparkFlexConfig intakeRotatorConfig = new SparkFlexConfig();
+    private static SparkFlex intakeRotatorMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_ID, MotorType.kBrushless);
 
-    private static SparkClosedLoopController intakeWheelsMotorPIDController;
     public static SparkFlexConfig intakeWheelsMotorConfig = new SparkFlexConfig();
+    private static BangBangController intakeWheelsMotorBBController = new BangBangController();
+    private static SimpleMotorFeedforward intakeWheelsMotorFeedforward;
+
+    public static SparkFlexConfig intakeRotatorConfig = new SparkFlexConfig();
+    private static PIDController intakeRotatorMotorPIDController;
+    private static ArmFeedforward intakeRotatorMotorFeedforward;
 
     public IntakeSubsystem() {
-        intakeRotatorConfig.closedLoop
-        .p(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_P)
-        .i(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_I)
-        .d(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_D)
+        intakeWheelsMotorConfig
+            .smartCurrentLimit(Constants.IntakeConstants.INTAKE_WHEELS_CURRENT_LIMIT)
+            .encoder
+            .positionConversionFactor(Constants.IntakeConstants.INTAKE_WHEELS_POSITION_CONVERSION_FACTOR)
+            .velocityConversionFactor(Constants.IntakeConstants.INTAKE_WHEELS_VELOCITY_CONVERSION_FACTOR);
+        intakeWheelsMotor.configure(intakeWheelsMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
 
-        .p(.06, ClosedLoopSlot.kSlot1)
-        .i(0, ClosedLoopSlot.kSlot1)
-        .d(0, ClosedLoopSlot.kSlot1);
-        intakeRotatorMotor.configure(intakeRotatorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
-                com.revrobotics.PersistMode.kNoPersistParameters);
-        intakeRotatorPIDController = intakeRotatorMotor.getClosedLoopController();
+        intakeWheelsMotorFeedforward = new SimpleMotorFeedforward(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_S, Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_V);
+        
+        intakeRotatorConfig
+            .smartCurrentLimit(Constants.IntakeConstants.INTAKE_ROTATOR_CURRENT_LIMIT)
+            .encoder
+            .positionConversionFactor(Constants.IntakeConstants.INTAKE_ROTATOR_POSITION_CONVERSION_FACTOR)
+            .velocityConversionFactor(Constants.IntakeConstants.INTAKE_ROTATOR_VELOCITY_CONVERSION_FACTOR);
+        intakeRotatorMotor.configure(intakeRotatorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters, com.revrobotics.PersistMode.kNoPersistParameters);
+        intakeRotatorMotor.getEncoder().setPosition(Constants.IntakeConstants.INTAKE_ROTATOR_INITIAL_ENCODER_VALUE);
 
-        intakeWheelsMotorConfig.closedLoop.pid(Constants.IntakeConstants.INTAKE_MOTOR_P,
-                Constants.IntakeConstants.INTAKE_MOTOR_I,
-                Constants.IntakeConstants.INTAKE_MOTOR_D);
-        intakeWheelsMotor.configure(intakeWheelsMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
-                com.revrobotics.PersistMode.kNoPersistParameters);
-        intakeWheelsMotorPIDController = intakeWheelsMotor.getClosedLoopController();
+        intakeRotatorMotorPIDController = new PIDController(Constants.IntakeConstants.INTAKE_ROTATOR_UP_P, Constants.IntakeConstants.INTAKE_ROTATOR_UP_I, Constants.IntakeConstants.INTAKE_ROTATOR_UP_D);
+        intakeRotatorMotorFeedforward = new ArmFeedforward(Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_S, Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_G, Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_V);
     }
 
     public void startIntakeMotor() {
-        intakeWheelsMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM, ControlType.kVelocity);
+        intakeWheelsMotorBBController.setSetpoint(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM);
     }
 
     public void reverseIntakeMotor() {
-        intakeWheelsMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM * -1, ControlType.kVelocity);
+        intakeWheelsMotorBBController.setSetpoint(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM * -1);
     }
 
     public void stopIntakeMotor() {
-        intakeWheelsMotor.set(0);
+        intakeWheelsMotorBBController.setSetpoint(0.0);
     }
 
     public Command startIntakeMotorCommand() {
@@ -76,7 +75,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void deployIntake() {
-        intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+        intakeRotatorMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_COLLECT_POSITION_RADS);
     }
 
     public Command deployintakeCommand() {
@@ -84,7 +83,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void retractIntake() {
-        intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+        intakeRotatorMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_RETRACT_POSITION_RADS);
     }
 
     public Command retractIntakeCommand() {
@@ -92,8 +91,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void assistFuelIntake() {
-        intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE,
-                ControlType.kPosition);
+        intakeRotatorMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_MIDDLE_POSITION_RADS);
     }
 
     public Command assistFuelIntakeCommand() {
@@ -103,6 +101,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        intakeWheelsMotor.setVoltage(
+            12.0 * intakeWheelsMotorBBController.calculate(intakeWheelsMotor.getEncoder().getVelocity()) 
+            + 0.9 * intakeWheelsMotorFeedforward.calculate(intakeWheelsMotorBBController.getSetpoint()));
+        intakeRotatorMotor.setVoltage(
+            12.0 * intakeRotatorMotorPIDController.calculate(intakeRotatorMotor.getEncoder().getPosition()) 
+            + intakeRotatorMotorFeedforward.calculate(intakeRotatorMotorPIDController.getSetpoint(), 0.0));
+
         SmartDashboard.putNumber("Intake Rotator Motor PID", intakeRotatorMotor.getEncoder().getPosition());
     }
 }
