@@ -11,11 +11,13 @@ import frc.robot.Constants;
 import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.swerve.utility.WheelForceCalculator.Feedforwards;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkMax;
@@ -23,8 +25,8 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.LimelightHelpers;
-import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
 public class ShooterSubsystem extends SubsystemBase {
     private static SparkFlex centerShooterMotor = new SparkFlex(Constants.ShooterConstants.CENTER_SHOOTER_MOTOR_ID,
@@ -52,28 +54,52 @@ public class ShooterSubsystem extends SubsystemBase {
     public static SparkFlexConfig indexerAndRampMotorConfig = new SparkFlexConfig();
 
     public ShooterSubsystem() {
-        centerShooterMotorConfig.closedLoop.pid(Constants.ShooterConstants.SHOOTER_MOTOR_P,
-                Constants.ShooterConstants.SHOOTER_MOTOR_I,
-                Constants.ShooterConstants.SHOOTER_MOTOR_D);
+        centerShooterMotorConfig
+                .voltageCompensation(12.0)
+                .closedLoop
+                .p(Constants.ShooterConstants.SHOOTER_MOTOR_P)
+                .i(Constants.ShooterConstants.SHOOTER_MOTOR_I)
+                .d(Constants.ShooterConstants.SHOOTER_MOTOR_D)
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .feedForward
+                .kS(Constants.ShooterConstants.SHOOTER_MOTOR_S)
+                .kV(Constants.ShooterConstants.SHOOTER_MOTOR_V);
+        centerShooterMotorConfig.smartCurrentLimit(80);
         centerShooterMotor.configure(centerShooterMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         centerShooterMotorPIDController = centerShooterMotor.getClosedLoopController();
-    
-    leftShooterMotorConfig.closedLoop.pid(Constants.ShooterConstants.SHOOTER_MOTOR_P,
-                Constants.ShooterConstants.SHOOTER_MOTOR_I,
-                Constants.ShooterConstants.SHOOTER_MOTOR_D);
+
+        leftShooterMotorConfig              
+                .voltageCompensation(12.0)
+                .closedLoop
+                .p(Constants.ShooterConstants.SHOOTER_MOTOR_P)
+                .i(Constants.ShooterConstants.SHOOTER_MOTOR_I)
+                .d(Constants.ShooterConstants.SHOOTER_MOTOR_D)
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .feedForward
+                .kS(Constants.ShooterConstants.SHOOTER_MOTOR_S)
+                .kV(Constants.ShooterConstants.SHOOTER_MOTOR_V);
+        leftShooterMotorConfig.smartCurrentLimit(80);
         leftShooterMotor.configure(leftShooterMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         leftShooterMotorPIDController = leftShooterMotor.getClosedLoopController();
-    
-    rightShooterMotorConfig.closedLoop.pid(Constants.ShooterConstants.SHOOTER_MOTOR_P,
-                Constants.ShooterConstants.SHOOTER_MOTOR_I,
-                Constants.ShooterConstants.SHOOTER_MOTOR_D);
+
+        rightShooterMotorConfig
+                .voltageCompensation(12.0)
+                .closedLoop
+                .p(Constants.ShooterConstants.SHOOTER_MOTOR_P)
+                .i(Constants.ShooterConstants.SHOOTER_MOTOR_I)
+                .d(Constants.ShooterConstants.SHOOTER_MOTOR_D)
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .feedForward
+                .kS(Constants.ShooterConstants.SHOOTER_MOTOR_S)
+                .kV(Constants.ShooterConstants.SHOOTER_MOTOR_V);
+        rightShooterMotorConfig.smartCurrentLimit(80);
         rightShooterMotor.configure(rightShooterMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         rightShooterMotorPIDController = rightShooterMotor.getClosedLoopController();
 
-        indexerAndRampMotorConfig.closedLoop.pid(0.0001,
+        indexerAndRampMotorConfig.closedLoop.pid(Constants.ShooterConstants.INDEXER_MOTOR_P,
                 0,
                 0);
         indexerAndRampMotor.configure(indexerAndRampMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
@@ -81,78 +107,81 @@ public class ShooterSubsystem extends SubsystemBase {
         indexerAndRampMotorPIDController = indexerAndRampMotor.getClosedLoopController();
     }
 
+    // private static SparkMax leftActuatorMotor = new
+    // SparkMax(Constants.ShooterConstants.LEFT_ACTUATOR_PWM_PORT,
+    // MotorType.kBrushless);
 
-    //private static SparkMax leftActuatorMotor = new SparkMax(Constants.ShooterConstants.LEFT_ACTUATOR_PWM_PORT,
-      //      MotorType.kBrushless);
-
-    //private static SparkMax rightActuatorMotor = new SparkMax(Constants.ShooterConstants.RIGHT_ACTUATOR_PWM_PORT,
-            //MotorType.kBrushless);
-
-    //private static AnalogPotentiometer leftPotentiometer = new AnalogPotentiometer(0, 1, 0);
-    //private static AnalogPotentiometer rightPotentiometer = new AnalogPotentiometer(0, 1, 0);
-
-    private static double currentPotentiometerPosition; // might need second value for the right potentiometer
+    // private static SparkMax rightActuatorMotor = new
+    // SparkMax(Constants.ShooterConstants.RIGHT_ACTUATOR_PWM_PORT,
+    // MotorType.kBrushless);
 
     public void setShooterMotorsRPM() {
-        centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
-        leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
-        rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
+        centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM, ControlType.kVelocity);
+        leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM, ControlType.kVelocity);
+        rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM, ControlType.kVelocity);
     }
 
-    //test individual motor code
+    // test individual motor code
     public void setLeftShooterMotorRPM() {
-        leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
+        leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM, ControlType.kVelocity);
     }
+
     public Command testLeftShooterCommand() {
         return runOnce(() -> setLeftShooterMotorRPM());
     }
 
     public void setRightShooterMotorRPM() {
-        rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
+        rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM, ControlType.kVelocity);
     }
+
     public Command testRightShooterCommand() {
         return runOnce(() -> setRightShooterMotorRPM());
     }
 
     public void setCenterShooterMotorRPM() {
-        centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM,ControlType.kVelocity);
+        centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM, ControlType.kVelocity);
     }
+
     public Command testCenterShooterCommand() {
         return runOnce(() -> setCenterShooterMotorRPM());
     }
 
     public void stopLeftShooterMotorRPM() {
-        leftShooterMotor.set(0);    
+        leftShooterMotor.set(0);
     }
+
     public Command stopLeftShooterCommand() {
         return runOnce(() -> stopLeftShooterMotorRPM());
     }
 
     public void stopCenterShooterMotorRPM() {
-        centerShooterMotor.set(0);    
+        centerShooterMotor.set(0);
     }
+
     public Command stopCenterShooterCommand() {
         return runOnce(() -> stopCenterShooterMotorRPM());
     }
 
     public void stopRightShooterMotorRPM() {
-        rightShooterMotor.set(0);    
+        rightShooterMotor.set(0);
     }
+
     public Command stopRightShooterCommand() {
         return runOnce(() -> stopRightShooterMotorRPM());
     }
-    
 
     public double getShooterMotorRPM() {
         return rightShooterMotor.getEncoder().getVelocity();
     }
 
     public void setIndexerAndRampMotorRPM() {
-        indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM, ControlType.kVelocity);
+        indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM,
+                ControlType.kVelocity);
     }
 
     public void reverseIndexerAndRampMotorRPM() {
-        indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM * -1, ControlType.kVelocity);
+        indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM * -1,
+                ControlType.kVelocity);
     }
 
     public Command reverseIndexerAndRampMotorRPMCommand() {
@@ -164,20 +193,30 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public Command stopIndexerAndRampMotorCommand() {
-        return runOnce(()-> indexerAndRampMotor.set(0));
+        return runOnce(() -> indexerAndRampMotor.set(0));
     }
 
     /*public Command shootFuelCommand() {
         return runOnce(() -> setShooterMotorsRPM())
-                .until(() -> {return (getShooterMotorRPM() <= Constants.ShooterConstants.SHOOTER_RPM * 0.9);})
-                .andThen(() -> setIndexerAndRampMotorRPM()); 
-    } */
+                .until(() -> {
+                    return (getShooterMotorRPM() <= Constants.ShooterConstants.SHOOTER_RPM);
+                })
+                .andThen(() -> setIndexerAndRampMotorRPM());
+    }*/
 
     
-      public Command shootFuelCommand() {
-      return runOnce(() -> setShooterMotorsRPM()).andThen(new WaitCommand(2))
-      .andThen(() -> setIndexerAndRampMotorRPM());
-      }; 
+     //public Command shootFuelCommand() {
+    //  return runOnce(() -> setShooterMotorsRPM()).andThen(new WaitCommand(2))
+    //  .andThen(() -> setIndexerAndRampMotorRPM());
+    //  };
+
+     public Command shootFuelCommand() {
+      return runOnce(() -> setShooterMotorsRPM())
+        .andThen(new WaitUntilCommand(() -> {
+            return (getShooterMotorRPM() <= Constants.ShooterConstants.SHOOTER_RPM);
+        }))
+        .andThen(() -> setIndexerAndRampMotorRPM());
+    };
      
 
     public void stopShooters() {
@@ -193,34 +232,10 @@ public class ShooterSubsystem extends SubsystemBase {
         return runOnce(() -> stopShooters());
     }
 
-    public void moveActuator(double desiredPotentiometerPosition) {
-        if (desiredPotentiometerPosition > currentPotentiometerPosition) {
-            //TODO: Test for positive or negative power
-            //leftActuatorMotor.set(0.1);
-            //rightActuatorMotor.set(0.1);
-        } else {
-            //leftActuatorMotor.set(-0.1);
-            //rightActuatorMotor.set(-0.1);
-        }
-    }
-
-    public void stopActuator() {
-        //leftActuatorMotor.set(0);
-        //rightActuatorMotor.set(0);
-    }
-
-    public Command moveActuatorCommand(double desiredPotentiometerPosition) {
-        return run(() -> moveActuator(desiredPotentiometerPosition))
-                .until(() -> currentPotentiometerPosition == currentPotentiometerPosition)
-                .andThen(() -> stopActuator());
-    }
-
     @Override
     public void periodic() {
 
         SmartDashboard.putNumber("Shooter Velocity", leftShooterMotor.getEncoder().getVelocity());
-        /* SmartDashboard.putNumber("Left Potentiometer Distance", leftPotentiometer.get());
-        SmartDashboard.putNumber("Right Potentiometer Distance", rightPotentiometer.get());
-        currentPotentiometerPosition = leftPotentiometer.get(); */
+
     }
 }

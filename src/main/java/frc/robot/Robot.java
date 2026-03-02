@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.TargetingSubsystems;
 
 /**
@@ -94,16 +96,8 @@ public class Robot extends TimedRobot {
         //Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
         //Constants.IntakeConstants.updateIntakeWheelsRPM();
         Constants.ShooterConstants.updateShooterRPM();
+        TargetingSubsystems.getHubPoseTheta(m_robotContainer.getSwerveDrive());
         //Constants.ShooterConstants.updateIndexerAndRampMotorRPM();
-        
-        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.ORANGE_PHOTON_CAM,
-                Constants.TargetingConstants.ORANGE_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
-        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.BLACK_PHOTON_CAM,
-                Constants.TargetingConstants.BLACK_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
-        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.RED_PHOTON_CAM,
-                Constants.TargetingConstants.RED_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
-        TargetingSubsystems.updateRobotPose(Constants.TargetingConstants.PURPLE_PHOTON_CAM,
-                Constants.TargetingConstants.PURPLE_PHOTON_ESTIMATOR, m_robotContainer.getSwerveDrive());
 
     }
 
@@ -132,6 +126,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        IntakeSubsystem.resetIntakeRotationEncoder();
         m_robotContainer.setMotorBrake(true);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -142,6 +137,9 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
         }
+
+
+
     }
 
     /**

@@ -82,37 +82,47 @@ public final class Constants {
         public static final int RIGHT_SHOOTER_MOTOR_ID = 40;
         public static final int INDEXER_MOTOR_ID = 43;
 
-        public static double SHOOTER_MOTOR_P = 0.0018;
+        public static double SHOOTER_MOTOR_P = 0.001;
         public static double SHOOTER_MOTOR_I = 0;
-        public static double SHOOTER_MOTOR_D = 0;
+        public static double SHOOTER_MOTOR_D = 0.001;
+        public static double SHOOTER_MOTOR_S = 0.2;
+        public static double SHOOTER_MOTOR_V = 0.0015;
 
         public static double INDEXER_MOTOR_P = 0.0001;
         public static double INDEXER_MOTOR_I = 0;
         public static double INDEXER_MOTOR_D = 0;
 
-
-        /*private static GenericEntry indexerAndRampRPM = programmingTab.add("Desired Ramp + Indexer RPM", 2000)
-                .withWidget(BuiltInWidgets.kNumberBar).getEntry();*/
-
+        /*
+         * private static GenericEntry indexerAndRampRPM =
+         * programmingTab.add("Desired Ramp + Indexer RPM", 2000)
+         * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
+         */
 
         public static double INDEXER_AND_RAMP_MOTOR_RPM = 10000;
 
         // this method called in robot periodic so values updated in elastic are
         // constantly read and applied to RAMP_MOTOR_SPEED
-        /*public static void updateIndexerAndRampMotorRPM() {
-            INDEXER_AND_RAMP_MOTOR_RPM = indexerAndRampRPM.getDouble(2000);
-        }*/
+        /*
+         * public static void updateIndexerAndRampMotorRPM() {
+         * INDEXER_AND_RAMP_MOTOR_RPM = indexerAndRampRPM.getDouble(2000);
+         * }
+         */
     }
 
     public static class IntakeConstants {
 
-        /* private static GenericEntry intakeRPM = programmingTab.add("Desired Intake RPM", -1000)
-                .withWidget(BuiltInWidgets.kNumberBar).getEntry(); */
+        /*
+         * private static GenericEntry intakeRPM =
+         * programmingTab.add("Desired Intake RPM", -1000)
+         * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
+         */
         public static double INTAKE_WHEELS_MOTOR_RPM = -7000;
 
-        /*public static void updateIntakeWheelsRPM() {
-            INTAKE_WHEELS_MOTOR_RPM = intakeRPM.getDouble(-1000);
-        }*/
+        /*
+         * public static void updateIntakeWheelsRPM() {
+         * INTAKE_WHEELS_MOTOR_RPM = intakeRPM.getDouble(-1000);
+         * }
+         */
 
         public static final int INTAKE_WHEELS_MOTOR_ID = 50;
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
@@ -122,61 +132,70 @@ public final class Constants {
             public static final double INTAKE_ROTATOR_I = 0;
             public static final double INTAKE_ROTATOR_D = 0;
         }
+
         public static final double INTAKE_MOTOR_P = 0.0001;
         public static final double INTAKE_MOTOR_I = 0;
         public static final double INTAKE_MOTOR_D = 0;
 
-        public static final double INTAKE_COLLECT_ENCODER_VALUE = 5;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -2.5;
-        public static final double INTAKE_RETRACT_ENCODER_VALUE = 0;
+        public static final double INTAKE_COLLECT_ENCODER_VALUE = 0;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -3;
+        public static final double INTAKE_RETRACT_ENCODER_VALUE = -5;
     }
 
-
-        // create object and a new widget under programming tab in Elastic where object
-        // retrieves value from widget
-
-
+    // create object and a new widget under programming tab in Elastic where object
+    // retrieves value from widget
 
     public static class TargetingConstants {
         public static final Pose2d RIGHT_CLIMB_POSE = new Pose2d(1.075, 4.75, Rotation2d.fromDegrees(90));
         public static final Pose2d LEFT_CLIMB_POSE = new Pose2d(1.075, 2.75, Rotation2d.fromDegrees(-90));
 
-        public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Rear Left Camera");
-        public static final PhotonCamera BLACK_PHOTON_CAM = new PhotonCamera("Rear Right Camera");
+        public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Back Left Camera");
+        public static final PhotonCamera BLACK_PHOTON_CAM = new PhotonCamera("Back Right Camera");
         public static final PhotonCamera RED_PHOTON_CAM = new PhotonCamera("Front Left Camera");
         public static final PhotonCamera PURPLE_PHOTON_CAM = new PhotonCamera("Front Right Camera");
 
-        public static final Pose2d HUB_POSE = new Pose2d(4.625, 4.03, new Rotation2d());
+        public static Rotation2d HUB_ROTATION_BLUE;
+        public static Rotation2d HUB_ROTATION_RED;
 
-        public static final Transform3d ORANGE_ROBOT_TO_CAM = new Transform3d(new Translation3d(0, 0, 0),
-                new Rotation3d(0, 0, 0));
-        public static final Transform3d BLACK_ROBOT_TO_CAM = new Transform3d(new Translation3d(0, 0, 0),
-                new Rotation3d(0, 0, 0));
-        public static final Transform3d RED_ROBOT_TO_CAM = new Transform3d(new Translation3d(0, 0, 0),
-                new Rotation3d(0, 0, 0));
-        public static final Transform3d PURPLE_ROBOT_TO_CAM = new Transform3d(new Translation3d(0, 0, 0),
+        public static final double HUB_X_POSE_BLUE = 4.625;
+        public static final double HUB_Y_POSE_BLUE = 4.03;
+
+        public static final double HUB_X_POSE_RED = 4.625;
+        public static final double HUB_Y_POSE_RED = 0;
+
+        public static final Transform3d ROBOT_TO_BACK_LEFT_CAM = new Transform3d(
+                new Translation3d(-Units.inchesToMeters(12.75), Units.inchesToMeters(6.25),   Units.inchesToMeters(13.1875)),
+                new Rotation3d(0, 0, Math.toRadians(-205)));
+
+        public static final Transform3d ROBOT_TO_BACK_RIGHT_CAM = new Transform3d(
+                new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.25), Units.inchesToMeters(14)),
+                new Rotation3d(0, 0, Math.toRadians(200)));
+
+        public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
+                new Translation3d(Units.inchesToMeters(23.375), 0, Units.inchesToMeters(13)),
                 new Rotation3d(0, 0, 0));
 
-        public static final PhotonPoseEstimator ORANGE_PHOTON_ESTIMATOR = new PhotonPoseEstimator(
-                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark),
-                ORANGE_ROBOT_TO_CAM);
-        public static final PhotonPoseEstimator BLACK_PHOTON_ESTIMATOR = new PhotonPoseEstimator(
-                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark),
-                BLACK_ROBOT_TO_CAM);
-        public static final PhotonPoseEstimator RED_PHOTON_ESTIMATOR = new PhotonPoseEstimator(
-                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark),
-                RED_ROBOT_TO_CAM);
-        public static final PhotonPoseEstimator PURPLE_PHOTON_ESTIMATOR = new PhotonPoseEstimator(
-                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltAndymark),
-                PURPLE_ROBOT_TO_CAM);
+        public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
+                new Translation3d(0, 0, 0),
+                new Rotation3d(0, 0, 0));
     }
 
     public static class ClimberConstants {
-        public static final int CLIMB_MOTOR_ID = 60;
-        public static final int RATCHET_PWM_PORT = 9;
+        public static final int CLIMB_MOTOR_ID = 52;
 
-        public static final double RATCHET_UNLOCK_ANGLE = 0;
-        public static final double RATCHET_LOCK_ANGLE = 180;
         public static final double CLIMBER_SPEED = .5;
+
+        public static final double CLIMBER_PID_P = 5;
+        public static final double CLIMBER_PID_I = 0;
+        public static final double CLIMBER_PID_D = 0;
+
+        public static final double CLIMBER_LIFTED_SETPOINT_VALUE = 45;
+        public static final double CLIMBER_LOWERED_SETPOINT_VALUE = 0;
+
+    }
+
+    public static class LEDConstants {
+        public static final int LED_DIO_PORT = 0;
+
     }
 }

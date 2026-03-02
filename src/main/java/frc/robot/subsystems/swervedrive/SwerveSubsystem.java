@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.subsystems.TargetingSubsystems;
 import frc.robot.subsystems.swervedrive.Vision.Cameras;
 import java.io.File;
 import java.io.IOException;
@@ -146,7 +147,7 @@ public class SwerveSubsystem extends SubsystemBase {
         // When vision is enabled we must manually update odometry in SwerveDrive
         if (visionDriveTest) {
             swerveDrive.updateOdometry();
-            //vision.updatePoseEstimation(swerveDrive);
+            vision.updatePoseEstimation(swerveDrive);
         }
     }
 
@@ -188,9 +189,9 @@ public class SwerveSubsystem extends SubsystemBase {
                     new PPHolonomicDriveController(
                             // PPHolonomicController is the built in path following controller for holonomic
                             // drive trains
-                            new PIDConstants(5.0, 0.0, 0.0),
+                            new PIDConstants(3.6, 0.0, 0.0),
                             // Translation PID constants
-                            new PIDConstants(3.8, 0.0, 0.0)
+                            new PIDConstants(3.675, 0.0, 0.00)
                     // Rotation PID constants
                     ),
                     config,

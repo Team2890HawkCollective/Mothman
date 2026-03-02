@@ -40,6 +40,7 @@ import frc.robot.subsystems.TargetingSubsystems;
 import swervelib.SwerveInputStream;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.swervedrive.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -64,8 +65,8 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-    // private final TargetingSubsystems m_TargetingSubsystems = new
-    // TargetingSubsystems();
+    //private final TargetingSubsystems m_TargetingSubsystems = new
+      //  TargetingSubsystems();
     private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
     private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
 
@@ -136,6 +137,10 @@ public class RobotContainer {
 
         // Create the NamedCommands that will be used in PathPlanner
         NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+        NamedCommands.registerCommand("Shoot_Fuel_Command", m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.startIntakeMotorCommand()).andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly().withTimeout(2)));
+        NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.deployintakeCommand());
+        NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand());
+        NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
 
         // Have the autoChooser pull in all PathPlanner autos as options
         autoChooser = AutoBuilder.buildAutoChooser();
@@ -149,6 +154,8 @@ public class RobotContainer {
 
         // Put the autoChooser on the SmartDashboard
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
+
 
     }
 
@@ -183,20 +190,15 @@ public class RobotContainer {
                 .onFalse(m_IntakeSubsystem.stopIntakeMotorCommand().andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand()));
         // command for
         // full shooting system including linear actuators
-        driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
-               // .andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
+        driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
 
         driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly());
 
-        driverXbox.y().onTrue(m_ClimberSubsystem.lowerRobotCommand())
-                .onFalse(m_ClimberSubsystem.stopClimberCommand());
-        driverXbox.a().onTrue(m_ClimberSubsystem.liftRobotCommand())
-                .onFalse(m_ClimberSubsystem.stopClimberCommand());
+        driverXbox.y().onTrue(m_ClimberSubsystem.lowerRobotCommand());
+        driverXbox.a().onTrue(m_ClimberSubsystem.liftRobotCommand());
         driverXbox.povDown().onTrue(m_IntakeSubsystem.retractIntakeCommand());
         driverXbox.povUp().onTrue(m_IntakeSubsystem.deployintakeCommand());
-        driverXbox.povLeft().onTrue(m_ClimberSubsystem.toggleRatchetCommand(true));
-        driverXbox.povRight().onTrue(m_ClimberSubsystem.toggleRatchetCommand(false));
-        driverXbox.rightStick().onTrue(climbCommand());
+        //driverXbox.povRight().whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
 
         // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
         driverXbox.x().onTrue(m_ShooterSubsystem.stopShooterCommand()
@@ -289,18 +291,6 @@ public class RobotContainer {
         return drivebase;
     }
 
-    public Command climbCommand() {
-        if (driverXbox.getRightY() > -0.5) {
-            return m_ClimberSubsystem.lowerRobotCommand();
-        } else if (driverXbox.getRightX() < 0.5) {
-            return m_ClimberSubsystem.liftRobotCommand();
-        } else
-            return m_ClimberSubsystem.stopClimberCommand();
 
-    }
 
-    public SequentialCommandGroup fullShootFuelSystemCommand = new SequentialCommandGroup(
-            // m_ShooterSubsystem.moveActuatorCommand(Constants.ShooterConstants.DESIRED_POTENTIOMETER_DISTANCE),
-            m_ShooterSubsystem.shootFuelCommand(),
-            m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly());
 }

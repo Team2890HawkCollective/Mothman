@@ -36,11 +36,12 @@ public class IntakeSubsystem extends SubsystemBase {
         .i(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_I)
         .d(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_D)
 
-        .p(.06, ClosedLoopSlot.kSlot1)
+        .p(.13, ClosedLoopSlot.kSlot1)
         .i(0, ClosedLoopSlot.kSlot1)
         .d(0, ClosedLoopSlot.kSlot1);
         intakeRotatorMotor.configure(intakeRotatorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
+        intakeRotatorConfig.smartCurrentLimit(40);
         intakeRotatorPIDController = intakeRotatorMotor.getClosedLoopController();
 
         intakeWheelsMotorConfig.closedLoop.pid(Constants.IntakeConstants.INTAKE_MOTOR_P,
@@ -49,6 +50,11 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeWheelsMotor.configure(intakeWheelsMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         intakeWheelsMotorPIDController = intakeWheelsMotor.getClosedLoopController();
+    }
+
+    public static void resetIntakeRotationEncoder()
+    {
+        intakeRotatorMotor.getEncoder().setPosition(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE);
     }
 
     public void startIntakeMotor() {
@@ -93,12 +99,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void assistFuelIntake() {
         intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE,
-                ControlType.kPosition);
+                ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 
     public Command assistFuelIntakeCommand() {
-        return runOnce(() -> assistFuelIntake()).andThen(new WaitCommand(2)).andThen(deployintakeCommand())
-                .andThen(new WaitCommand(2));
+        return runOnce(() -> assistFuelIntake()).andThen(new WaitCommand(1.5)).andThen(deployintakeCommand())
+                .andThen(new WaitCommand(1.5));
     }
 
     @Override

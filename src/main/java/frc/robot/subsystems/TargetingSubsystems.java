@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
+import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 
+import org.dyn4j.geometry.Rotation;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -35,6 +37,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -51,8 +55,13 @@ public class TargetingSubsystems extends SubsystemBase {
 
     PIDController photonAimPIDController = new PIDController(3, 0, 0.001);
 
+    static Pose2d allianceHubPose;
+    public static Rotation2d hubThetaPose = new Rotation2d();
+    public static Optional<Alliance> alliance = DriverStation.getAlliance();
+
     public TargetingSubsystems() {
         photonAimPIDController.enableContinuousInput(-Math.PI, Math.PI);
+       
     }
 
     Pose2d currentRobotPose;
@@ -95,14 +104,17 @@ public class TargetingSubsystems extends SubsystemBase {
         }, swerveDrive);
     }
 
-    public Command aimAtHub(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) {
+    public Command aimAtHubPose(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) {
         return new RunCommand(() -> {
             currentRobotPose = swerveDrive.getPose();
 
+
+
             // Transform2d errorFromDesiredPose = desiredPose.minus(currentRobotPose);
 
+            
             Rotation2d angleDifference = PhotonUtils.getYawToPose(currentRobotPose,
-                    Constants.TargetingConstants.HUB_POSE);
+                    allianceHubPose);
 
             double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(),
                     angleDifference.getRadians());
@@ -110,11 +122,11 @@ public class TargetingSubsystems extends SubsystemBase {
             angleSpeed = MathUtil.clamp(angleSpeed, -3.0, 3.0);
 
             swerveDrive.drive(new Translation2d(driverXbox.getLeftX() * -1, -driverXbox.getLeftY() * -1), angleSpeed,
-                    false);
+                    true);
         }, swerveDrive);
     }
 
-    Command photonAimAtClimb(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) {
+    Command photonAimAtAprilTag(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) {
         return new RunCommand(() -> {
             double rot = 0.0;
             var result = Constants.TargetingConstants.RED_PHOTON_CAM.getLatestResult();
@@ -130,65 +142,29 @@ public class TargetingSubsystems extends SubsystemBase {
         }, swerveDrive);
     }
 
-    public PhotonPoseEstimator getPhotonPoseEstimator(PhotonPoseEstimator poseEstimator) {
-        return poseEstimator;
+
+    public static void getHubPoseTheta(SwerveSubsystem swerveDrive)
+    {
+        if(alliance.isPresent()){
+            if (alliance.get() == Alliance.Blue){
+            hubThetaPose = new Rotation2d(Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getPose().getY(), Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getPose().getX()));
+
+                allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_BLUE, Constants.TargetingConstants.HUB_Y_POSE_BLUE, hubThetaPose);
+            }
+
+            else{
+                hubThetaPose = new Rotation2d(Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_RED - swerveDrive.getPose().getY(), Constants.TargetingConstants.HUB_X_POSE_RED - swerveDrive.getPose().getX()));
+                allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_RED, Constants.TargetingConstants.HUB_Y_POSE_RED, hubThetaPose);
+            }
+        } 
+
     }
-
-    /*
-     * // static public NetworkTable table =
-     * //
-     * NetworkTableInstance.getDefault().getTable(Constants.LimeLight.LIMELIGHT_NAME
-     * );
-     * // static public NetworkTableEntry ty = table.getEntry("ty");
-     * // static double targetOffsetAngle_Vertical = ty.getDouble(0.0);
-     * 
-     * // how many degrees back is your limelight rotated from perfectly vertical?
-     * static double limelightMountAngleDegrees = 25.0;
-     * 
-     * // distance from the center of the Limelight lens to the floor
-     * static double limelightLensHeightInches = 27.5;
-     * 
-     * // distance from the target to the floor
-     * static double goalHeightInches = 44;
-     * 
-     * static double angleToGoalDegrees = limelightMountAngleDegrees +
-     * Constants.LimeLight.LIMELIGHT_TY;
-     * static double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-     * 
-     * // calculate distance
-     * static double distanceFromLimelightToGoalInches = (goalHeightInches -
-     * limelightLensHeightInches)
-     * / Math.tan(angleToGoalRadians);
-     * 
-     * public static double getDistanceFromAprilTag() {
-     * angleToGoalDegrees = limelightMountAngleDegrees +
-     * Constants.LimeLight.LIMELIGHT_TY;
-     * angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
-     * distanceFromLimelightToGoalInches = (goalHeightInches -
-     * limelightLensHeightInches)
-     * / Math.tan(angleToGoalRadians);
-     * return distanceFromLimelightToGoalInches;
-     * }
-     */
-
-    public static Optional<EstimatedRobotPose> visionEst = Optional.empty();
-
-    public static void updateRobotPose(PhotonCamera camera, PhotonPoseEstimator poseEstimator, SwerveSubsystem swerveDrive) {
-     /*  for (var result : camera.getAllUnreadResults()) {
-            visionEst = poseEstimator.estimateCoprocMultiTagPose(result);
-            
-            if (visionEst.isPresent()) {
-            EstimatedRobotPose estimatedPose = visionEst.get();
-            swerveDrive.getSwerveDrive()
-                    .addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
-        }
-
-        
-    }*/
-}
-
+   
     @Override
     public void periodic() {
+        
+        SmartDashboard.putString("Target Hub Pose", allianceHubPose.getX() + "\n" + allianceHubPose.getY() + "\n" + allianceHubPose.getRotation()) ;
+        
         /*
          * Shuffleboard.getTab("Vision").add("Photon Vision Yaw Value",
          * photonVision.getLatestResult().getBestTarget().getYaw());
