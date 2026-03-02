@@ -5,9 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Deploy_Intake_Command"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "HP to hub and shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Fuel_Command"
           }
         }
       ]
