@@ -128,9 +128,9 @@ public final class Constants {
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
 
         public static class IntakeRotatorPID {
-            public static final double INTAKE_ROTATOR_P = 0.03;
+            public static final double INTAKE_ROTATOR_P = 10;
             public static final double INTAKE_ROTATOR_I = 0;
-            public static final double INTAKE_ROTATOR_D = 0;
+            public static final double INTAKE_ROTATOR_D = 2;
         }
 
         public static final double INTAKE_MOTOR_P = 0.0001;
@@ -138,8 +138,13 @@ public final class Constants {
         public static final double INTAKE_MOTOR_D = 0;
 
         public static final double INTAKE_COLLECT_ENCODER_VALUE = 0;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -3;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -2.5;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = -5;
+
+        public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .26;
+        public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .64;
+        public static final double INTAKE_THROUGHBORE_ENCODER_MIDDLE = .54;
+
     }
 
     // create object and a new widget under programming tab in Elastic where object
@@ -195,7 +200,8 @@ public final class Constants {
     }
 
     public static class LEDConstants {
-        public static final int LED_DIO_PORT = 0;
+        public static final int LED_PWM_PORT = 6;
+
 
     }
 }

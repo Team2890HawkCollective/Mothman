@@ -4,37 +4,87 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Percent;
+import static edu.wpi.first.units.Units.Second;
+
 import java.util.Optional;
 
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class LEDSubsystem extends SubsystemBase {
-  /** Creates a new LEDSubsystem. */
+
+  AddressableLED m_LED;
+
+  AddressableLEDBuffer m_Buffer;
+  AddressableLEDBufferView m_Left;
+  AddressableLEDBufferView m_Right;
+
+  LEDPattern hubActiveColor = LEDPattern.solid(Color.kGreen);
+  LEDPattern hubActiveBlinkPattern = hubActiveColor.blink(Second.of(0.5));
+
+  LEDPattern hubInactiveColor = LEDPattern.solid(Color.kRed);
+  LEDPattern hubInactiveBlinkPattern = hubInactiveColor.blink(Second.of(0.5));
+
+  LEDPattern allianceShiftColor = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kTeal, Color.kMagenta);
+  LEDPattern allianceShiftPattern = allianceShiftColor.scrollAtRelativeSpeed(Percent.per(Second).of(100));
+
+  LEDPattern transitionColor = LEDPattern.solid(Color.kYellow);
+  LEDPattern transitionBlinkPattern = transitionColor.blink(Second.of(0.5));
+
+  LEDPattern endGameColor = LEDPattern.solid(Color.kOrangeRed);
+  LEDPattern endGameBlinkPattern = endGameColor.blink(Second.of(0.2));
+
+  LEDPattern rainbow = LEDPattern.rainbow(255, 128);
+  LEDPattern rainbowScroll = rainbow.scrollAtRelativeSpeed(Percent.per(Second).of(100));
 
   public LEDSubsystem() {
+    m_LED = new AddressableLED(Constants.LEDConstants.LED_PWM_PORT);
+    m_Buffer = new AddressableLEDBuffer(44);    
+    m_LED.setLength(m_Buffer.getLength());
 
+    m_Left = m_Buffer.createView(0, 21);
+    m_Right = m_Buffer.createView(22, 43);
+
+    hubInactiveBlinkPattern.applyTo(m_Left);
+    hubActiveBlinkPattern.applyTo(m_Right);
+
+    m_LED.setData(m_Buffer);
+    m_LED.start();
   }
 
   private double matchTime;
   private boolean isHubActive;
 
   public void setLEDPeriod() {
+    if(DriverStation.isAutonomous())
+    {
+      allianceShiftPattern.applyTo(m_Buffer);
+    }
+
     if (matchTime <= 140 && matchTime > 130 && !DriverStation.isAutonomous()) // transition
     {
-
+      transitionBlinkPattern.applyTo(m_Left);
     }
 
     if (matchTime <= 130 && matchTime > 30 && !DriverStation.isAutonomous()) // shifts
     {
-
+      allianceShiftPattern.applyTo(m_Left);
     }
 
     if (matchTime <= 30 && !DriverStation.isAutonomous()) // endgame
     {
-
+      endGameBlinkPattern.applyTo(m_Left);
     }
+
+    allianceShiftPattern.applyTo(m_Buffer);
   }
 
   public void setLEDHubActive() {
@@ -113,5 +163,8 @@ public class LEDSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     matchTime = DriverStation.getMatchTime();
     isHubActive = isHubActive();
+    setLEDPeriod();
+
+    m_LED.setData(m_Buffer);
   }
 }

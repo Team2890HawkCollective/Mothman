@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.TargetingSubsystems;
 
 /**
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
+    private LEDSubsystem m_LedSubsystem;
 
     private Timer disabledTimer;
     private static NetworkTable table;
@@ -58,6 +60,8 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
+
+        m_LedSubsystem = new LEDSubsystem();
         m_robotContainer = new RobotContainer();
 
         // Create a timer to disable motor brake a few seconds after disable. This will
@@ -70,6 +74,7 @@ public class Robot extends TimedRobot {
         }
 
         m_robotContainer.getSwerveDrive().zeroGyroWithAlliance();
+        IntakeSubsystem.resetIntakeRotationEncoder();
     }
 
     /**
@@ -126,7 +131,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        IntakeSubsystem.resetIntakeRotationEncoder();
+       // IntakeSubsystem.resetIntakeRotationEncoder();
         m_robotContainer.setMotorBrake(true);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 

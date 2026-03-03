@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
@@ -52,112 +53,117 @@ import frc.robot.subsystems.swervedrive.Vision;
  */
 public class RobotContainer {
 
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    final CommandXboxController driverXbox = new CommandXboxController(0);
-    final CommandXboxController operatorXbox = new CommandXboxController(1);
+        // Replace with CommandPS4Controller or CommandJoystick if needed
+        final CommandXboxController driverXbox = new CommandXboxController(0);
+        final CommandXboxController operatorXbox = new CommandXboxController(1);
 
-    // The robot's subsystems and commands are defined here...
-    private static final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
-            "swerve/neo"));
+        // The robot's subsystems and commands are defined here...
+        private static final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+                        "swerve/neo"));
 
-    // Establish a Sendable Chooser that will be able to be sent to the
-    // SmartDashboard, allowing selection of desired auto
-    private final SendableChooser<Command> autoChooser;
+        // Establish a Sendable Chooser that will be able to be sent to the
+        // SmartDashboard, allowing selection of desired auto
+        private final SendableChooser<Command> autoChooser;
 
-    private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-    //private final TargetingSubsystems m_TargetingSubsystems = new
-      //  TargetingSubsystems();
-    private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
-    private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+        private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
+        // private final TargetingSubsystems m_TargetingSubsystems = new
+        // TargetingSubsystems();
+        private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
+        private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+        /**
+         * Converts driver input into a field-relative ChassisSpeeds that is controlled
+         * by angular velocity.
+         */
+        SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
+                        () -> driverXbox.getLeftY() * -1,
+                        () -> driverXbox.getLeftX() * -1)
+                        .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
+                        .deadband(OperatorConstants.DEADBAND)
+                        .scaleTranslation(0.8)
+                        .allianceRelativeControl(true);
 
-    /**
-     * Converts driver input into a field-relative ChassisSpeeds that is controlled
-     * by angular velocity.
-     */
-    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-            () -> driverXbox.getLeftY() * -1,
-            () -> driverXbox.getLeftX() * -1)
-            .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
-            .deadband(OperatorConstants.DEADBAND)
-            .scaleTranslation(0.8)
-            .allianceRelativeControl(true);
+        /**
+         * Clone's the angular velocity input stream and converts it to a fieldRelative
+         * input stream.
+         */
+        SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
+                        .withControllerHeadingAxis(driverXbox::getRightX,
+                                        driverXbox::getRightY)
+                        .headingWhile(true);
 
-    /**
-     * Clone's the angular velocity input stream and converts it to a fieldRelative
-     * input stream.
-     */
-    SwerveInputStream driveDirectAngle = driveAngularVelocity.copy()
-            .withControllerHeadingAxis(driverXbox::getRightX,
-                    driverXbox::getRightY)
-            .headingWhile(true);
+        /**
+         * Clone's the angular velocity input stream and converts it to a robotRelative
+         * input stream.
+         */
+        SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(false)
+                        .allianceRelativeControl(true);
 
-    /**
-     * Clone's the angular velocity input stream and converts it to a robotRelative
-     * input stream.
-     */
-    SwerveInputStream driveRobotOriented = driveAngularVelocity.copy().robotRelative(false)
-            .allianceRelativeControl(true);
+        SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
+                        () -> -driverXbox.getLeftY(),
+                        () -> -driverXbox.getLeftX())
+                        .withControllerRotationAxis(() -> driverXbox.getRawAxis(
+                                        2))
+                        .deadband(OperatorConstants.DEADBAND)
+                        .scaleTranslation(0.8)
+                        .allianceRelativeControl(true);
+        // Derive the heading axis with math!
+        SwerveInputStream driveDirectAngleKeyboard = driveAngularVelocityKeyboard.copy()
+                        .withControllerHeadingAxis(() -> Math.sin(
+                                        driverXbox.getRawAxis(
+                                                        2) *
+                                                        Math.PI)
+                                        *
+                                        (Math.PI *
+                                                        2),
+                                        () -> Math.cos(
+                                                        driverXbox.getRawAxis(
+                                                                        2) *
+                                                                        Math.PI)
+                                                        *
+                                                        (Math.PI *
+                                                                        2))
+                        .headingWhile(true)
+                        .translationHeadingOffset(true)
+                        .translationHeadingOffset(Rotation2d.fromDegrees(
+                                        0));
 
-    SwerveInputStream driveAngularVelocityKeyboard = SwerveInputStream.of(drivebase.getSwerveDrive(),
-            () -> -driverXbox.getLeftY(),
-            () -> -driverXbox.getLeftX())
-            .withControllerRotationAxis(() -> driverXbox.getRawAxis(
-                    2))
-            .deadband(OperatorConstants.DEADBAND)
-            .scaleTranslation(0.8)
-            .allianceRelativeControl(true);
-    // Derive the heading axis with math!
-    SwerveInputStream driveDirectAngleKeyboard = driveAngularVelocityKeyboard.copy()
-            .withControllerHeadingAxis(() -> Math.sin(
-                    driverXbox.getRawAxis(
-                            2) *
-                            Math.PI)
-                    *
-                    (Math.PI *
-                            2),
-                    () -> Math.cos(
-                            driverXbox.getRawAxis(
-                                    2) *
-                                    Math.PI)
-                            *
-                            (Math.PI *
-                                    2))
-            .headingWhile(true)
-            .translationHeadingOffset(true)
-            .translationHeadingOffset(Rotation2d.fromDegrees(
-                    0));
+        /**
+         * The container for the robot. Contains subsystems, OI devices, and commands.
+         */
+        public RobotContainer() {
+                // Configure the trigger bindings
+                configureBindings();
+                DriverStation.silenceJoystickConnectionWarning(true);
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        // Configure the trigger bindings
-        configureBindings();
-        DriverStation.silenceJoystickConnectionWarning(true);
+                // Create the NamedCommands that will be used in PathPlanner
+                NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+                NamedCommands.registerCommand("Shoot_Fuel_Command",
+                                m_ShooterSubsystem.shootFuelCommand()
+                                                .andThen(m_IntakeSubsystem.startIntakeMotorCommand())
+                                                .andThen(m_IntakeSubsystem.assistFuelIntakeCommand(
+                                                                Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE,
+                                                                Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE)
+                                                                .repeatedly()
+                                                                .withTimeout(2)));
+                NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem
+                                .goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE));
+                NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand());
+                NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
 
-        // Create the NamedCommands that will be used in PathPlanner
-        NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-        NamedCommands.registerCommand("Shoot_Fuel_Command", m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.startIntakeMotorCommand()).andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly().withTimeout(2)));
-        NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.deployintakeCommand());
-        NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand());
-        NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
+                // Have the autoChooser pull in all PathPlanner autos as options
+                autoChooser = AutoBuilder.buildAutoChooser();
 
-        // Have the autoChooser pull in all PathPlanner autos as options
-        autoChooser = AutoBuilder.buildAutoChooser();
+                // Set the default auto (do nothing)
+                autoChooser.setDefaultOption("Do Nothing", Commands.none());
 
-        // Set the default auto (do nothing)
-        autoChooser.setDefaultOption("Do Nothing", Commands.none());
+                // Add a simple auto option to have the robot drive forward for 1 second then
+                // stop
+                autoChooser.addOption("Drive Forward", drivebase.driveForward().withTimeout(1));
 
-        // Add a simple auto option to have the robot drive forward for 1 second then
-        // stop
-        autoChooser.addOption("Drive Forward", drivebase.driveForward().withTimeout(1));
+                // Put the autoChooser on the SmartDashboard
+                SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        // Put the autoChooser on the SmartDashboard
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-
-
-
-    }
+        }
 
     /**
      * Use this method to define your trigger->command mappings. Triggers can be
@@ -192,17 +198,21 @@ public class RobotContainer {
         // full shooting system including linear actuators
         driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
 
-        driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly());
+        driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE, Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY).repeatedly());
+
 
         driverXbox.y().onTrue(m_ClimberSubsystem.lowerRobotCommand());
         driverXbox.a().onTrue(m_ClimberSubsystem.liftRobotCommand());
-        driverXbox.povDown().onTrue(m_IntakeSubsystem.retractIntakeCommand());
-        driverXbox.povUp().onTrue(m_IntakeSubsystem.deployintakeCommand());
+        driverXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY));
+        driverXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_RETRACT));
+
+        //driverXbox.povDown().onTrue(m_IntakeSubsystem.deployIntakeCommand());
+        //driverXbox.povUp().onTrue(m_IntakeSubsystem.retractIntakeCommand());
         //driverXbox.povRight().whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
 
         // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
         driverXbox.x().onTrue(m_ShooterSubsystem.stopShooterCommand()
-                .andThen(m_IntakeSubsystem.deployintakeCommand()));
+                .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)));
         // driverXbox.a().whileTrue(aimAtHopperCommand(() -> -driverXbox.getLeftY(),
         // () -> -driverXbox.getLeftX()));
 
@@ -272,25 +282,23 @@ public class RobotContainer {
 
     }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        // Pass in the selected auto from the SmartDashboard as our desired autnomous
-        // commmand
-        return autoChooser.getSelected();
-    }
+        /**
+         * Use this to pass the autonomous command to the main {@link Robot} class.
+         *
+         * @return the command to run in autonomous
+         */
+        public Command getAutonomousCommand() {
+                // Pass in the selected auto from the SmartDashboard as our desired autnomous
+                // commmand
+                return autoChooser.getSelected();
+        }
 
-    public void setMotorBrake(boolean brake) {
-        drivebase.setMotorBrake(brake);
-    }
+        public void setMotorBrake(boolean brake) {
+                drivebase.setMotorBrake(brake);
+        }
 
-    public SwerveSubsystem getSwerveDrive() {
-        return drivebase;
-    }
-
-
+        public SwerveSubsystem getSwerveDrive() {
+                return drivebase;
+        }
 
 }
