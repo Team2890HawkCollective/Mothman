@@ -30,7 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private static SparkFlex intakeRotatorMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_ID,
             MotorType.kBrushless);
 
-    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(10, 5);
+    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(5, 10);
     private final ProfiledPIDController intakeRotatorProfiledPIDController;
 
     private static SparkClosedLoopController intakeRotatorPIDController;
@@ -48,6 +48,7 @@ public class IntakeSubsystem extends SubsystemBase {
             Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_P,
             Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_I,
             Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_D, m_Constraints);
+        intakeRotatorProfiledPIDController.setTolerance(0.05);
 
         intakeRotatorConfig.closedLoop
                 .p(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_P)
@@ -72,7 +73,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void goToPosition(double goalPosition) {
         double pidVal = intakeRotatorProfiledPIDController.calculate(encoderValue, goalPosition);
-        intakeRotatorMotor.setVoltage(-pidVal);
+        intakeRotatorMotor.setVoltage(-pidVal * 12);
     }
 
 
@@ -106,8 +107,8 @@ public class IntakeSubsystem extends SubsystemBase {
         return runOnce(() -> goToPosition(goalPosition));
     }
 
-    public Command assistFuelIntakeCommand(double deployedPosition, double retractedPosition) {
-        return runOnce(() -> goToPositionCommand(retractedPosition).andThen(new WaitCommand(1.5))
+    public Command assistFuelIntakeCommand(double deployedPosition, double assistPosition) {
+        return runOnce(() -> goToPositionCommand(assistPosition).andThen(new WaitCommand(1.5))
                 .andThen(goToPositionCommand(deployedPosition)).andThen(new WaitCommand(1.5)));
     }
 

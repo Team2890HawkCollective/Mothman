@@ -196,7 +196,7 @@ public class RobotContainer {
                 .onFalse(m_IntakeSubsystem.stopIntakeMotorCommand().andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand()));
         // command for
         // full shooting system including linear actuators
-        driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
+        driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
 
         driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE, Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY).repeatedly());
 
@@ -205,14 +205,15 @@ public class RobotContainer {
         driverXbox.a().onTrue(m_ClimberSubsystem.liftRobotCommand());
         driverXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY));
         driverXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_RETRACT));
+        //driverXbox.povLeft().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE));
 
         //driverXbox.povDown().onTrue(m_IntakeSubsystem.deployIntakeCommand());
         //driverXbox.povUp().onTrue(m_IntakeSubsystem.retractIntakeCommand());
         //driverXbox.povRight().whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
 
         // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
-        driverXbox.x().onTrue(m_ShooterSubsystem.stopShooterCommand()
-                .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)));
+        driverXbox.x().onTrue(m_ShooterSubsystem.stopShooterCommand());
+                //.andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY)));
         // driverXbox.a().whileTrue(aimAtHopperCommand(() -> -driverXbox.getLeftY(),
         // () -> -driverXbox.getLeftX()));
 

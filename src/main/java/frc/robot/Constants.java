@@ -38,10 +38,10 @@ public final class Constants {
 
     private static ShuffleboardTab programmingTab = Shuffleboard.getTab("Programming");
 
-    public static final double ROBOT_MASS = 115 * 0.453592; // 32lbs * kg per pound
+    public static final double ROBOT_MASS = 140 * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
-    public static final double MAX_SPEED = Units.feetToMeters(14.5);
+    public static final double MAX_SPEED = Units.feetToMeters(25);
     // Maximum speed of the robot in meters per second, used to limit acceleration.
 
     // public static final class AutonConstants
@@ -98,7 +98,7 @@ public final class Constants {
          * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
          */
 
-        public static double INDEXER_AND_RAMP_MOTOR_RPM = 10000;
+        public static double INDEXER_AND_RAMP_MOTOR_RPM = 20000;
 
         // this method called in robot periodic so values updated in elastic are
         // constantly read and applied to RAMP_MOTOR_SPEED
@@ -116,7 +116,7 @@ public final class Constants {
          * programmingTab.add("Desired Intake RPM", -1000)
          * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
          */
-        public static double INTAKE_WHEELS_MOTOR_RPM = -7000;
+        public static double INTAKE_WHEELS_MOTOR_RPM = -6250;
 
         /*
          * public static void updateIntakeWheelsRPM() {
@@ -128,9 +128,9 @@ public final class Constants {
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
 
         public static class IntakeRotatorPID {
-            public static final double INTAKE_ROTATOR_P = 10;
-            public static final double INTAKE_ROTATOR_I = 0;
-            public static final double INTAKE_ROTATOR_D = 2;
+            public static final double INTAKE_ROTATOR_P = .5;
+            public static final double INTAKE_ROTATOR_I = 0.01;
+            public static final double INTAKE_ROTATOR_D = 0;
         }
 
         public static final double INTAKE_MOTOR_P = 0.0001;
@@ -141,9 +141,9 @@ public final class Constants {
         public static final double INTAKE_MIDDLE_ENCODER_VALUE = -2.5;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = -5;
 
-        public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .26;
-        public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .64;
-        public static final double INTAKE_THROUGHBORE_ENCODER_MIDDLE = .54;
+        public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
+        public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .49;
+        public static final double INTAKE_THROUGHBORE_ENCODER_MIDDLE = .389;
 
     }
 
@@ -178,7 +178,7 @@ public final class Constants {
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
                 new Translation3d(Units.inchesToMeters(23.375), 0, Units.inchesToMeters(13)),
-                new Rotation3d(0, 0, 0));
+                new Rotation3d(0, 74, 0));
 
         public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
                 new Translation3d(0, 0, 0),
