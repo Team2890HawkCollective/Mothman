@@ -45,7 +45,7 @@
     "rotation": 38.99099404250546
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Start to HP to Hub to Climb",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

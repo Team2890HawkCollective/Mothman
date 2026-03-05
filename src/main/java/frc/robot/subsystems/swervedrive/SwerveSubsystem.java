@@ -27,6 +27,9 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -36,6 +39,7 @@ import frc.robot.subsystems.TargetingSubsystems;
 import frc.robot.subsystems.swervedrive.Vision.Cameras;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -70,6 +74,7 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     private Vision vision;
 
+    private final Field2d rebuiltField = new Field2d();
     /**
      * Initialize {@link SwerveDrive} with the directory provided.
      *
@@ -118,6 +123,7 @@ public class SwerveSubsystem extends SubsystemBase {
             swerveDrive.stopOdometryThread();
         }
         setupPathPlanner();
+        SmartDashboard.putData("Rebuilt Field", rebuiltField);
     }
 
     /**
@@ -149,6 +155,11 @@ public class SwerveSubsystem extends SubsystemBase {
             swerveDrive.updateOdometry();
             vision.updatePoseEstimation(swerveDrive);
         }
+
+        SmartDashboard.putString("Robot Pose ", "x: " + swerveDrive.getPose().getX() + "\ny: "
+                + swerveDrive.getPose().getY() + "\nrot: " + swerveDrive.getPose().getRotation());
+
+            rebuiltField.setRobotPose(getPose());
     }
 
     @Override
@@ -270,6 +281,28 @@ public class SwerveSubsystem extends SubsystemBase {
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(
                 pose,
+                constraints,
+                edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
+        );
+    }
+
+    public Command driveToClimbPose(Pose2d blueAlliancePose, Pose2d redAlliancePose) {
+
+        Pose2d goal;
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+        if (alliance.get() == Alliance.Blue) {
+            goal = blueAlliancePose;
+        } else {
+            goal = redAlliancePose;
+        }
+        // Create the constraints to use while pathfinding
+        PathConstraints constraints = new PathConstraints(
+                swerveDrive.getMaximumChassisVelocity(), 4.0,
+                swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        return AutoBuilder.pathfindToPose(
+                goal,
                 constraints,
                 edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
         );

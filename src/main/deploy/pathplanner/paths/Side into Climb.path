@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 2.5
+        "x": 1.08,
+        "y": 2.046
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.030153689607046,
-        "y": 2.3289899283371653
+        "x": 1.0861477272727271,
+        "y": 2.5817386363636365
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.08,
-        "y": 2.0457840909090907
+        "x": 1.25,
+        "y": 3.5
       },
       "prevControl": {
-        "x": 1.5498463103929543,
-        "y": 2.2167941625719254
+        "x": 1.256147727272727,
+        "y": 3.190795454545455
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 0.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -99.66394495351781
+    "rotation": -99.664
   },
   "reversed": false,
   "folder": "Start to HP to Hub to Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 22.013232308372665
+    "rotation": -99.664
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

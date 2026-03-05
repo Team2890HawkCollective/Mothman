@@ -205,18 +205,18 @@ public class ShooterSubsystem extends SubsystemBase {
     }*/
 
     
-     //public Command shootFuelCommand() {
-    //  return runOnce(() -> setShooterMotorsRPM()).andThen(new WaitCommand(2))
-    //  .andThen(() -> setIndexerAndRampMotorRPM());
-    //  };
+    public Command shootFuelCommand() {
+      return runOnce(() -> setShooterMotorsRPM()).andThen(new WaitCommand(2))
+      .andThen(() -> setIndexerAndRampMotorRPM());
+      };
 
-     public Command shootFuelCommand() {
+    /*  public Command shootFuelCommand() {
       return runOnce(() -> setShooterMotorsRPM())
         .andThen(new WaitUntilCommand(() -> {
             return (getShooterMotorRPM() <= Constants.ShooterConstants.SHOOTER_RPM);
         }))
         .andThen(() -> setIndexerAndRampMotorRPM());
-    };
+    };*/
      
 
     public void stopShooters() {

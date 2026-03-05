@@ -53,15 +53,21 @@ import frc.robot.Constants;
 
 public class TargetingSubsystems extends SubsystemBase {
 
-    PIDController photonAimPIDController = new PIDController(3, 0, 0.001);
+    PIDController photonAimPIDController = new PIDController(3, 0.01, 0);
 
-    static Pose2d allianceHubPose;
+    static Pose2d allianceHubPose = new Pose2d();
     public static Rotation2d hubThetaPose = new Rotation2d();
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
+    private static ShuffleboardTab cameras;
 
     public TargetingSubsystems() {
         photonAimPIDController.enableContinuousInput(-Math.PI, Math.PI);
-       
+        cameras = Shuffleboard.getTab("Vision");
+        // cameras.addCamera("Rear Left Camera","Rear Left
+        // Camera","http://photonvision.local:5800/#/cameras");
+        // cameras.addCamera("Rear Right Camera", "Rear Right Camera",
+        // "http://photonvision.local:5800/#/cameras");
+
     }
 
     Pose2d currentRobotPose;
@@ -108,16 +114,12 @@ public class TargetingSubsystems extends SubsystemBase {
         return new RunCommand(() -> {
             currentRobotPose = swerveDrive.getPose();
 
-
-
             // Transform2d errorFromDesiredPose = desiredPose.minus(currentRobotPose);
 
-            
             Rotation2d angleDifference = PhotonUtils.getYawToPose(currentRobotPose,
                     allianceHubPose);
 
-            double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(),
-                    angleDifference.getRadians());
+            double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(), allianceHubPose.getRotation().getRadians());
 
             angleSpeed = MathUtil.clamp(angleSpeed, -3.0, 3.0);
 
@@ -142,29 +144,48 @@ public class TargetingSubsystems extends SubsystemBase {
         }, swerveDrive);
     }
 
+    public static void getHubPoseTheta(SwerveSubsystem swerveDrive) {
+        if (alliance.isPresent()) {
+            if (alliance.get() == Alliance.Blue) {
+                hubThetaPose = new Rotation2d(
+                        Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getPose().getY(), Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getPose().getX()));
 
-    public static void getHubPoseTheta(SwerveSubsystem swerveDrive)
-    {
-        if(alliance.isPresent()){
-            if (alliance.get() == Alliance.Blue){
-            hubThetaPose = new Rotation2d(Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getPose().getY(), Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getPose().getX()));
-
-                allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_BLUE, Constants.TargetingConstants.HUB_Y_POSE_BLUE, hubThetaPose);
+                allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_BLUE,
+                        Constants.TargetingConstants.HUB_Y_POSE_BLUE, hubThetaPose);
             }
 
-            else{
-                hubThetaPose = new Rotation2d(Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_RED - swerveDrive.getPose().getY(), Constants.TargetingConstants.HUB_X_POSE_RED - swerveDrive.getPose().getX()));
-                allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_RED, Constants.TargetingConstants.HUB_Y_POSE_RED, hubThetaPose);
+            else {
+                hubThetaPose = new Rotation2d(
+                        Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_RED - swerveDrive.getPose().getY(),
+                        Constants.TargetingConstants.HUB_X_POSE_RED - swerveDrive.getPose().getX()));
+                allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_RED,
+                        Constants.TargetingConstants.HUB_Y_POSE_RED, hubThetaPose);
             }
-        } 
+        }
 
     }
-   
+
+
+      public static void updateShooterRPM(Pose2d currentRobotPose) {
+      double distance = PhotonUtils.getDistanceToPose(currentRobotPose,
+      allianceHubPose);
+      Constants.ShooterConstants.SHOOTER_RPM = -300 * Math.pow(distance, 3)
+      + 1221.475 * Math.pow(distance, 2)
+      - 1955.00131 * distance
+      - 1630.07168;
+      
+     }
+     
+
     @Override
     public void periodic() {
-        
-        SmartDashboard.putString("Target Hub Pose", allianceHubPose.getX() + "\n" + allianceHubPose.getY() + "\n" + allianceHubPose.getRotation()) ;
-        
+        alliance = DriverStation.getAlliance();
+        SmartDashboard.putString("Target Hub Pose",
+                allianceHubPose.getX() + " " + allianceHubPose.getY() + " " + allianceHubPose.getRotation());
+
+        SmartDashboard.putString("Hub Pose", "x: " + allianceHubPose.getMeasureX() + "  y: " + allianceHubPose.getY()
+                + "  angle: " + allianceHubPose.getRotation());
+
         /*
          * Shuffleboard.getTab("Vision").add("Photon Vision Yaw Value",
          * photonVision.getLatestResult().getBestTarget().getYaw());
@@ -174,10 +195,7 @@ public class TargetingSubsystems extends SubsystemBase {
          * LimelightHelpers.getTX("limelight"));
          * Shuffleboard.getTab("Vision").add("Limelight April Tag ID",
          * LimelightHelpers.getFiducialID("limelight"));
-         * Shuffleboard.getTab("Vision").addCamera("Limelight", "limelight", null);
-         * Shuffleboard.getTab("Vision").addCamera("Photon",
-         * "Arducam_OV9281_USB_Camera",
-         * "http://photonvision.local:5800");
          */
+
     }
 }

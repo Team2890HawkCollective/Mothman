@@ -38,10 +38,10 @@ public final class Constants {
 
     private static ShuffleboardTab programmingTab = Shuffleboard.getTab("Programming");
 
-    public static final double ROBOT_MASS = 140 * 0.453592; // 32lbs * kg per pound
+    public static final double ROBOT_MASS = 115 * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
-    public static final double MAX_SPEED = Units.feetToMeters(25);
+    public static final double MAX_SPEED = Units.feetToMeters(14.5);
     // Maximum speed of the robot in meters per second, used to limit acceleration.
 
     // public static final class AutonConstants
@@ -68,14 +68,14 @@ public final class Constants {
     }
 
     public static class ShooterConstants {
-        private static GenericEntry shooterRPM = programmingTab.add("Desired Shooter RPM", -4000)
-                .withWidget(BuiltInWidgets.kNumberBar).getEntry();
+       // private static GenericEntry shooterRPM = programmingTab.add("Desired Shooter RPM", -4000)
+        //        .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
-        public static double SHOOTER_RPM;
+        public static double SHOOTER_RPM = -2700;
 
-        public static void updateShooterRPM() {
-            SHOOTER_RPM = shooterRPM.getDouble(-4000);
-        }
+       // public static void updateShooterRPM() {
+          //  SHOOTER_RPM = shooterRPM.getDouble(-4000);
+       // }
 
         public static final int CENTER_SHOOTER_MOTOR_ID = 42;
         public static final int LEFT_SHOOTER_MOTOR_ID = 41;
@@ -128,31 +128,45 @@ public final class Constants {
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
 
         public static class IntakeRotatorPID {
-            public static final double INTAKE_ROTATOR_P = .5;
-            public static final double INTAKE_ROTATOR_I = 0.01;
-            public static final double INTAKE_ROTATOR_D = 0;
+            public static final double INTAKE_ROTATOR_P = .1;
+            public static final double INTAKE_ROTATOR_I = 0.0;
+            public static final double INTAKE_ROTATOR_D = 0.;
         }
 
         public static final double INTAKE_MOTOR_P = 0.0001;
         public static final double INTAKE_MOTOR_I = 0;
         public static final double INTAKE_MOTOR_D = 0;
 
-        public static final double INTAKE_COLLECT_ENCODER_VALUE = 0;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -2.5;
-        public static final double INTAKE_RETRACT_ENCODER_VALUE = -5;
+        public static final double INTAKE_COLLECT_ENCODER_VALUE = -0.2;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -3;
+        public static final double INTAKE_RETRACT_ENCODER_VALUE = -5.5;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
         public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .49;
         public static final double INTAKE_THROUGHBORE_ENCODER_MIDDLE = .389;
 
+        public static final double INTAKE_MANUAL_SPEED = .1;
     }
 
     // create object and a new widget under programming tab in Elastic where object
     // retrieves value from widget
 
     public static class TargetingConstants {
-        public static final Pose2d RIGHT_CLIMB_POSE = new Pose2d(1.075, 4.75, Rotation2d.fromDegrees(90));
-        public static final Pose2d LEFT_CLIMB_POSE = new Pose2d(1.075, 2.75, Rotation2d.fromDegrees(-90));
+        public static final Pose2d BLUE_LEFT_CLIMB_POSE = new Pose2d(1.066, 4.633, Rotation2d.fromDegrees(90));
+        public static final Pose2d BLUE_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(1.066, 5.133,
+                Rotation2d.fromDegrees(90));
+
+        public static final Pose2d BLUE_RIGHT_CLIMB_POSE = new Pose2d(1.066, 2.87, Rotation2d.fromDegrees(-90));
+        public static final Pose2d BLUE_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(1.066, 2.37,
+                Rotation2d.fromDegrees(-90));
+
+        public static final Pose2d RED_RIGHT_CLIMB_POSE = new Pose2d(15.474, 5.22, Rotation2d.fromDegrees(90));
+        public static final Pose2d RED_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(15.474, 5.72,
+                Rotation2d.fromDegrees(90));
+
+        public static final Pose2d RED_LEFT_CLIMB_POSE = new Pose2d(15.474, 3.437, Rotation2d.fromDegrees(-90));
+        public static final Pose2d RED_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(15.474, 2.937,
+                Rotation2d.fromDegrees(-90));
 
         public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Back Left Camera");
         public static final PhotonCamera BLACK_PHOTON_CAM = new PhotonCamera("Back Right Camera");
@@ -165,16 +179,17 @@ public final class Constants {
         public static final double HUB_X_POSE_BLUE = 4.625;
         public static final double HUB_Y_POSE_BLUE = 4.03;
 
-        public static final double HUB_X_POSE_RED = 4.625;
-        public static final double HUB_Y_POSE_RED = 0;
+        public static final double HUB_X_POSE_RED = 11.915;
+        public static final double HUB_Y_POSE_RED = 4.03;
 
         public static final Transform3d ROBOT_TO_BACK_LEFT_CAM = new Transform3d(
-                new Translation3d(-Units.inchesToMeters(12.75), Units.inchesToMeters(6.25),   Units.inchesToMeters(13.1875)),
-                new Rotation3d(0, 0, Math.toRadians(-205)));
+                new Translation3d(-Units.inchesToMeters(12.75), Units.inchesToMeters(6.25),
+                        Units.inchesToMeters(13.1875)),
+                new Rotation3d(0, 0, Math.toRadians(205)));
 
         public static final Transform3d ROBOT_TO_BACK_RIGHT_CAM = new Transform3d(
                 new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.25), Units.inchesToMeters(14)),
-                new Rotation3d(0, 0, Math.toRadians(200)));
+                new Rotation3d(0, 0, Math.toRadians(-200)));
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
                 new Translation3d(Units.inchesToMeters(23.375), 0, Units.inchesToMeters(13)),
@@ -201,7 +216,6 @@ public final class Constants {
 
     public static class LEDConstants {
         public static final int LED_PWM_PORT = 6;
-
 
     }
 }

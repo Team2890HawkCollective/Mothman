@@ -4,13 +4,17 @@
 
 package frc.robot;
 
+import java.util.logging.Logger;
+
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -44,6 +48,7 @@ public class Robot extends TimedRobot {
     private static NetworkTable table;
     private static GenericEntry distanceFromLimelight;
 
+    private static StructPublisher<Pose2d> advantageScopePublisher = NetworkTableInstance.getDefault().getStructTopic("Robot Pose hahaha", Pose2d.struct).publish();
 
     public Robot() {
         instance = this;
@@ -99,13 +104,16 @@ public class Robot extends TimedRobot {
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        TargetingSubsystems.updateShooterRPM(m_robotContainer.getSwerveDrive().getPose());
+
+        SmartDashboard.putNumber("Estimated Shooter RPM", Constants.ShooterConstants.SHOOTER_RPM);
 
         //Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
         //Constants.IntakeConstants.updateIntakeWheelsRPM();
-        Constants.ShooterConstants.updateShooterRPM();
+        //Constants.ShooterConstants.updateShooterRPM();
         TargetingSubsystems.getHubPoseTheta(m_robotContainer.getSwerveDrive());
         //Constants.ShooterConstants.updateIndexerAndRampMotorRPM();
-
+        advantageScopePublisher.set(m_robotContainer.getSwerveDrive().getPose());
     }
 
     /**

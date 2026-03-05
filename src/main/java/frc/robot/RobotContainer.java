@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.util.Named;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -22,7 +23,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
@@ -56,6 +59,8 @@ public class RobotContainer {
         // Replace with CommandPS4Controller or CommandJoystick if needed
         final CommandXboxController driverXbox = new CommandXboxController(0);
         final CommandXboxController operatorXbox = new CommandXboxController(1);
+                private final static CommandJoystick topButtons = new CommandJoystick(2);
+
 
         // The robot's subsystems and commands are defined here...
         private static final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
@@ -66,8 +71,8 @@ public class RobotContainer {
         private final SendableChooser<Command> autoChooser;
 
         private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-        // private final TargetingSubsystems m_TargetingSubsystems = new
-        // TargetingSubsystems();
+        private final TargetingSubsystems m_TargetingSubsystems = new
+         TargetingSubsystems();
         private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
         private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
         /**
@@ -139,16 +144,13 @@ public class RobotContainer {
                 NamedCommands.registerCommand("test", Commands.print("I EXIST"));
                 NamedCommands.registerCommand("Shoot_Fuel_Command",
                                 m_ShooterSubsystem.shootFuelCommand()
-                                                .andThen(m_IntakeSubsystem.startIntakeMotorCommand())
-                                                .andThen(m_IntakeSubsystem.assistFuelIntakeCommand(
-                                                                Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE,
-                                                                Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE)
-                                                                .repeatedly()
-                                                                .withTimeout(2)));
-                NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem
-                                .goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE));
+                                                .andThen(m_IntakeSubsystem.startIntakeMotorCommand()));
+                NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.deployIntakeCommand());
                 NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand());
                 NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
+                NamedCommands.registerCommand("Assist_Shooter", m_IntakeSubsystem.assistFuelIntakeCommand());
+                NamedCommands.registerCommand("Lift_Robot", m_ClimberSubsystem.liftRobotCommand());
+
 
                 // Have the autoChooser pull in all PathPlanner autos as options
                 autoChooser = AutoBuilder.buildAutoChooser();
@@ -197,18 +199,18 @@ public class RobotContainer {
         // command for
         // full shooting system including linear actuators
         driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
-
-        driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE, Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY).repeatedly());
+        driverXbox.rightBumper().whileTrue(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly());
+        //driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE, Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY).repeatedly());
 
 
         driverXbox.y().onTrue(m_ClimberSubsystem.lowerRobotCommand());
         driverXbox.a().onTrue(m_ClimberSubsystem.liftRobotCommand());
-        driverXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY));
-        driverXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_RETRACT));
+        //driverXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY));
+        //driverXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_RETRACT));
         //driverXbox.povLeft().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE));
 
-        //driverXbox.povDown().onTrue(m_IntakeSubsystem.deployIntakeCommand());
-        //driverXbox.povUp().onTrue(m_IntakeSubsystem.retractIntakeCommand());
+        driverXbox.povDown().onTrue(m_IntakeSubsystem.deployIntakeCommand());
+        driverXbox.povUp().onTrue(m_IntakeSubsystem.retractIntakeCommand());
         //driverXbox.povRight().whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
 
         // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
@@ -227,6 +229,15 @@ public class RobotContainer {
                 .onFalse(m_ShooterSubsystem.stopRightShooterCommand());
         operatorXbox.a().whileTrue(m_ShooterSubsystem.setIndexerAndRampMotorRPMCommand())
                 .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
+
+        topButtons.axisGreaterThan(1, 0.3).toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED * -1)).toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
+        topButtons.axisGreaterThan(1, -0.3).toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED)).toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
+        topButtons.button(3).onTrue(killAllCommand());
+        topButtons.button(6).whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
+        topButtons.button(1).onTrue(drivebase.driveToClimbPose(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
+        topButtons.button(2).onTrue(drivebase.driveToClimbPose(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
+
+        //topButtons.button(1).onTrue(drivebase.driveToPose(Constants.))
 
         if (RobotBase.isSimulation()) {
             drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
@@ -300,6 +311,14 @@ public class RobotContainer {
 
         public SwerveSubsystem getSwerveDrive() {
                 return drivebase;
+        }
+
+        public void killAll() {
+                CommandScheduler.getInstance().cancelAll();
+        }
+
+        public Command killAllCommand(){
+                return Commands.runOnce(()->killAll());
         }
 
 }
