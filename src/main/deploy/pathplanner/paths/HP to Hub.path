@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5,
-        "y": 0.65
+        "x": 0.447,
+        "y": 0.634
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8535533905932737,
-        "y": 1.0035533905932739
+        "x": 0.8005533905932738,
+        "y": 0.9875533905932738
       },
       "isLocked": false,
       "linkedName": null
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 38.99099404250546
+    "rotation": 27.207
   },
   "reversed": false,
   "folder": "Start to HP to Hub to Climb",

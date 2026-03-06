@@ -55,7 +55,6 @@ public class TargetingSubsystems extends SubsystemBase {
 
     PIDController photonAimPIDController = new PIDController(3, 0.01, 0);
 
-    static Pose2d allianceHubPose = new Pose2d();
     public static Rotation2d hubThetaPose = new Rotation2d();
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
     private static ShuffleboardTab cameras;
@@ -117,9 +116,9 @@ public class TargetingSubsystems extends SubsystemBase {
             // Transform2d errorFromDesiredPose = desiredPose.minus(currentRobotPose);
 
             Rotation2d angleDifference = PhotonUtils.getYawToPose(currentRobotPose,
-                    allianceHubPose);
+                    Constants.TargetingConstants.allianceHubPose);
 
-            double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(), allianceHubPose.getRotation().getRadians());
+            double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(), Constants.TargetingConstants.allianceHubPose.getRotation().getRadians());
 
             angleSpeed = MathUtil.clamp(angleSpeed, -3.0, 3.0);
 
@@ -150,7 +149,7 @@ public class TargetingSubsystems extends SubsystemBase {
                 hubThetaPose = new Rotation2d(
                         Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getPose().getY(), Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getPose().getX()));
 
-                allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_BLUE,
+                Constants.TargetingConstants.allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_BLUE,
                         Constants.TargetingConstants.HUB_Y_POSE_BLUE, hubThetaPose);
             }
 
@@ -158,7 +157,7 @@ public class TargetingSubsystems extends SubsystemBase {
                 hubThetaPose = new Rotation2d(
                         Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_RED - swerveDrive.getPose().getY(),
                         Constants.TargetingConstants.HUB_X_POSE_RED - swerveDrive.getPose().getX()));
-                allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_RED,
+                Constants.TargetingConstants.allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_RED,
                         Constants.TargetingConstants.HUB_Y_POSE_RED, hubThetaPose);
             }
         }
@@ -168,11 +167,12 @@ public class TargetingSubsystems extends SubsystemBase {
 
       public static void updateShooterRPM(Pose2d currentRobotPose) {
       double distance = PhotonUtils.getDistanceToPose(currentRobotPose,
-      allianceHubPose);
-      Constants.ShooterConstants.SHOOTER_RPM = -300 * Math.pow(distance, 3)
-      + 1221.475 * Math.pow(distance, 2)
-      - 1955.00131 * distance
-      - 1630.07168;
+      Constants.TargetingConstants.allianceHubPose);
+      Constants.ShooterConstants.SHOOTER_RPM = 
+      (-293.84123 * Math.pow(distance, 3))
+      + (1360.01497 * Math.pow(distance, 2))
+      - (2391.17127 * distance)
+      - 1249.22704;
       
      }
      
@@ -181,10 +181,10 @@ public class TargetingSubsystems extends SubsystemBase {
     public void periodic() {
         alliance = DriverStation.getAlliance();
         SmartDashboard.putString("Target Hub Pose",
-                allianceHubPose.getX() + " " + allianceHubPose.getY() + " " + allianceHubPose.getRotation());
+                Constants.TargetingConstants.allianceHubPose.getX() + " " + Constants.TargetingConstants.allianceHubPose.getY() + " " + Constants.TargetingConstants.allianceHubPose.getRotation());
 
-        SmartDashboard.putString("Hub Pose", "x: " + allianceHubPose.getMeasureX() + "  y: " + allianceHubPose.getY()
-                + "  angle: " + allianceHubPose.getRotation());
+        SmartDashboard.putString("Hub Pose", "x: " + Constants.TargetingConstants.allianceHubPose.getMeasureX() + "  y: " + Constants.TargetingConstants.allianceHubPose.getY()
+                + "  angle: " + Constants.TargetingConstants.allianceHubPose.getRotation());
 
         /*
          * Shuffleboard.getTab("Vision").add("Photon Vision Yaw Value",

@@ -143,13 +143,19 @@ public class RobotContainer {
                 // Create the NamedCommands that will be used in PathPlanner
                 NamedCommands.registerCommand("test", Commands.print("I EXIST"));
                 NamedCommands.registerCommand("Shoot_Fuel_Command",
-                                m_ShooterSubsystem.shootFuelCommand()
+                                m_ShooterSubsystem.setShooterMotorsRPMAutoCommand()
                                                 .andThen(m_IntakeSubsystem.startIntakeMotorCommand()));
                 NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.deployIntakeCommand());
                 NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand());
                 NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
                 NamedCommands.registerCommand("Assist_Shooter", m_IntakeSubsystem.assistFuelIntakeCommand());
                 NamedCommands.registerCommand("Lift_Robot", m_ClimberSubsystem.liftRobotCommand());
+                NamedCommands.registerCommand("Kill_All", killAllCommand());
+                NamedCommands.registerCommand("Auto_Aim_To_Hub", m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
+                NamedCommands.registerCommand("PathPlan_To_Climb_Right_Offsetted", drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
+                NamedCommands.registerCommand("PathPlan_To_Climb_Left_Offsetted", drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
+                NamedCommands.registerCommand("PathPlan_Into_Climb_Right", drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE, Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE));
+                NamedCommands.registerCommand("PathPlan_Into_Climb_Left", drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE, Constants.TargetingConstants.RED_LEFT_CLIMB_POSE));
 
 
                 // Have the autoChooser pull in all PathPlanner autos as options
@@ -230,12 +236,12 @@ public class RobotContainer {
         operatorXbox.a().whileTrue(m_ShooterSubsystem.setIndexerAndRampMotorRPMCommand())
                 .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
 
-        topButtons.axisGreaterThan(1, 0.3).toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED * -1)).toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
+        topButtons.axisGreaterThan(1, 0.3).toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED * -5)).toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
         topButtons.axisGreaterThan(1, -0.3).toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED)).toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
         topButtons.button(3).onTrue(killAllCommand());
         topButtons.button(6).whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
-        topButtons.button(1).onTrue(drivebase.driveToClimbPose(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
-        topButtons.button(2).onTrue(drivebase.driveToClimbPose(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
+        topButtons.button(1).onTrue(drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
+        topButtons.button(2).onTrue(drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
 
         //topButtons.button(1).onTrue(drivebase.driveToPose(Constants.))
 

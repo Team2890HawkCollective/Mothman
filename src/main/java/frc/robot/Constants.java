@@ -7,6 +7,8 @@ package frc.robot;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
+import com.pathplanner.lib.path.PathConstraints;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -98,7 +100,7 @@ public final class Constants {
          * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
          */
 
-        public static double INDEXER_AND_RAMP_MOTOR_RPM = 20000;
+        public static double INDEXER_AND_RAMP_MOTOR_RPM = 30000;
 
         // this method called in robot periodic so values updated in elastic are
         // constantly read and applied to RAMP_MOTOR_SPEED
@@ -128,16 +130,16 @@ public final class Constants {
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
 
         public static class IntakeRotatorPID {
-            public static final double INTAKE_ROTATOR_P = .1;
-            public static final double INTAKE_ROTATOR_I = 0.0;
-            public static final double INTAKE_ROTATOR_D = 0.;
+            public static final double INTAKE_ROTATOR_P = .08;
+            public static final double INTAKE_ROTATOR_I = 0;
+            public static final double INTAKE_ROTATOR_D = 0.01;
         }
 
         public static final double INTAKE_MOTOR_P = 0.0001;
         public static final double INTAKE_MOTOR_I = 0;
         public static final double INTAKE_MOTOR_D = 0;
 
-        public static final double INTAKE_COLLECT_ENCODER_VALUE = -0.2;
+        public static final double INTAKE_COLLECT_ENCODER_VALUE = 1.4;
         public static final double INTAKE_MIDDLE_ENCODER_VALUE = -3;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = -5.5;
 
@@ -175,6 +177,8 @@ public final class Constants {
 
         public static Rotation2d HUB_ROTATION_BLUE;
         public static Rotation2d HUB_ROTATION_RED;
+        public static Pose2d allianceHubPose = new Pose2d();
+
 
         public static final double HUB_X_POSE_BLUE = 4.625;
         public static final double HUB_Y_POSE_BLUE = 4.03;
@@ -182,10 +186,12 @@ public final class Constants {
         public static final double HUB_X_POSE_RED = 11.915;
         public static final double HUB_Y_POSE_RED = 4.03;
 
+        public static PathConstraints DRIVE_INTO_CLIMB_CONSTRAINTS;
+
         public static final Transform3d ROBOT_TO_BACK_LEFT_CAM = new Transform3d(
                 new Translation3d(-Units.inchesToMeters(12.75), Units.inchesToMeters(6.25),
                         Units.inchesToMeters(13.1875)),
-                new Rotation3d(0, 0, Math.toRadians(205)));
+                new Rotation3d(0, 0, Math.toRadians(195)));
 
         public static final Transform3d ROBOT_TO_BACK_RIGHT_CAM = new Transform3d(
                 new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.25), Units.inchesToMeters(14)),

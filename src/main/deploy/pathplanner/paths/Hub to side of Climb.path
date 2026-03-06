@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 1.08,
+        "x": 1.25,
         "y": 2.0457840909090907
       },
       "prevControl": {
-        "x": 1.5498463103929543,
+        "x": 1.7198463103929542,
         "y": 2.2167941625719254
       },
       "nextControl": null,
@@ -48,7 +48,7 @@
   "folder": "Start to HP to Hub to Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 22.013232308372665
+    "rotation": 27.207
   },
   "useDefaultConstraints": true
 }

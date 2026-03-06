@@ -69,6 +69,10 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     private final boolean visionDriveTest = true;
 
+    
+
+    
+
     /**
      * PhotonVision class to keep an accurate odometry.
      */
@@ -120,10 +124,13 @@ public class SwerveSubsystem extends SubsystemBase {
             setupPhotonVision();
             // Stop the odometry thread if we are using vision that way we can synchronize
             // updates better.
-            swerveDrive.stopOdometryThread();
+            //swerveDrive.stopOdometryThread();
         }
         setupPathPlanner();
         SmartDashboard.putData("Rebuilt Field", rebuiltField);
+        Constants.TargetingConstants.DRIVE_INTO_CLIMB_CONSTRAINTS = new PathConstraints(1, 4.0,
+                swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(360));
+
     }
 
     /**
@@ -286,7 +293,7 @@ public class SwerveSubsystem extends SubsystemBase {
         );
     }
 
-    public Command driveToClimbPose(Pose2d blueAlliancePose, Pose2d redAlliancePose) {
+    public Command driveToClimbPoseOffsetted(Pose2d blueAlliancePose, Pose2d redAlliancePose) {
 
         Pose2d goal;
         Optional<Alliance> alliance = DriverStation.getAlliance();
@@ -304,6 +311,26 @@ public class SwerveSubsystem extends SubsystemBase {
         return AutoBuilder.pathfindToPose(
                 goal,
                 constraints,
+                edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
+        );
+    }
+
+        public Command driveIntoClimbPose(Pose2d blueAlliancePose, Pose2d redAlliancePose) {
+
+        Pose2d goal;
+        Optional<Alliance> alliance = DriverStation.getAlliance();
+        if (alliance.get() == Alliance.Blue) {
+            goal = blueAlliancePose;
+        } else {
+            goal = redAlliancePose;
+        }
+        // Create the constraints to use while pathfinding
+        
+
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        return AutoBuilder.pathfindToPose(
+                goal,
+                Constants.TargetingConstants.DRIVE_INTO_CLIMB_CONSTRAINTS,
                 edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
         );
     }

@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.logging.Logger;
 
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -107,7 +108,7 @@ public class Robot extends TimedRobot {
         TargetingSubsystems.updateShooterRPM(m_robotContainer.getSwerveDrive().getPose());
 
         SmartDashboard.putNumber("Estimated Shooter RPM", Constants.ShooterConstants.SHOOTER_RPM);
-
+        SmartDashboard.putNumber("Distance From Hub: ", PhotonUtils.getDistanceToPose(m_robotContainer.getSwerveDrive().getPose(), Constants.TargetingConstants.allianceHubPose));
         //Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
         //Constants.IntakeConstants.updateIntakeWheelsRPM();
         //Constants.ShooterConstants.updateShooterRPM();

@@ -31,43 +31,37 @@
         {
           "type": "named",
           "data": {
+            "name": "Auto_Aim_To_Hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot_Fuel_Command"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 3.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Assist_Shooter"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
+            "name": "Kill_All"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Stop_Shooter_Command"
+            "name": "PathPlan_To_Climb_Right_Offsetted"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Hub to side of Climb"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Side into Climb"
+            "name": "PathPlan_Into_Climb_Right"
           }
         },
         {

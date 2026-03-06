@@ -121,6 +121,18 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM, ControlType.kVelocity);
     }
 
+    public void setShooterMotorsRPMAuto(){
+        centerShooterMotorPIDController.setSetpoint(-2700, ControlType.kVelocity);
+        leftShooterMotorPIDController.setSetpoint(-2700, ControlType.kVelocity);
+        rightShooterMotorPIDController.setSetpoint(-2700, ControlType.kVelocity);
+    }
+
+    public Command setShooterMotorsRPMAutoCommand()
+    {
+        return runOnce(()-> setShooterMotorsRPMAuto()).andThen(new WaitCommand(1.5))
+      .andThen(() -> setIndexerAndRampMotorRPM());
+    }
+
     // test individual motor code
     public void setLeftShooterMotorRPM() {
         leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM, ControlType.kVelocity);
@@ -206,7 +218,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     
     public Command shootFuelCommand() {
-      return runOnce(() -> setShooterMotorsRPM()).andThen(new WaitCommand(2))
+      return runOnce(() -> setShooterMotorsRPM()).andThen(new WaitCommand(1.5))
       .andThen(() -> setIndexerAndRampMotorRPM());
       };
 
