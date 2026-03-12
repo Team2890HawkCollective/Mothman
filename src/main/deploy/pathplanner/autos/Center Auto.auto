@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Deploy_Intake_Command"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Start_Intake_Wheels"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center to Floor Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Floor Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Floor Intake to Left Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Fuel_Command"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Assist_Shooter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Left Shoot to Offsetted-Left Climb"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Offsetted-Left to Left Climb"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Lift_Robot"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

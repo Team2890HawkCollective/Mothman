@@ -31,13 +31,13 @@ public class LEDSubsystem extends SubsystemBase {
   LEDPattern hubActiveBlinkPattern = hubActiveColor.blink(Second.of(0.5));
 
   LEDPattern hubInactiveColor = LEDPattern.solid(Color.kRed);
-  LEDPattern hubInactiveBlinkPattern = hubInactiveColor.blink(Second.of(0.5));
+  LEDPattern hubInactiveBlinkPattern = hubInactiveColor.blink(Second.of(0.1));
 
   LEDPattern allianceShiftColor = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kTeal, Color.kMagenta);
   LEDPattern allianceShiftPattern = allianceShiftColor.scrollAtRelativeSpeed(Percent.per(Second).of(100));
 
   LEDPattern transitionColor = LEDPattern.solid(Color.kYellow);
-  LEDPattern transitionBlinkPattern = transitionColor.blink(Second.of(0.5));
+  LEDPattern transitionBlinkPattern = transitionColor.blink(Second.of(0.2));
 
   LEDPattern endGameColor = LEDPattern.solid(Color.kOrangeRed);
   LEDPattern endGameBlinkPattern = endGameColor.blink(Second.of(0.2));
@@ -69,22 +69,47 @@ public class LEDSubsystem extends SubsystemBase {
       allianceShiftPattern.applyTo(m_Buffer);
     }
 
-    if (matchTime <= 140 && matchTime > 130 && !DriverStation.isAutonomous()) // transition
+    else
     {
-      transitionBlinkPattern.applyTo(m_Left);
-    }
+      if (matchTime <= 140 && matchTime > 132) // transition
+      {
+        transitionBlinkPattern.applyTo(m_Left);
+      }
 
-    if (matchTime <= 130 && matchTime > 30 && !DriverStation.isAutonomous()) // shifts
-    {
-      allianceShiftPattern.applyTo(m_Left);
-    }
+      if(matchTime <= 132 && matchTime > 130)
+      {
+        hubInactiveBlinkPattern.applyTo(m_Buffer);
+      }
 
-    if (matchTime <= 30 && !DriverStation.isAutonomous()) // endgame
-    {
-      endGameBlinkPattern.applyTo(m_Left);
-    }
+      if(matchTime <= 107 && matchTime > 105 && isHubActive == false)
+      {
+        hubInactiveBlinkPattern.applyTo(m_Buffer);
+      }
 
-    allianceShiftPattern.applyTo(m_Buffer);
+      if(matchTime <= 82 && matchTime > 80 && isHubActive == false)
+      {
+        hubInactiveBlinkPattern.applyTo(m_Buffer);
+      }
+
+      if(matchTime <= 57 && matchTime > 55 && isHubActive == false)
+      {
+        hubInactiveBlinkPattern.applyTo(m_Buffer);
+      }
+
+      if(matchTime <= 32 && matchTime > 30 && isHubActive == false)
+      {
+        hubInactiveBlinkPattern.applyTo(m_Buffer);
+      }
+
+      if (matchTime <= 30) // endgame
+      {
+        endGameBlinkPattern.applyTo(m_Left);
+      }
+
+
+      allianceShiftPattern.applyTo(m_Buffer);
+    }
+    
   }
 
   public void setLEDHubActive() {

@@ -5,33 +5,33 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "Start to Over Left Ramp"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Deploy_Intake_Command"
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Starting to HP"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HP to Hub"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Auto_Aim_To_Hub"
+            "name": "Start_Intake_Wheels"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Collect Left-Center Fuel"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Collect Left-Center Fuel to Shoot"
           }
         },
         {
@@ -43,25 +43,25 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Kill_All"
+            "name": "Assist_Shooter"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "PathPlan_To_Climb_Right_Offsetted"
+            "pathName": "Left Shoot to Offsetted-Left Climb"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "PathPlan_Into_Climb_Right"
+            "pathName": "Offsetted-Left to Left Climb"
           }
         },
         {

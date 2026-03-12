@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 2.5
+        "x": 1.1789090909090907,
+        "y": 5.941761363636363
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.030153689607046,
-        "y": 2.3289899283371653
+        "x": 0.5089659090909093,
+        "y": 5.931454545454544
       },
       "isLocked": false,
-      "linkedName": "Right Shoot Position Waypoint"
+      "linkedName": "Left Intake Balls Waypoint"
     },
     {
       "anchor": {
-        "x": 1.14,
-        "y": 2.046
+        "x": 0.5192727272727271,
+        "y": 5.941761363636363
       },
       "prevControl": {
-        "x": 1.6098463103929541,
-        "y": 2.2170100716628345
+        "x": 0.9521590909090447,
+        "y": 5.9314545454499195
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Offsetted-Climb Waypoint"
+      "linkedName": "Floor Intake Fuel Waypoint"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 0.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "HP to Shoot to Climb",
+  "folder": "Middle Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 36.0
+    "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 2.5
+        "x": 7.734045454548223,
+        "y": 7.054897727274547
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.030153689607046,
-        "y": 2.3289899283371653
+        "x": 7.734045454545454,
+        "y": 5.075988636363636
       },
       "isLocked": false,
-      "linkedName": "Right Shoot Position Waypoint"
+      "linkedName": "Over Left Ramp Waypoint"
     },
     {
       "anchor": {
-        "x": 1.14,
-        "y": 2.046
+        "x": 7.734045454548223,
+        "y": 4.6843295454545455
       },
       "prevControl": {
-        "x": 1.6098463103929541,
-        "y": 2.2170100716628345
+        "x": 7.734045454548223,
+        "y": 6.8982811140664015
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Offsetted-Climb Waypoint"
+      "linkedName": "Collect Fuel Left Waypoint"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -45,10 +45,10 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": "HP to Shoot to Climb",
+  "folder": "Left Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 36.0
+    "rotation": -90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

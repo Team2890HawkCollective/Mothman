@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.25,
+        "x": 1.14,
         "y": 2.046
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.302590909090909,
-        "y": 2.6126590909090908
+        "x": 1.1561466905187832,
+        "y": 2.7126296958855094
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Offsetted-Right Climb Waypoint"
     },
     {
       "anchor": {
-        "x": 1.37,
-        "y": 3.5
+        "x": 1.14,
+        "y": 3.25
       },
       "prevControl": {
-        "x": 1.3761477272727272,
-        "y": 3.190795454545455
+        "x": 1.146147727272727,
+        "y": 2.940795454545455
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Climb Waypoint"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
+    "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -99.664
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "Start to HP to Hub to Climb",
+  "folder": "HP to Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -99.664
+    "rotation": -90.0
   },
   "useDefaultConstraints": false
 }

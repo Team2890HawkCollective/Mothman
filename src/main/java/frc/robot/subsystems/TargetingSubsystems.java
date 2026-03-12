@@ -35,7 +35,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -53,7 +52,7 @@ import frc.robot.Constants;
 
 public class TargetingSubsystems extends SubsystemBase {
 
-    PIDController photonAimPIDController = new PIDController(3, 0.01, 0);
+    PIDController photonAimPIDController = new PIDController(5, 0.01, 0);
 
     public static Rotation2d hubThetaPose = new Rotation2d();
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
@@ -138,8 +137,8 @@ public class TargetingSubsystems extends SubsystemBase {
 
             rot = MathUtil.clamp(rot, -3.0, 3.0);
 
-            swerveDrive.drive(new Translation2d(driverXbox.getLeftX() * -1,
-                    driverXbox.getLeftY() * -1), rot, false);
+            swerveDrive.drive(new Translation2d(driverXbox.getLeftY() * -1,
+                    driverXbox.getLeftX() * -1), rot, false);
         }, swerveDrive);
     }
 
@@ -168,12 +167,10 @@ public class TargetingSubsystems extends SubsystemBase {
       public static void updateShooterRPM(Pose2d currentRobotPose) {
       double distance = PhotonUtils.getDistanceToPose(currentRobotPose,
       Constants.TargetingConstants.allianceHubPose);
-      Constants.ShooterConstants.SHOOTER_RPM = 
-      (-293.84123 * Math.pow(distance, 3))
+      Constants.ShooterConstants.SHOOTER_RPM = Math.max((-293.84123 * Math.pow(distance, 3))
       + (1360.01497 * Math.pow(distance, 2))
       - (2391.17127 * distance)
-      - 1249.22704;
-      
+      - 1249.22704, -6000); 
      }
      
 
@@ -185,17 +182,5 @@ public class TargetingSubsystems extends SubsystemBase {
 
         SmartDashboard.putString("Hub Pose", "x: " + Constants.TargetingConstants.allianceHubPose.getMeasureX() + "  y: " + Constants.TargetingConstants.allianceHubPose.getY()
                 + "  angle: " + Constants.TargetingConstants.allianceHubPose.getRotation());
-
-        /*
-         * Shuffleboard.getTab("Vision").add("Photon Vision Yaw Value",
-         * photonVision.getLatestResult().getBestTarget().getYaw());
-         * Shuffleboard.getTab("Vision").add("Photon Vision Pitch Value",
-         * photonVision.getLatestResult().getBestTarget().getPitch());
-         * Shuffleboard.getTab("Vision").add("Limelight TX Value",
-         * LimelightHelpers.getTX("limelight"));
-         * Shuffleboard.getTab("Vision").add("Limelight April Tag ID",
-         * LimelightHelpers.getFiducialID("limelight"));
-         */
-
     }
 }

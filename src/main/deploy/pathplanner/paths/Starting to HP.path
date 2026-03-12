@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 3.5159570661896247,
-        "y": 0.4572987477638639
+        "y": 0.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8344901610017894,
-        "y": 0.4248479427549193
+        "x": 2.6424772727272727,
+        "y": 0.7471249999999998
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Start Right Trench Waypoint"
     },
     {
       "anchor": {
-        "x": 0.457431818181818,
-        "y": 0.63375
+        "x": 0.46,
+        "y": 0.634
       },
       "prevControl": {
-        "x": 1.0093340606142802,
-        "y": 0.6337499999999999
+        "x": 1.0119022424324617,
+        "y": 0.6340000000000003
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "HP Waypoint"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Start to HP to Hub to Climb",
+  "folder": "HP to Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

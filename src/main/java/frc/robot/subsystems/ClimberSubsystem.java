@@ -34,11 +34,18 @@ public class ClimberSubsystem extends SubsystemBase {
     climberMotorPIDController = climberMotor.getClosedLoopController();
   }
 
+  public void setClimberSpeed(double speed) {
+    climberMotor.set(speed);
+  }
+
+  public Command setClimberSpeedCommand(double speed) {
+    return runOnce(() -> setClimberSpeed(speed));
+  }
   public void liftRobot() {
     climberMotorPIDController.setSetpoint(Constants.ClimberConstants.CLIMBER_LIFTED_SETPOINT_VALUE, ControlType.kPosition);
   }
 
-  public void lowerRobot() {
+  public static void lowerRobot() {
     climberMotorPIDController.setSetpoint(Constants.ClimberConstants.CLIMBER_LOWERED_SETPOINT_VALUE, ControlType.kPosition);
   }
 
@@ -62,5 +69,6 @@ public class ClimberSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Climber Motor Encoder", climberMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("Climber motor power", climberMotor.get());
   }
 }

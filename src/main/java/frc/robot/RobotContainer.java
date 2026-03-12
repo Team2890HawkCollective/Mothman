@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
@@ -43,6 +44,7 @@ import javax.lang.model.util.ElementScanner14;
 import frc.robot.subsystems.TargetingSubsystems;
 import swervelib.SwerveInputStream;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.swervedrive.Vision;
 
@@ -59,8 +61,8 @@ public class RobotContainer {
         // Replace with CommandPS4Controller or CommandJoystick if needed
         final CommandXboxController driverXbox = new CommandXboxController(0);
         final CommandXboxController operatorXbox = new CommandXboxController(1);
-                private final static CommandJoystick topButtons = new CommandJoystick(2);
-
+        private final static CommandJoystick topButtons = new CommandJoystick(2);
+        final CommandJoystick bottomButtons = new CommandJoystick(3);
 
         // The robot's subsystems and commands are defined here...
         private static final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
@@ -71,8 +73,7 @@ public class RobotContainer {
         private final SendableChooser<Command> autoChooser;
 
         private final IntakeSubsystem m_IntakeSubsystem = new IntakeSubsystem();
-        private final TargetingSubsystems m_TargetingSubsystems = new
-         TargetingSubsystems();
+        private final TargetingSubsystems m_TargetingSubsystems = new TargetingSubsystems();
         private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
         private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
         /**
@@ -142,21 +143,37 @@ public class RobotContainer {
 
                 // Create the NamedCommands that will be used in PathPlanner
                 NamedCommands.registerCommand("test", Commands.print("I EXIST"));
+                NamedCommands.registerCommand("Start_Intake_Wheels", m_IntakeSubsystem.startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST));
                 NamedCommands.registerCommand("Shoot_Fuel_Command",
-                                m_ShooterSubsystem.setShooterMotorsRPMAutoCommand()
-                                                .andThen(m_IntakeSubsystem.startIntakeMotorCommand()));
-                NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.deployIntakeCommand());
-                NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand());
+                                m_ShooterSubsystem.setShooterMotorsRPMAutoCommand());
+                NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.deployIntakeCommand()
+                                .andThen(m_IntakeSubsystem.startIntakeMotorCommand(
+                                                Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW)));
+                NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand()
+                                .andThen(m_IntakeSubsystem.deployIntakeCommand()));
                 NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
-                NamedCommands.registerCommand("Assist_Shooter", m_IntakeSubsystem.assistFuelIntakeCommand());
+                NamedCommands.registerCommand("Assist_Shooter",
+                                m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly().withTimeout(5));
                 NamedCommands.registerCommand("Lift_Robot", m_ClimberSubsystem.liftRobotCommand());
                 NamedCommands.registerCommand("Kill_All", killAllCommand());
-                NamedCommands.registerCommand("Auto_Aim_To_Hub", m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
-                NamedCommands.registerCommand("PathPlan_To_Climb_Right_Offsetted", drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
-                NamedCommands.registerCommand("PathPlan_To_Climb_Left_Offsetted", drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
-                NamedCommands.registerCommand("PathPlan_Into_Climb_Right", drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE, Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE));
-                NamedCommands.registerCommand("PathPlan_Into_Climb_Left", drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE, Constants.TargetingConstants.RED_LEFT_CLIMB_POSE));
-
+                NamedCommands.registerCommand("Auto_Aim_To_Hub",
+                                m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
+                
+                
+                /*NamedCommands.registerCommand("PathPlan_To_Climb_Right_Offsetted",
+                                drivebase.driveToClimbPoseOffsetted(
+                                                Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED,
+                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
+                NamedCommands.registerCommand("PathPlan_To_Climb_Left_Offsetted",
+                                drivebase.driveToClimbPoseOffsetted(
+                                                Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED,
+                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
+                NamedCommands.registerCommand("PathPlan_Into_Climb_Right",
+                                drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE,
+                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE));
+                NamedCommands.registerCommand("PathPlan_Into_Climb_Left",
+                                drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE,
+                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE));*/
 
                 // Have the autoChooser pull in all PathPlanner autos as options
                 autoChooser = AutoBuilder.buildAutoChooser();
@@ -173,132 +190,173 @@ public class RobotContainer {
 
         }
 
-    /**
-     * Use this method to define your trigger->command mappings. Triggers can be
-     * created via the
-     * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-     * an arbitrary predicate, or via the
-     * named factories in
-     * {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses
-     * for
-     * {@link CommandXboxController
-     * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
-     * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick
-     * Flight joysticks}.
-     */
-    private void configureBindings() {
-        Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
-        Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
-        Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
-        Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
-                driveDirectAngle);
-        Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
-        Command driveFieldOrientedAnglularVelocityKeyboard = drivebase
-                .driveFieldOriented(driveAngularVelocityKeyboard);
-        Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
-                driveDirectAngleKeyboard);
+        /**
+         * Use this method to define your trigger->command mappings. Triggers can be
+         * created via the
+         * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
+         * an arbitrary predicate, or via the
+         * named factories in
+         * {@link edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses
+         * for
+         * {@link CommandXboxController
+         * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller PS4}
+         * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick
+         * Flight joysticks}.
+         */
+        private void configureBindings() {
+                Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
+                Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+                Command driveRobotOrientedAngularVelocity = drivebase.driveFieldOriented(driveRobotOriented);
+                Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
+                                driveDirectAngle);
+                Command driveFieldOrientedDirectAngleKeyboard = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
+                Command driveFieldOrientedAnglularVelocityKeyboard = drivebase
+                                .driveFieldOriented(driveAngularVelocityKeyboard);
+                Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
+                                driveDirectAngleKeyboard);
 
-        driverXbox.leftTrigger().whileTrue(m_IntakeSubsystem.startIntakeMotorCommand())
-                .onFalse(m_IntakeSubsystem.stopIntakeMotorCommand());
-        driverXbox.leftBumper().whileTrue(m_IntakeSubsystem.reverseIntakeMotorCommand().andThen(m_ShooterSubsystem.reverseIndexerAndRampMotorRPMCommand()))
-                .onFalse(m_IntakeSubsystem.stopIntakeMotorCommand().andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand()));
-        // command for
-        // full shooting system including linear actuators
-        driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
-        driverXbox.rightBumper().whileTrue(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly());
-        //driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE, Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY).repeatedly());
+                driverXbox.start().onTrue(m_IntakeSubsystem.stopIntakeMotorCommand());
+                driverXbox.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
+                driverXbox.leftTrigger().onTrue(m_IntakeSubsystem
+                                .startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST));
+                driverXbox.rightBumper()
+                                .whileTrue(m_IntakeSubsystem.reverseIntakeMotorCommand()
+                                                .andThen(m_ShooterSubsystem.reverseIndexerAndRampMotorRPMCommand())
+                                                .andThen(m_ShooterSubsystem.reverseShooterCommand()))
+                                .onFalse(m_IntakeSubsystem.stopIntakeMotorCommand()
+                                                .andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand())
+                                                .andThen(m_ShooterSubsystem.setShooterMotorsRPMCommand(
+                                                                Constants.ShooterConstants.IDLE_SHOOTER_RPM)));
+                // command for
+                // full shooting system including linear actuators
+                //driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new WaitCommand(1.5)));
+                                //.andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
+                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.setShooterMotorsRPMCommand(-3400));
+                driverXbox.leftBumper().onTrue(m_IntakeSubsystem
+                                .startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
+                // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,
+                // Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY).repeatedly());
 
-        driverXbox.y().onTrue(m_ClimberSubsystem.lowerRobotCommand());
-        driverXbox.a().onTrue(m_ClimberSubsystem.liftRobotCommand());
-        //driverXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY));
-        //driverXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_RETRACT));
-        //driverXbox.povLeft().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE));
+                driverXbox.y().onTrue(m_ClimberSubsystem.lowerRobotCommand());
+                driverXbox.a().onTrue(m_ClimberSubsystem.liftRobotCommand());
+                // driverXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY));
+                // driverXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_RETRACT));
+                // driverXbox.povLeft().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE));
 
-        driverXbox.povDown().onTrue(m_IntakeSubsystem.deployIntakeCommand());
-        driverXbox.povUp().onTrue(m_IntakeSubsystem.retractIntakeCommand());
-        //driverXbox.povRight().whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
+                driverXbox.povDown().onTrue(m_IntakeSubsystem.deployIntakeCommand());
+                driverXbox.povUp().onTrue(m_IntakeSubsystem.retractIntakeCommand());
+                // driverXbox.povRight().whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase,
+                // driverXbox));
 
-        // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
-        driverXbox.x().onTrue(m_ShooterSubsystem.stopShooterCommand());
-                //.andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY)));
-        // driverXbox.a().whileTrue(aimAtHopperCommand(() -> -driverXbox.getLeftY(),
-        // () -> -driverXbox.getLeftX()));
+                // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
+                driverXbox.x().onTrue(setIdleShooterRPMCommand().andThen(m_IntakeSubsystem.deployIntakeCommand()));
+                // .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY)));
+                // driverXbox.a().whileTrue(aimAtHopperCommand(() -> -driverXbox.getLeftY(),
+                // () -> -driverXbox.getLeftX()));
 
-        // driverXbox.b().whileTrue(m_TargetingSubsystems.aimAndRangeToPose(Constants.TargetingConstants.LEFT_CLIMB_POSE));
+                // driverXbox.b().whileTrue(m_TargetingSubsystems.aimAndRangeToPose(Constants.TargetingConstants.LEFT_CLIMB_POSE));
 
-        operatorXbox.x().whileTrue(m_ShooterSubsystem.testLeftShooterCommand())
-                .onFalse(m_ShooterSubsystem.stopLeftShooterCommand());
-        operatorXbox.y().whileTrue(m_ShooterSubsystem.testCenterShooterCommand())
-                .onFalse(m_ShooterSubsystem.stopCenterShooterCommand());
-        operatorXbox.b().whileTrue(m_ShooterSubsystem.testRightShooterCommand())
-                .onFalse(m_ShooterSubsystem.stopRightShooterCommand());
-        operatorXbox.a().whileTrue(m_ShooterSubsystem.setIndexerAndRampMotorRPMCommand())
-                .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
+                
+                  operatorXbox.x().whileTrue(m_ShooterSubsystem.testLeftShooterCommand())
+                  .onFalse(m_ShooterSubsystem.stopLeftShooterCommand());
+                  operatorXbox.y().whileTrue(m_ShooterSubsystem.testCenterShooterCommand())
+                  .onFalse(m_ShooterSubsystem.stopCenterShooterCommand());
+                  operatorXbox.b().whileTrue(m_ShooterSubsystem.testRightShooterCommand())
+                  .onFalse(m_ShooterSubsystem.stopRightShooterCommand());
+                 operatorXbox.a().whileTrue(m_ShooterSubsystem.
+                  setIndexerAndRampMotorRPMCommand())
+                  .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
+                 
 
-        topButtons.axisGreaterThan(1, 0.3).toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED * -5)).toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
-        topButtons.axisGreaterThan(1, -0.3).toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED)).toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
-        topButtons.button(3).onTrue(killAllCommand());
-        topButtons.button(6).whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
-        topButtons.button(1).onTrue(drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
-        topButtons.button(2).onTrue(drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED, Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
+                topButtons.axisGreaterThan(1, 0.3)
+                                .toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(
+                                                Constants.IntakeConstants.INTAKE_MANUAL_SPEED * -5))
+                                .toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
+                topButtons.axisGreaterThan(1, -0.3)
+                                .toggleOnTrue(m_IntakeSubsystem
+                                                .rotateIntakeCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED))
+                                .toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
+                topButtons.axisGreaterThan(0, 0.5).onTrue(m_ClimberSubsystem.setClimberSpeedCommand(0.4))
+                                .onFalse(m_ClimberSubsystem.setClimberSpeedCommand(0));
+                topButtons.axisLessThan(0, -0.8).onTrue(m_ClimberSubsystem.setClimberSpeedCommand(-0.4))
+                                .onFalse(m_ClimberSubsystem.setClimberSpeedCommand(0));
+                topButtons.button(3).onTrue(killAllCommand());
+                topButtons.button(6).whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
+                topButtons.button(1)
+                                .onTrue(drivebase.driveToClimbPoseOffsetted(
+                                                Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED,
+                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
+                topButtons.button(2)
+                                .onTrue(drivebase.driveToClimbPoseOffsetted(
+                                                Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED,
+                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
+                topButtons.button(4).whileTrue(m_ShooterSubsystem.setIndexerAndRampMotorRPMCommand())
+                                .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
 
-        //topButtons.button(1).onTrue(drivebase.driveToPose(Constants.))
+                bottomButtons.button(9)
+                                .onTrue(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly().withTimeout(1.5));
+                bottomButtons.button(3).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+                bottomButtons.button(7).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+                bottomButtons.button(4).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+                bottomButtons.button(8).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 
-        if (RobotBase.isSimulation()) {
-            drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
-        } else {
-            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+                // topButtons.button(1).onTrue(drivebase.driveToPose(Constants.))
+
+                if (RobotBase.isSimulation()) {
+                        drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
+                } else {
+                        drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+                }
+
+                if (Robot.isSimulation()) {
+                        Pose2d target = new Pose2d(new Translation2d(1, 4),
+                                        Rotation2d.fromDegrees(90));
+                        // drivebase.getSwerveDrive().field.getObject("targetPose").setPose(target);
+                        driveDirectAngleKeyboard.driveToPose(() -> target,
+                                        new ProfiledPIDController(5,
+                                                        0,
+                                                        0,
+                                                        new Constraints(5, 2)),
+                                        new ProfiledPIDController(5,
+                                                        0,
+                                                        0,
+                                                        new Constraints(Units.degreesToRadians(360),
+                                                                        Units.degreesToRadians(180))));
+                        driverXbox.start()
+                                        .onTrue(Commands.runOnce(() -> drivebase
+                                                        .resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
+                        driverXbox.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
+                        driverXbox.button(2)
+                                        .whileTrue(Commands.runEnd(
+                                                        () -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
+                                                        () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
+
+                        // driverXbox.b().whileTrue(
+                        // drivebase.driveToPose(
+                        // new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
+                        // );
+
+                }
+                if (DriverStation.isTest()) {
+                        drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command
+                                                                                         // above!
+
+                        driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+                        driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+                        driverXbox.back().whileTrue(drivebase.centerModulesCommand());
+                        driverXbox.leftBumper().onTrue(Commands.none());
+                        driverXbox.rightBumper().onTrue(Commands.none());
+                } else {
+                        // driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
+                        // driverXbox.start().whileTrue(Commands.none());
+                        // driverXbox.back().whileTrue(Commands.none());
+                        // driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock,
+                        // drivebase).repeatedly());
+                        // driverXbox.rightBumper().onTrue(Commands.none());
+                }
+
         }
-
-        if (Robot.isSimulation()) {
-            Pose2d target = new Pose2d(new Translation2d(1, 4),
-                    Rotation2d.fromDegrees(90));
-            // drivebase.getSwerveDrive().field.getObject("targetPose").setPose(target);
-            driveDirectAngleKeyboard.driveToPose(() -> target,
-                    new ProfiledPIDController(5,
-                            0,
-                            0,
-                            new Constraints(5, 2)),
-                    new ProfiledPIDController(5,
-                            0,
-                            0,
-                            new Constraints(Units.degreesToRadians(360),
-                                    Units.degreesToRadians(180))));
-            driverXbox.start()
-                    .onTrue(Commands.runOnce(() -> drivebase
-                            .resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-            driverXbox.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
-            driverXbox.button(2)
-                    .whileTrue(Commands.runEnd(
-                            () -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
-                            () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
-
-            // driverXbox.b().whileTrue(
-            // drivebase.driveToPose(
-            // new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-            // );
-
-        }
-        if (DriverStation.isTest()) {
-            drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command
-                                                                             // above!
-
-            driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-            driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-            driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-            driverXbox.leftBumper().onTrue(Commands.none());
-            driverXbox.rightBumper().onTrue(Commands.none());
-        } else {
-            driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-            driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-            driverXbox.start().whileTrue(Commands.none());
-            driverXbox.back().whileTrue(Commands.none());
-            driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-            driverXbox.rightBumper().onTrue(Commands.none());
-        }
-
-    }
 
         /**
          * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -323,8 +381,14 @@ public class RobotContainer {
                 CommandScheduler.getInstance().cancelAll();
         }
 
-        public Command killAllCommand(){
-                return Commands.runOnce(()->killAll());
+        public Command killAllCommand() {
+                return Commands.runOnce(() -> killAll());
+        }
+
+        public Command setIdleShooterRPMCommand() {
+                return Commands.runOnce(() -> m_ShooterSubsystem
+                                .setShooterMotorsRPM(Constants.ShooterConstants.IDLE_SHOOTER_RPM))
+                                .andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
         }
 
 }

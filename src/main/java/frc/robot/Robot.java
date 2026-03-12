@@ -28,6 +28,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TargetingSubsystems;
 
 /**
@@ -44,10 +45,10 @@ public class Robot extends TimedRobot {
     private RobotContainer m_robotContainer;
     private LEDSubsystem m_LedSubsystem;
     private ClimberSubsystem m_ClimberSubsystem;
+    private ShooterSubsystem m_ShooterSubsystem;
 
     private Timer disabledTimer;
     private static NetworkTable table;
-    private static GenericEntry distanceFromLimelight;
 
     private static StructPublisher<Pose2d> advantageScopePublisher = NetworkTableInstance.getDefault().getStructTopic("Robot Pose hahaha", Pose2d.struct).publish();
 
@@ -72,6 +73,7 @@ public class Robot extends TimedRobot {
         m_LedSubsystem = new LEDSubsystem();
         m_robotContainer = new RobotContainer();
         m_ClimberSubsystem = new ClimberSubsystem();
+        m_ShooterSubsystem = new ShooterSubsystem();
         // Create a timer to disable motor brake a few seconds after disable. This will
         // let the robot stop
         // immediately when disabled, but then also let it be pushed more
@@ -145,7 +147,7 @@ public class Robot extends TimedRobot {
        // IntakeSubsystem.resetIntakeRotationEncoder();
         m_robotContainer.setMotorBrake(true);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        m_ClimberSubsystem.lowerRobotCommand();
+        //ShooterSubsystem.setShooterMotorsRPM(Constants.ShooterConstants.IDLE_SHOOTER_RPM);
 
         // Print the selected autonomous command upon autonomous init
         System.out.println("Auto selected: " + m_autonomousCommand);
@@ -168,7 +170,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        m_ClimberSubsystem.lowerRobotCommand();
+        ClimberSubsystem.lowerRobot();
+        //ShooterSubsystem.setShooterMotorsRPM(Constants.ShooterConstants.IDLE_SHOOTER_RPM);
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove

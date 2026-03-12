@@ -124,7 +124,7 @@ public class SwerveSubsystem extends SubsystemBase {
             setupPhotonVision();
             // Stop the odometry thread if we are using vision that way we can synchronize
             // updates better.
-            //swerveDrive.stopOdometryThread();
+            swerveDrive.stopOdometryThread();
         }
         setupPathPlanner();
         SmartDashboard.putData("Rebuilt Field", rebuiltField);

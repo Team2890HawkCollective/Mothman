@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5185568181818176,
-        "y": 4.024693181818182
+        "x": 2.6837045454545447,
+        "y": 4.591568181818182
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.879534090909091,
-        "y": 4.024693181818182
+        "x": 1.4468863636391924,
+        "y": 4.911079545452217
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Floor Intake to Shoot Waypoint"
     },
     {
       "anchor": {
-        "x": 2.281738636363636,
-        "y": 4.024693181818182
+        "x": 1.14,
+        "y": 5.0
       },
       "prevControl": {
-        "x": 2.8279999999999994,
-        "y": 4.024693181818182
+        "x": 2.467261363639192,
+        "y": 4.653409090906762
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Ofsetted-Left Climb Waypoint"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Middle Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -18.80579011375007
   },
   "useDefaultConstraints": true
 }

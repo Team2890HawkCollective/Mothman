@@ -3,62 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.4655813953488368,
-        "y": 0.6682289803220032
+        "x": 3.5185568181818176,
+        "y": 7.2095
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.580858676207512,
-        "y": -0.27284436493738906
+        "x": 1.1273750000027687,
+        "y": 5.385193181820003
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.591109123434704,
-        "y": 2.1771914132379244
+        "x": 4.672920454548223,
+        "y": 5.477954545456365
       },
       "prevControl": {
-        "x": 3.078571154198153,
-        "y": 2.162419836548123
+        "x": 3.3539345896947985,
+        "y": 5.471848129415376
       },
       "nextControl": {
-        "x": 2.055670840787119,
-        "y": 2.1934168157423963
+        "x": 6.899193181820951,
+        "y": 5.488261363638184
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.077871198568873,
-        "y": 3.86463327370304
+        "x": 7.734045454548223,
+        "y": 7.054897727274547
       },
       "prevControl": {
-        "x": 1.9420930232558136,
-        "y": 4.026887298747764
+        "x": 5.971579545454545,
+        "y": 7.271340909090909
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Over Left Ramp Waypoint"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 180.0
-    },
-    {
-      "waypointRelativePos": 1.567134268537075,
-      "rotationDegrees": -1.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -67,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Left Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": false
 }

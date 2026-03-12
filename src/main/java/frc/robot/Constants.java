@@ -74,6 +74,8 @@ public final class Constants {
         //        .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
         public static double SHOOTER_RPM = -2700;
+        public static final double IDLE_SHOOTER_RPM = -1800;
+        public static final double AUTO_SHOOTER_RPM = -3100; //always negative to shoot
 
        // public static void updateShooterRPM() {
           //  SHOOTER_RPM = shooterRPM.getDouble(-4000);
@@ -100,7 +102,7 @@ public final class Constants {
          * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
          */
 
-        public static double INDEXER_AND_RAMP_MOTOR_RPM = 30000;
+        public static double INDEXER_AND_RAMP_MOTOR_RPM = 15000; //always positive when feeding into shooter
 
         // this method called in robot periodic so values updated in elastic are
         // constantly read and applied to RAMP_MOTOR_SPEED
@@ -118,7 +120,9 @@ public final class Constants {
          * programmingTab.add("Desired Intake RPM", -1000)
          * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
          */
-        public static double INTAKE_WHEELS_MOTOR_RPM = -6250;
+        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -8000; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -5000; // always negative when intaking
+
 
         /*
          * public static void updateIntakeWheelsRPM() {
@@ -130,36 +134,36 @@ public final class Constants {
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
 
         public static class IntakeRotatorPID {
-            public static final double INTAKE_ROTATOR_P = .08;
+            public static final double INTAKE_ROTATOR_P = .07;
             public static final double INTAKE_ROTATOR_I = 0;
-            public static final double INTAKE_ROTATOR_D = 0.01;
+            public static final double INTAKE_ROTATOR_D = 0.03;
         }
 
         public static final double INTAKE_MOTOR_P = 0.0001;
         public static final double INTAKE_MOTOR_I = 0;
-        public static final double INTAKE_MOTOR_D = 0;
+        public static final double INTAKE_MOTOR_D = 0.00005;
 
-        public static final double INTAKE_COLLECT_ENCODER_VALUE = 1.4;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -3;
-        public static final double INTAKE_RETRACT_ENCODER_VALUE = -5.5;
+        public static final double INTAKE_COLLECT_ENCODER_VALUE = 1;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -4;
+        public static final double INTAKE_RETRACT_ENCODER_VALUE = -6.2;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
         public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .49;
         public static final double INTAKE_THROUGHBORE_ENCODER_MIDDLE = .389;
 
-        public static final double INTAKE_MANUAL_SPEED = .1;
+        public static final double INTAKE_MANUAL_SPEED = .15;
     }
 
     // create object and a new widget under programming tab in Elastic where object
     // retrieves value from widget
 
     public static class TargetingConstants {
-        public static final Pose2d BLUE_LEFT_CLIMB_POSE = new Pose2d(1.066, 4.633, Rotation2d.fromDegrees(90));
-        public static final Pose2d BLUE_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(1.066, 5.133,
+        public static final Pose2d BLUE_LEFT_CLIMB_POSE = new Pose2d(1.14, 4.25, Rotation2d.fromDegrees(90));
+        public static final Pose2d BLUE_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(1.14, 5.0,
                 Rotation2d.fromDegrees(90));
 
-        public static final Pose2d BLUE_RIGHT_CLIMB_POSE = new Pose2d(1.066, 2.87, Rotation2d.fromDegrees(-90));
-        public static final Pose2d BLUE_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(1.066, 2.37,
+        public static final Pose2d BLUE_RIGHT_CLIMB_POSE = new Pose2d(1.14, 2.046, Rotation2d.fromDegrees(-90));
+        public static final Pose2d BLUE_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(1.14, 3.25,
                 Rotation2d.fromDegrees(-90));
 
         public static final Pose2d RED_RIGHT_CLIMB_POSE = new Pose2d(15.474, 5.22, Rotation2d.fromDegrees(90));
@@ -198,12 +202,12 @@ public final class Constants {
                 new Rotation3d(0, 0, Math.toRadians(-200)));
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(23.375), 0, Units.inchesToMeters(13)),
-                new Rotation3d(0, 74, 0));
+                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(11.25), Units.inchesToMeters(26)),
+                new Rotation3d(0, Math.toRadians(10), 0));
 
         public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
-                new Translation3d(0, 0, 0),
-                new Rotation3d(0, 0, 0));
+                new Translation3d(Units.inchesToMeters(1.5), Units.inchesToMeters(-11.25), Units.inchesToMeters(26)),
+                new Rotation3d(0, Math.toRadians(-10), 0));
     }
 
     public static class ClimberConstants {
@@ -215,7 +219,7 @@ public final class Constants {
         public static final double CLIMBER_PID_I = 0;
         public static final double CLIMBER_PID_D = 0;
 
-        public static final double CLIMBER_LIFTED_SETPOINT_VALUE = 45;
+        public static final double CLIMBER_LIFTED_SETPOINT_VALUE = 65;
         public static final double CLIMBER_LOWERED_SETPOINT_VALUE = 0;
 
     }
