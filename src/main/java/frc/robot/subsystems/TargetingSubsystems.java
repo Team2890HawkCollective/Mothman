@@ -56,15 +56,9 @@ public class TargetingSubsystems extends SubsystemBase {
 
     public static Rotation2d hubThetaPose = new Rotation2d();
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
-    private static ShuffleboardTab cameras;
 
     public TargetingSubsystems() {
         photonAimPIDController.enableContinuousInput(-Math.PI, Math.PI);
-        cameras = Shuffleboard.getTab("Vision");
-        // cameras.addCamera("Rear Left Camera","Rear Left
-        // Camera","http://photonvision.local:5800/#/cameras");
-        // cameras.addCamera("Rear Right Camera", "Rear Right Camera",
-        // "http://photonvision.local:5800/#/cameras");
 
     }
 

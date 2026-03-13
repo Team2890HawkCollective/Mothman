@@ -232,7 +232,7 @@ public class RobotContainer {
                 // full shooting system including linear actuators
                 //driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new WaitCommand(1.5)));
                                 //.andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
-                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.setShooterMotorsRPMCommand(-3400));
+                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
                 driverXbox.leftBumper().onTrue(m_IntakeSubsystem
                                 .startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
                 // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,
@@ -258,15 +258,12 @@ public class RobotContainer {
                 // driverXbox.b().whileTrue(m_TargetingSubsystems.aimAndRangeToPose(Constants.TargetingConstants.LEFT_CLIMB_POSE));
 
                 
-                  operatorXbox.x().whileTrue(m_ShooterSubsystem.testLeftShooterCommand())
+                topButtons.button(12).whileTrue(m_ShooterSubsystem.testLeftShooterCommand())
                   .onFalse(m_ShooterSubsystem.stopLeftShooterCommand());
-                  operatorXbox.y().whileTrue(m_ShooterSubsystem.testCenterShooterCommand())
+                topButtons.button(11).whileTrue(m_ShooterSubsystem.testCenterShooterCommand())
                   .onFalse(m_ShooterSubsystem.stopCenterShooterCommand());
-                  operatorXbox.b().whileTrue(m_ShooterSubsystem.testRightShooterCommand())
+                topButtons.button(10).whileTrue(m_ShooterSubsystem.testRightShooterCommand())
                   .onFalse(m_ShooterSubsystem.stopRightShooterCommand());
-                 operatorXbox.a().whileTrue(m_ShooterSubsystem.
-                  setIndexerAndRampMotorRPMCommand())
-                  .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
                  
 
                 topButtons.axisGreaterThan(1, 0.3)
@@ -386,7 +383,7 @@ public class RobotContainer {
         }
 
         public Command setIdleShooterRPMCommand() {
-                return Commands.runOnce(() -> m_ShooterSubsystem
+                return Commands.runOnce(() -> ShooterSubsystem
                                 .setShooterMotorsRPM(Constants.ShooterConstants.IDLE_SHOOTER_RPM))
                                 .andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
         }

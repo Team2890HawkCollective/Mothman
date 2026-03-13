@@ -85,8 +85,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
                 // Slot 2
                 .p(.8, ClosedLoopSlot.kSlot2)
-                .i(.001, ClosedLoopSlot.kSlot2)
-                .d(0.3, ClosedLoopSlot.kSlot2);
+                .i(.0, ClosedLoopSlot.kSlot2)
+                .d(0.8, ClosedLoopSlot.kSlot2);
 
         intakeRotatorConfig.smartCurrentLimit(80);
         intakeRotatorMotor.configure(intakeRotatorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,

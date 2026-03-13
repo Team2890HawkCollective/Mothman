@@ -111,13 +111,6 @@ public class ShooterSubsystem extends SubsystemBase {
         indexerAndRampMotorPIDController = indexerAndRampMotor.getClosedLoopController();
     }
 
-    // private static SparkMax leftActuatorMotor = new
-    // SparkMax(Constants.ShooterConstants.LEFT_ACTUATOR_PWM_PORT,
-    // MotorType.kBrushless);
-
-    // private static SparkMax rightActuatorMotor = new
-    // SparkMax(Constants.ShooterConstants.RIGHT_ACTUATOR_PWM_PORT,
-    // MotorType.kBrushless);
 
     public void setShooterMotorsRPM() {
         centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM, ControlType.kVelocity);
@@ -267,7 +260,10 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
-        SmartDashboard.putNumber("Shooter Velocity", leftShooterMotor.getEncoder().getVelocity());
+        SmartDashboard.putString("Shooter Velocity", "Left: " 
+        + leftShooterMotor.getEncoder().getVelocity() 
+        + "  Center:" + centerShooterMotor.getEncoder().getVelocity() 
+        + "  Right: " + rightShooterMotor.getEncoder().getVelocity());
 
     }
 }
