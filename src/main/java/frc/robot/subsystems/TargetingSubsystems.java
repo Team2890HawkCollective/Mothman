@@ -158,14 +158,30 @@ public class TargetingSubsystems extends SubsystemBase {
     }
 
 
-      public static void updateShooterRPM(Pose2d currentRobotPose) {
+      public static void updateShooterAndIndexerRPM(Pose2d currentRobotPose) {
       double distance = PhotonUtils.getDistanceToPose(currentRobotPose,
       Constants.TargetingConstants.allianceHubPose);
-      Constants.ShooterConstants.SHOOTER_RPM = Math.max((-293.84123 * Math.pow(distance, 3))
-      + (1360.01497 * Math.pow(distance, 2))
-      - (2391.17127 * distance)
-      - 1249.22704, -6000); 
-     }
+      Constants.ShooterConstants.SHOOTER_RPM_LEFT = Math.max((-1.73146 * Math.pow(distance, 4))
+      + (27.27766 * Math.pow(distance, 3))
+      - (154.79287 * Math.pow(distance, 2))
+      - (34.29619 * distance) 
+      -2387.13374, -6000); 
+
+      Constants.ShooterConstants.SHOOTER_RPM_RIGHT = Math.max((-2.40765 * Math.pow(distance, 4))
+      + (38.94472 * Math.pow(distance, 3))
+      - (225.17963 * Math.pow(distance, 2))
+      + (138.9699 * distance) 
+      - 2531.33326, -6000); 
+
+    Constants.ShooterConstants.SHOOTER_RPM_CENTER = Math.max((-1.84547 * Math.pow(distance, 4))
+      + (32.75767 * Math.pow(distance, 3))
+      - (201.29209 * Math.pow(distance, 2))
+      + (58.06248 * distance) 
+      - 2460.16313, -6000); 
+
+      Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM = -Constants.ShooterConstants.SHOOTER_RPM_CENTER * 4.5 * 5/2;
+      //To find the linear speed, the equation is RPM * Circumference, pi is not needed as it cancels out.
+      }
      
 
     @Override

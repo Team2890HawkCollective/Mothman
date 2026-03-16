@@ -19,6 +19,7 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -107,7 +108,7 @@ public class Robot extends TimedRobot {
         // robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
-        TargetingSubsystems.updateShooterRPM(m_robotContainer.getSwerveDrive().getPose());
+        TargetingSubsystems.updateShooterAndIndexerRPM(m_robotContainer.getSwerveDrive().getPose());
 
         SmartDashboard.putNumber("Estimated Shooter RPM", Constants.ShooterConstants.SHOOTER_RPM);
         SmartDashboard.putNumber("Distance From Hub: ", PhotonUtils.getDistanceToPose(m_robotContainer.getSwerveDrive().getPose(), Constants.TargetingConstants.allianceHubPose));
@@ -188,6 +189,14 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void teleopPeriodic() {
+        if(DriverStation.getMatchTime() <= 15)
+        {
+            m_robotContainer.operatorXbox.setRumble(RumbleType.kBothRumble, 1);
+        }
+        if(DriverStation.getMatchTime() <= 14.5)
+        {
+            m_robotContainer.operatorXbox.setRumble(RumbleType.kBothRumble, 0);
+        }
     }
 
     @Override

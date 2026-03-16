@@ -331,8 +331,8 @@ public class Vision {
 
     /**
      * Front Right Camera
-     */
-    /*PURPLE_PHOTON_CAM("Front Right Camera",
+    
+    FRONT_RIGHT_CAM("Front Right Camera",
         Constants.TargetingConstants.ROBOT_TO_FRONT_RIGHT_CAM.getRotation(),
         Constants.TargetingConstants.ROBOT_TO_FRONT_RIGHT_CAM.getTranslation(),
         VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));*/

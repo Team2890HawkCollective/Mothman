@@ -70,17 +70,21 @@ public final class Constants {
     }
 
     public static class ShooterConstants {
-       // private static GenericEntry shooterRPM = programmingTab.add("Desired Shooter RPM", -4000)
-        //        .withWidget(BuiltInWidgets.kNumberBar).getEntry();
+        private static GenericEntry shooterRPM = programmingTab.add("Desired Shooter RPM", -4000)
+                .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
         public static double SHOOTER_RPM = -2700;
         public static final double IDLE_SHOOTER_RPM = -1800;
-        public static final double AUTO_SHOOTER_RPM = -3100; //always negative to shoot
+        public static final double AUTO_SHOOTER_RPM = -2900; //always negative to shoot
 
-       // public static void updateShooterRPM() {
-          //  SHOOTER_RPM = shooterRPM.getDouble(-4000);
-       // }
+        public static void updateShooterRPM() {
+            SHOOTER_RPM = shooterRPM.getDouble(-4000);
+        }
 
+
+        public static double SHOOTER_RPM_LEFT;
+        public static double SHOOTER_RPM_RIGHT;
+        public static double SHOOTER_RPM_CENTER;
         public static final int CENTER_SHOOTER_MOTOR_ID = 42;
         public static final int LEFT_SHOOTER_MOTOR_ID = 41;
         public static final int RIGHT_SHOOTER_MOTOR_ID = 40;
@@ -144,7 +148,7 @@ public final class Constants {
         public static final double INTAKE_MOTOR_D = 0.00005;
 
         public static final double INTAKE_COLLECT_ENCODER_VALUE = 1;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -4;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -1;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = -6.2;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
@@ -166,12 +170,12 @@ public final class Constants {
         public static final Pose2d BLUE_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(1.14, 3.25,
                 Rotation2d.fromDegrees(-90));
 
-        public static final Pose2d RED_RIGHT_CLIMB_POSE = new Pose2d(15.474, 5.22, Rotation2d.fromDegrees(90));
-        public static final Pose2d RED_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(15.474, 5.72,
+        public static final Pose2d RED_RIGHT_CLIMB_POSE = new Pose2d(15.35, 5, Rotation2d.fromDegrees(90));
+        public static final Pose2d RED_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(15.35, 5.72,
                 Rotation2d.fromDegrees(90));
 
-        public static final Pose2d RED_LEFT_CLIMB_POSE = new Pose2d(15.474, 3.437, Rotation2d.fromDegrees(-90));
-        public static final Pose2d RED_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(15.474, 2.937,
+        public static final Pose2d RED_LEFT_CLIMB_POSE = new Pose2d(15.35, 3.6, Rotation2d.fromDegrees(-90));
+        public static final Pose2d RED_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(15.35, 3.1,
                 Rotation2d.fromDegrees(-90));
 
         public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Back Left Camera");
@@ -203,11 +207,11 @@ public final class Constants {
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
                 new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(11.25), Units.inchesToMeters(26)),
-                new Rotation3d(0, Math.toRadians(10), 0));
+                new Rotation3d(0, Math.toRadians(15), 0));
 
         public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(1.5), Units.inchesToMeters(-11.25), Units.inchesToMeters(26)),
-                new Rotation3d(0, Math.toRadians(-10), 0));
+                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(-11.25), Units.inchesToMeters(26)),
+                new Rotation3d(0, Math.toRadians(15), 0));
     }
 
     public static class ClimberConstants {

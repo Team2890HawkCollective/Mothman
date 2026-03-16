@@ -48,8 +48,8 @@ public class IntakeSubsystem extends SubsystemBase {
     SysIdRoutine routine = new SysIdRoutine(new SysIdRoutine.Config(),
             new SysIdRoutine.Mechanism(intakeRotatorMotor::setVoltage,
             log -> log.motor("arm").voltage(Volts.of(intakeRotatorMotor.getAppliedOutput() * 12))
-                    .angularPosition(Radians.of(intakeRotatorEncoder.get() * 2 * Math.PI))
-                    .angularVelocity(RadiansPerSecond.of(0)),
+                    .angularPosition(Radians.of(intakeRotatorMotor.getEncoder().getPosition() * 2 * Math.PI))
+                    .angularVelocity(RadiansPerSecond.of(intakeRotatorMotor.getEncoder().getVelocity() * 2 * Math.PI/60)),
                     this, "armSysId"));
 
     private static SparkClosedLoopController intakeRotatorPIDController;

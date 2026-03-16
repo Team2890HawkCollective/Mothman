@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.1,
-        "y": 5.973935599284436
+        "x": 2.0,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.38534515206406017,
-        "y": 5.973935599284436
+        "x": 3.0,
+        "y": 7.0
       },
       "isLocked": false,
-      "linkedName": "Left Intake Balls Waypoint"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.4331305903398923,
-        "y": 5.973935599284436
+        "x": 15.35,
+        "y": 4.25
       },
       "prevControl": {
-        "x": 1.1145974955277276,
-        "y": 5.925259391771019
+        "x": 14.35,
+        "y": 4.25
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Floor Intake Fuel Waypoint"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Middle Shoot to Climb",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

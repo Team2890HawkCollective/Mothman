@@ -59,7 +59,7 @@ import frc.robot.subsystems.swervedrive.Vision;
 public class RobotContainer {
 
         // Replace with CommandPS4Controller or CommandJoystick if needed
-        final CommandXboxController driverXbox = new CommandXboxController(0);
+        static final CommandXboxController driverXbox = new CommandXboxController(0);
         final CommandXboxController operatorXbox = new CommandXboxController(1);
         private final static CommandJoystick topButtons = new CommandJoystick(2);
         final CommandJoystick bottomButtons = new CommandJoystick(3);
@@ -143,13 +143,13 @@ public class RobotContainer {
 
                 // Create the NamedCommands that will be used in PathPlanner
                 NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-                NamedCommands.registerCommand("Start_Intake_Wheels", m_IntakeSubsystem.startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST));
                 NamedCommands.registerCommand("Shoot_Fuel_Command",
                                 m_ShooterSubsystem.setShooterMotorsRPMAutoCommand());
+                NamedCommands.registerCommand("Start_Indexer", m_ShooterSubsystem.setIndexerAndRampMotorRPMCommand());
                 NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.deployIntakeCommand()
                                 .andThen(m_IntakeSubsystem.startIntakeMotorCommand(
-                                                Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW)));
-                NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand()
+                                                Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST)));
+                NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand().andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand())
                                 .andThen(m_IntakeSubsystem.deployIntakeCommand()));
                 NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
                 NamedCommands.registerCommand("Assist_Shooter",
@@ -158,22 +158,25 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Kill_All", killAllCommand());
                 NamedCommands.registerCommand("Auto_Aim_To_Hub",
                                 m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox));
-                
-                
-                /*NamedCommands.registerCommand("PathPlan_To_Climb_Right_Offsetted",
-                                drivebase.driveToClimbPoseOffsetted(
-                                                Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED,
-                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
-                NamedCommands.registerCommand("PathPlan_To_Climb_Left_Offsetted",
-                                drivebase.driveToClimbPoseOffsetted(
-                                                Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED,
-                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
-                NamedCommands.registerCommand("PathPlan_Into_Climb_Right",
-                                drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE,
-                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE));
-                NamedCommands.registerCommand("PathPlan_Into_Climb_Left",
-                                drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE,
-                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE));*/
+
+                /*
+                 * NamedCommands.registerCommand("PathPlan_To_Climb_Right_Offsetted",
+                 * drivebase.driveToClimbPoseOffsetted(
+                 * Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED,
+                 * Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
+                 * NamedCommands.registerCommand("PathPlan_To_Climb_Left_Offsetted",
+                 * drivebase.driveToClimbPoseOffsetted(
+                 * Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED,
+                 * Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
+                 * NamedCommands.registerCommand("PathPlan_Into_Climb_Right",
+                 * drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.
+                 * BLUE_RIGHT_CLIMB_POSE,
+                 * Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE));
+                 * NamedCommands.registerCommand("PathPlan_Into_Climb_Left",
+                 * drivebase.driveToClimbPoseOffsetted(Constants.TargetingConstants.
+                 * BLUE_LEFT_CLIMB_POSE,
+                 * Constants.TargetingConstants.RED_LEFT_CLIMB_POSE));
+                 */
 
                 // Have the autoChooser pull in all PathPlanner autos as options
                 autoChooser = AutoBuilder.buildAutoChooser();
@@ -230,9 +233,10 @@ public class RobotContainer {
                                                                 Constants.ShooterConstants.IDLE_SHOOTER_RPM)));
                 // command for
                 // full shooting system including linear actuators
-                //driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new WaitCommand(1.5)));
-                                //.andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
-                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
+                // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new
+                // WaitCommand(1.5)));
+                // .andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
+                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.stopIntakeMotorCommand()));
                 driverXbox.leftBumper().onTrue(m_IntakeSubsystem
                                 .startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
                 // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,
@@ -257,14 +261,12 @@ public class RobotContainer {
 
                 // driverXbox.b().whileTrue(m_TargetingSubsystems.aimAndRangeToPose(Constants.TargetingConstants.LEFT_CLIMB_POSE));
 
-                
-                topButtons.button(12).whileTrue(m_ShooterSubsystem.testLeftShooterCommand())
-                  .onFalse(m_ShooterSubsystem.stopLeftShooterCommand());
-                topButtons.button(11).whileTrue(m_ShooterSubsystem.testCenterShooterCommand())
-                  .onFalse(m_ShooterSubsystem.stopCenterShooterCommand());
-                topButtons.button(10).whileTrue(m_ShooterSubsystem.testRightShooterCommand())
-                  .onFalse(m_ShooterSubsystem.stopRightShooterCommand());
-                 
+                bottomButtons.button(12).whileTrue(m_ShooterSubsystem.testLeftShooterCommand())
+                                .onFalse(m_ShooterSubsystem.stopLeftShooterCommand());
+                bottomButtons.button(11).whileTrue(m_ShooterSubsystem.testCenterShooterCommand())
+                                .onFalse(m_ShooterSubsystem.stopCenterShooterCommand());
+                bottomButtons.button(10).whileTrue(m_ShooterSubsystem.testRightShooterCommand())
+                                .onFalse(m_ShooterSubsystem.stopRightShooterCommand());
 
                 topButtons.axisGreaterThan(1, 0.3)
                                 .toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(
@@ -283,19 +285,25 @@ public class RobotContainer {
                 topButtons.button(1)
                                 .onTrue(drivebase.driveToClimbPoseOffsetted(
                                                 Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED,
-                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
+                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED)
+                                                .andThen(drivebase.driveIntoClimbPose(
+                                                                Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE,
+                                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE)));
                 topButtons.button(2)
                                 .onTrue(drivebase.driveToClimbPoseOffsetted(
                                                 Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED,
-                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
+                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED)
+                                                .andThen(drivebase.driveIntoClimbPose(
+                                                                Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE,
+                                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE)));
                 topButtons.button(4).whileTrue(m_ShooterSubsystem.setIndexerAndRampMotorRPMCommand())
                                 .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
 
                 bottomButtons.button(9)
-                                .onTrue(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly().withTimeout(1.5));
+                                .onTrue(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly());
                 bottomButtons.button(3).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
                 bottomButtons.button(7).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-                bottomButtons.button(4).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+                bottomButtons.button(4).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
                 bottomButtons.button(8).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 
                 // topButtons.button(1).onTrue(drivebase.driveToPose(Constants.))

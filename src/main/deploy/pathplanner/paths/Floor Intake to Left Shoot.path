@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5192727272727271,
-        "y": 5.941761363636363
+        "x": 0.4331305903398923,
+        "y": 5.973935599284436
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6630909090909087,
-        "y": 4.591568181818182
+        "x": 2.315277280858676,
+        "y": 4.821932021466905
       },
       "isLocked": false,
       "linkedName": "Floor Intake Fuel Waypoint"
     },
     {
       "anchor": {
-        "x": 2.6837045454545447,
-        "y": 4.591568181818182
+        "x": 2.785813953488372,
+        "y": 4.562325581395348
       },
       "prevControl": {
-        "x": 0.8490909090909089,
-        "y": 5.745931818181819
+        "x": 0.9036672629695885,
+        "y": 5.6981037567084085
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Shoot_Fuel_Command",
+      "waypointRelativePos": 0.6000000000000016,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,7 +49,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -18.80579011375007
+    "rotation": -23.62937773065676
   },
   "reversed": false,
   "folder": "Middle Shoot to Climb",

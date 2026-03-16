@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Start_Intake_Wheels"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Center to Floor Intake"
@@ -37,19 +31,25 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot_Fuel_Command"
+            "name": "Start_Indexer"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 2.5
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Assist_Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop_Shooter_Command"
           }
         },
         {
