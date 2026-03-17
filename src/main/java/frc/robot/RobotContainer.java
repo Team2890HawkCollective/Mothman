@@ -306,6 +306,12 @@ public class RobotContainer {
                 bottomButtons.button(4).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
                 bottomButtons.button(8).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 
+                operatorXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE));
+                operatorXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE));
+                operatorXbox.x().whileTrue(m_IntakeSubsystem.assistShooterCommand().repeatedly());
+                //.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE, Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE).repeatedly()).onFalse(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE));
+
+
                 // topButtons.button(1).onTrue(drivebase.driveToPose(Constants.))
 
                 if (RobotBase.isSimulation()) {

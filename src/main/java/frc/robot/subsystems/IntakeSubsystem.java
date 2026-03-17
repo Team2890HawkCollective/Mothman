@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Units;
@@ -40,16 +41,19 @@ public class IntakeSubsystem extends SubsystemBase {
     private static SparkFlex intakeRotatorMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_ID,
             MotorType.kBrushless);
 
-    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(0.3, .5);
+    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(5, 10);
     private final ProfiledPIDController intakeRotatorProfiledPIDController;
     private static TrapezoidProfile.State goalState = new TrapezoidProfile.State(
-            Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_RETRACT, 0);
+            Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE, 0);
+
+    private static ArmFeedforward intakeRotationFeedfoward = new ArmFeedforward(.75418, 1.1238, .023506, .043444);
 
     SysIdRoutine routine = new SysIdRoutine(new SysIdRoutine.Config(),
             new SysIdRoutine.Mechanism(intakeRotatorMotor::setVoltage,
-            log -> log.motor("arm").voltage(Volts.of(intakeRotatorMotor.getAppliedOutput() * 12))
-                    .angularPosition(Radians.of(intakeRotatorMotor.getEncoder().getPosition() * 2 * Math.PI))
-                    .angularVelocity(RadiansPerSecond.of(intakeRotatorMotor.getEncoder().getVelocity() * 2 * Math.PI/60)),
+                    log -> log.motor("arm").voltage(Volts.of(intakeRotatorMotor.getAppliedOutput() * 12))
+                            .angularPosition(Radians.of(intakeRotatorMotor.getEncoder().getPosition() * 2 * Math.PI))
+                            .angularVelocity(RadiansPerSecond
+                                    .of(intakeRotatorMotor.getEncoder().getVelocity() * 2 * Math.PI / 60)),
                     this, "armSysId"));
 
     private static SparkClosedLoopController intakeRotatorPIDController;
@@ -64,12 +68,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem() {
         intakeRotatorProfiledPIDController = new ProfiledPIDController(
-                Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_P,
+                3,
                 Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_I,
                 Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_D,
                 m_Constraints,
                 0.02);
-        intakeRotatorProfiledPIDController.setTolerance(0.02);
+        intakeRotatorProfiledPIDController.setTolerance(0.15);
         intakeRotatorProfiledPIDController.setGoal(goalState);
 
         intakeRotatorConfig.closedLoop
@@ -101,7 +105,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeWheelsMotor.configure(intakeWheelsMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
 
-        intakeRotatorMotor.getEncoder().setPosition(-6);
+        intakeRotatorMotor.getEncoder().setPosition(6.2);
         intakeWheelsMotorPIDController = intakeWheelsMotor.getClosedLoopController();
     }
 
@@ -147,18 +151,15 @@ public class IntakeSubsystem extends SubsystemBase {
         return runOnce(() -> stopIntakeMotor());
     }
 
-    /*
-     * public Command assistFuelIntakeCommand(double deployedPosition, double
-     * assistPosition) {
-     * return runOnce(() -> goToPositionCommand(assistPosition).andThen(new
-     * WaitCommand(1.5))
-     * .andThen(goToPositionCommand(deployedPosition)).andThen(new
-     * WaitCommand(1.5)));
-     * }
-     */
+    public Command assistShooterCommand()
+    {
+      return runOnce(() -> goToPosition(Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE)).andThen(new WaitCommand(.3))
+      .andThen(goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)).andThen(new WaitCommand(.2));
+      }
+     
 
     public static void resetIntakeRotationEncoder() {
-        intakeRotatorMotor.getEncoder().setPosition(-5);
+        intakeRotatorMotor.getEncoder().setPosition(6.2);
     }
 
     public void deployIntake() {
@@ -190,8 +191,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public Command assistFuelIntakeCommand() {
-        return runOnce(() -> assistFuelIntake()).andThen(new WaitCommand(.5)).andThen(deployIntakeCommand())
-                .andThen(new WaitCommand(.5));
+        return runOnce(() -> assistFuelIntake()).andThen(new WaitCommand(1.5)).andThen(deployIntakeCommand())
+                .andThen(new WaitCommand(1.5));
     }
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
@@ -204,11 +205,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        encoderValue = intakeRotatorEncoder.get();
-        //intakeRotatorMotor.setVoltage(intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
+        encoderValue = intakeRotatorMotor.getEncoder().getPosition();
+        intakeRotatorMotor.setVoltage(intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
+               //+ intakeRotationFeedfoward.calculate(intakeRotatorProfiledPIDController.getSetpoint().position * 2 * Math.PI/12,
+                       // intakeRotatorProfiledPIDController.getSetpoint().velocity));
         SmartDashboard.putNumber("Intake Rotator Motor Encoder", intakeRotatorMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Intake Rotator Throughbore Encoder Value", intakeRotatorEncoder.get());
-        SmartDashboard.putNumber("Voltage Deploy", intakeRotatorProfiledPIDController.calculate(encoderValue,
-                goalState));
+        SmartDashboard.putNumber("Intake Rotation Voltage", intakeRotatorProfiledPIDController.calculate(encoderValue, goalState)
+                + intakeRotationFeedfoward.calculate(intakeRotatorProfiledPIDController.getSetpoint().position * 2 * Math.PI/12,
+                        intakeRotatorProfiledPIDController.getSetpoint().velocity));
+        SmartDashboard.putNumber("Intake Rotation Goal Position: ", intakeRotatorProfiledPIDController.getGoal().position);
     }
 }

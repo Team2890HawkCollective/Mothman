@@ -147,9 +147,9 @@ public final class Constants {
         public static final double INTAKE_MOTOR_I = 0;
         public static final double INTAKE_MOTOR_D = 0.00005;
 
-        public static final double INTAKE_COLLECT_ENCODER_VALUE = 1;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = -1;
-        public static final double INTAKE_RETRACT_ENCODER_VALUE = -6.2;
+        public static final double INTAKE_COLLECT_ENCODER_VALUE = 0;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = 2;
+        public static final double INTAKE_RETRACT_ENCODER_VALUE = 6.2;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
         public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .49;
@@ -229,7 +229,7 @@ public final class Constants {
     }
 
     public static class LEDConstants {
-        public static final int LED_PWM_PORT = 6;
+        public static final int LED_PWM_PORT = 5;
 
     }
 }
