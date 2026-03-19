@@ -225,11 +225,11 @@ public class RobotContainer {
                                 .startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST));
                 driverXbox.rightBumper()
                                 .whileTrue(m_IntakeSubsystem.reverseIntakeMotorCommand()
-                                                .andThen(m_ShooterSubsystem.reverseIndexerAndRampMotorRPMCommand())
-                                                .andThen(m_ShooterSubsystem.reverseShooterCommand()))
-                                .onFalse(m_IntakeSubsystem.stopIntakeMotorCommand()
-                                                .andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand())
-                                                .andThen(m_ShooterSubsystem.setShooterMotorsRPMIdleCommand()));
+                                                .andThen(m_ShooterSubsystem.reverseIndexerAndRampMotorRPMCommand()))
+                                                //.andThen(m_ShooterSubsystem.reverseShooterCommand()))
+                                .onFalse(m_IntakeSubsystem.startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST)
+                                                .andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand()));
+                                                //.andThen(m_ShooterSubsystem.setShooterMotorsRPMIdleCommand()));
                 // command for
                 // full shooting system including linear actuators
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new
