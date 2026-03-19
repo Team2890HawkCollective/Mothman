@@ -141,7 +141,7 @@ public class ShooterSubsystem extends SubsystemBase {
         //rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
     }
 
-        public static void setShooterMotorsRPMIdle(){
+    public static void setShooterMotorsRPMIdle(){
         enableShooter = false;
         indexerStatus = false;
         centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.IDLE_SHOOTER_RPM, ControlType.kVelocity);
@@ -322,17 +322,17 @@ public class ShooterSubsystem extends SubsystemBase {
         if(enableShooter == true)
         {
             if(leftShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_LEFT * .80)
-                leftShooterMotor.setVoltage(bangBangController.calculate(leftShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_LEFT));
+                leftShooterMotor.setVoltage(bangBangController.calculate(leftShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_LEFT) * 12);
             else
                 leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
 
             if(centerShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_CENTER * .80)
-                centerShooterMotor.setVoltage(bangBangController.calculate(centerShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_CENTER));
+                centerShooterMotor.setVoltage(bangBangController.calculate(centerShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_CENTER) * 12);
             else
                 centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
 
             if (rightShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_RIGHT * .80)
-                rightShooterMotor.setVoltage(bangBangController.calculate(rightShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_RIGHT));
+                rightShooterMotor.setVoltage(bangBangController.calculate(rightShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_RIGHT) * 12);
             else
                 rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
 
