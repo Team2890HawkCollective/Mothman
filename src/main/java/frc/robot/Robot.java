@@ -151,7 +151,7 @@ public class Robot extends TimedRobot {
        // IntakeSubsystem.resetIntakeRotationEncoder();
         m_robotContainer.setMotorBrake(true);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-        //ShooterSubsystem.setShooterMotorsRPM(Constants.ShooterConstants.IDLE_SHOOTER_RPM);
+        ShooterSubsystem.setShooterMotorsRPMIdle();
 
         // Print the selected autonomous command upon autonomous init
         System.out.println("Auto selected: " + m_autonomousCommand);
@@ -175,7 +175,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         ClimberSubsystem.lowerRobot();
-        //ShooterSubsystem.setShooterMotorsRPM(Constants.ShooterConstants.IDLE_SHOOTER_RPM);
+        ShooterSubsystem.setShooterMotorsRPMIdle();
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
