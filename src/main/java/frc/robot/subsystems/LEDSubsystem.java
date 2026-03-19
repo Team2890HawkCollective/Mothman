@@ -24,22 +24,20 @@ public class LEDSubsystem extends SubsystemBase {
   AddressableLED m_LED;
 
   AddressableLEDBuffer m_Buffer;
-  AddressableLEDBufferView m_Left;
-  AddressableLEDBufferView m_Right;
 
-  LEDPattern hubActiveColor = LEDPattern.solid(Color.kGreen);
-  LEDPattern hubActiveBlinkPattern = hubActiveColor.blink(Second.of(0.5));
+  LEDPattern hubActiveColor = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kTeal, Color.kMagenta);
+  LEDPattern hubActiveBlinkPattern = hubActiveColor.breathe(Second.of(0.4));
 
-  LEDPattern hubInactiveColor = LEDPattern.solid(Color.kRed);
+  LEDPattern hubInactiveColor = LEDPattern.solid(Color.kMagenta);
   LEDPattern hubInactiveBlinkPattern = hubInactiveColor.blink(Second.of(0.1));
 
   LEDPattern allianceShiftColor = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kTeal, Color.kMagenta);
   LEDPattern allianceShiftPattern = allianceShiftColor.scrollAtRelativeSpeed(Percent.per(Second).of(100));
 
-  LEDPattern transitionColor = LEDPattern.solid(Color.kYellow);
+  LEDPattern transitionColor = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kTeal, Color.kMagenta);
   LEDPattern transitionBlinkPattern = transitionColor.blink(Second.of(0.2));
 
-  LEDPattern endGameColor = LEDPattern.solid(Color.kOrangeRed);
+  LEDPattern endGameColor = LEDPattern.solid(Color.kCoral);
   LEDPattern endGameBlinkPattern = endGameColor.blink(Second.of(0.2));
 
   LEDPattern rainbow = LEDPattern.rainbow(255, 128);
@@ -47,14 +45,8 @@ public class LEDSubsystem extends SubsystemBase {
 
   public LEDSubsystem() {
     m_LED = new AddressableLED(Constants.LEDConstants.LED_PWM_PORT);
-    m_Buffer = new AddressableLEDBuffer(44);    
+    m_Buffer = new AddressableLEDBuffer(26);
     m_LED.setLength(m_Buffer.getLength());
-
-    m_Left = m_Buffer.createView(0, 21);
-    m_Right = m_Buffer.createView(22, 43);
-
-    hubInactiveBlinkPattern.applyTo(m_Left);
-    hubActiveBlinkPattern.applyTo(m_Right);
 
     m_LED.setData(m_Buffer);
     m_LED.start();
@@ -64,52 +56,49 @@ public class LEDSubsystem extends SubsystemBase {
   private boolean isHubActive;
 
   public void setLEDPeriod() {
-    if(DriverStation.isAutonomous())
-    {
+    if (DriverStation.isAutonomous()) {
       allianceShiftPattern.applyTo(m_Buffer);
     }
 
-    else
-    {
+    if (DriverStation.isTeleop()) {
       if (matchTime <= 140 && matchTime > 132) // transition
       {
-        transitionBlinkPattern.applyTo(m_Left);
+        transitionBlinkPattern.applyTo(m_Buffer);
       }
 
-      if(matchTime <= 132 && matchTime > 130)
-      {
+      else if (matchTime <= 132 && matchTime > 130) {
         hubInactiveBlinkPattern.applyTo(m_Buffer);
       }
 
-      if(matchTime <= 107 && matchTime > 105 && isHubActive == false)
-      {
+      else if (matchTime <= 107 && matchTime > 105 && isHubActive == false) {
         hubInactiveBlinkPattern.applyTo(m_Buffer);
       }
 
-      if(matchTime <= 82 && matchTime > 80 && isHubActive == false)
-      {
+      else if (matchTime <= 82 && matchTime > 80 && isHubActive == false) {
         hubInactiveBlinkPattern.applyTo(m_Buffer);
       }
 
-      if(matchTime <= 57 && matchTime > 55 && isHubActive == false)
-      {
+      else if (matchTime <= 57 && matchTime > 55 && isHubActive == false) {
         hubInactiveBlinkPattern.applyTo(m_Buffer);
       }
 
-      if(matchTime <= 32 && matchTime > 30 && isHubActive == false)
-      {
+      else if (matchTime <= 32 && matchTime > 30 && isHubActive == false) {
         hubInactiveBlinkPattern.applyTo(m_Buffer);
       }
 
-      if (matchTime <= 30) // endgame
+      else if (matchTime <= 30) // endgame
       {
-        endGameBlinkPattern.applyTo(m_Left);
+        endGameBlinkPattern.applyTo(m_Buffer);
       }
 
+      else if (isHubActive == true) {
+        hubActiveBlinkPattern.applyTo(m_Buffer);
+      }
 
-      allianceShiftPattern.applyTo(m_Buffer);
+      else {
+        allianceShiftPattern.applyTo(m_Buffer);
+      }
     }
-    
   }
 
   public void setLEDHubActive() {
@@ -181,7 +170,6 @@ public class LEDSubsystem extends SubsystemBase {
       return true;
     }
   }
-
 
   @Override
   public void periodic() {

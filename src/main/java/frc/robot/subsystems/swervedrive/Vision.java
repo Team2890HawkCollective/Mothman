@@ -326,16 +326,16 @@ public class Vision {
     FRONT_LEFT_CAM("Front Left Camera",
         Constants.TargetingConstants.ROBOT_TO_FRONT_LEFT_CAM.getRotation(),
         Constants.TargetingConstants.ROBOT_TO_FRONT_LEFT_CAM.getTranslation(),
-        VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
+        VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
       
 
     /**
      * Front Right Camera
-    
+    */
     FRONT_RIGHT_CAM("Front Right Camera",
         Constants.TargetingConstants.ROBOT_TO_FRONT_RIGHT_CAM.getRotation(),
         Constants.TargetingConstants.ROBOT_TO_FRONT_RIGHT_CAM.getTranslation(),
-        VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));*/
+        VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
 
     /**
      * Latency alert to use when high latency is detected.

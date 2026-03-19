@@ -68,7 +68,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem() {
         intakeRotatorProfiledPIDController = new ProfiledPIDController(
-                3,
+                4,
                 Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_I,
                 Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_D,
                 m_Constraints,
@@ -92,7 +92,7 @@ public class IntakeSubsystem extends SubsystemBase {
                 .i(.0, ClosedLoopSlot.kSlot2)
                 .d(0.8, ClosedLoopSlot.kSlot2);
 
-        intakeRotatorConfig.smartCurrentLimit(80);
+        intakeRotatorConfig.smartCurrentLimit(70);
         intakeRotatorMotor.configure(intakeRotatorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
 
@@ -105,7 +105,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeWheelsMotor.configure(intakeWheelsMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
 
-        intakeRotatorMotor.getEncoder().setPosition(6.2);
+        intakeRotatorMotor.getEncoder().setPosition(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE);
         intakeWheelsMotorPIDController = intakeWheelsMotor.getClosedLoopController();
     }
 
@@ -153,13 +153,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command assistShooterCommand()
     {
-      return runOnce(() -> goToPosition(Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE)).andThen(new WaitCommand(.3))
-      .andThen(goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)).andThen(new WaitCommand(.2));
+      return runOnce(() -> goToPosition(Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE)).andThen(new WaitCommand(.4))
+      .andThen(goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)).andThen(new WaitCommand(.3));
       }
      
 
     public static void resetIntakeRotationEncoder() {
-        intakeRotatorMotor.getEncoder().setPosition(6.2);
+        intakeRotatorMotor.getEncoder().setPosition(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE);
     }
 
     public void deployIntake() {

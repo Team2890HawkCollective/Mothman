@@ -75,7 +75,7 @@ public final class Constants {
 
         public static double SHOOTER_RPM = -2700;
         public static final double IDLE_SHOOTER_RPM = -1800;
-        public static final double AUTO_SHOOTER_RPM = -2900; //always negative to shoot
+        public static final double AUTO_SHOOTER_RPM = -3000; //always negative to shoot
 
         public static void updateShooterRPM() {
             SHOOTER_RPM = shooterRPM.getDouble(-4000);
@@ -91,7 +91,7 @@ public final class Constants {
         public static final int INDEXER_MOTOR_ID = 43;
 
         public static double SHOOTER_MOTOR_P = 0.001;
-        public static double SHOOTER_MOTOR_I = 0;
+        public static double SHOOTER_MOTOR_I = 0.0;
         public static double SHOOTER_MOTOR_D = 0.001;
         public static double SHOOTER_MOTOR_S = 0.2;
         public static double SHOOTER_MOTOR_V = 0.0015;
@@ -124,8 +124,8 @@ public final class Constants {
          * programmingTab.add("Desired Intake RPM", -1000)
          * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
          */
-        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -8000; // always negative when intaking
-        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -5000; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -7500; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -4000; // always negative when intaking
 
 
         /*
@@ -148,8 +148,8 @@ public final class Constants {
         public static final double INTAKE_MOTOR_D = 0.00005;
 
         public static final double INTAKE_COLLECT_ENCODER_VALUE = 0;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = 2;
-        public static final double INTAKE_RETRACT_ENCODER_VALUE = 6.2;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = 5;
+        public static final double INTAKE_RETRACT_ENCODER_VALUE = 7;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
         public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .49;
@@ -194,7 +194,7 @@ public final class Constants {
         public static final double HUB_X_POSE_RED = 11.915;
         public static final double HUB_Y_POSE_RED = 4.03;
 
-        public static PathConstraints DRIVE_INTO_CLIMB_CONSTRAINTS;
+        public static PathConstraints DRIVE_INTO_CLIMB_CONSTRAINTS = new PathConstraints(1.5, 3.0, 3.0, 6.0, 12.0);
 
         public static final Transform3d ROBOT_TO_BACK_LEFT_CAM = new Transform3d(
                 new Translation3d(-Units.inchesToMeters(12.75), Units.inchesToMeters(6.25),
@@ -206,12 +206,12 @@ public final class Constants {
                 new Rotation3d(0, 0, Math.toRadians(-200)));
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(11.25), Units.inchesToMeters(26)),
-                new Rotation3d(0, Math.toRadians(15), 0));
+                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(11.25), Units.inchesToMeters(27.8)),
+                new Rotation3d(0, Math.toRadians(8), Math.toRadians(15)));
 
         public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(-11.25), Units.inchesToMeters(26)),
-                new Rotation3d(0, Math.toRadians(15), 0));
+                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(-11.25), Units.inchesToMeters(27.8)),
+                new Rotation3d(0, Math.toRadians(7), Math.toRadians(-15)));
     }
 
     public static class ClimberConstants {

@@ -31,13 +31,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Start_Indexer"
+            "name": "Auto_Aim_To_Hub"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 2.5
+            "name": "Start_Indexer"
           }
         },
         {

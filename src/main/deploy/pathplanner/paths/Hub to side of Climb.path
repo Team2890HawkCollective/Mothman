@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 2.5
+        "x": 1.9258676207513417,
+        "y": 2.469248658318426
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.030153689607046,
-        "y": 2.3289899283371653
+        "x": 1.4560213103583877,
+        "y": 2.298238586655591
       },
       "isLocked": false,
       "linkedName": "Right Shoot Position Waypoint"
     },
     {
       "anchor": {
-        "x": 1.14,
+        "x": 1.2,
         "y": 2.046
       },
       "prevControl": {
-        "x": 1.6098463103929541,
+        "x": 1.6698463103929542,
         "y": 2.2170100716628345
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Offsetted-Climb Waypoint"
+      "linkedName": "Offsetted-Right Climb Waypoint"
     }
   ],
   "rotationTargets": [],
@@ -48,7 +48,7 @@
   "folder": "HP to Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 36.0
+    "rotation": 32.036968529863586
   },
   "useDefaultConstraints": true
 }

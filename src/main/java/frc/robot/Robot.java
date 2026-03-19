@@ -110,7 +110,10 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         TargetingSubsystems.updateShooterAndIndexerRPM(m_robotContainer.getSwerveDrive().getPose());
 
-        SmartDashboard.putNumber("Estimated Shooter RPM", Constants.ShooterConstants.SHOOTER_RPM);
+        SmartDashboard.putNumber("Estimated Shooters RPMS/Left Shooter Estimated RPM", Constants.ShooterConstants.SHOOTER_RPM_LEFT);
+        SmartDashboard.putNumber("Estimated Shooters RPMS/Right Shooter Estimated RPM", Constants.ShooterConstants.SHOOTER_RPM_RIGHT);
+        SmartDashboard.putNumber("Estimated Shooters RPMS/Center Shooter Estimated RPM", Constants.ShooterConstants.SHOOTER_RPM_CENTER);
+
         SmartDashboard.putNumber("Distance From Hub: ", PhotonUtils.getDistanceToPose(m_robotContainer.getSwerveDrive().getPose(), Constants.TargetingConstants.allianceHubPose));
         //Constants.ShooterConstants.getRampAndIndexerMotorSpeed();
         //Constants.IntakeConstants.updateIntakeWheelsRPM();
@@ -191,11 +194,11 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         if(DriverStation.getMatchTime() <= 15)
         {
-            m_robotContainer.operatorXbox.setRumble(RumbleType.kBothRumble, 1);
+            m_robotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 1);
         }
-        if(DriverStation.getMatchTime() <= 14.5)
+        if(DriverStation.getMatchTime() <= 14)
         {
-            m_robotContainer.operatorXbox.setRumble(RumbleType.kBothRumble, 0);
+            m_robotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);
         }
     }
 

@@ -115,7 +115,7 @@ public class TargetingSubsystems extends SubsystemBase {
 
             angleSpeed = MathUtil.clamp(angleSpeed, -3.0, 3.0);
 
-            swerveDrive.drive(new Translation2d(driverXbox.getLeftX() * -1, -driverXbox.getLeftY() * -1), angleSpeed,
+            swerveDrive.drive(new Translation2d(driverXbox.getLeftY(), driverXbox.getLeftX()), angleSpeed,
                     true);
         }, swerveDrive);
     }
@@ -165,19 +165,19 @@ public class TargetingSubsystems extends SubsystemBase {
       + (27.27766 * Math.pow(distance, 3))
       - (154.79287 * Math.pow(distance, 2))
       - (34.29619 * distance) 
-      -2387.13374, -6000); 
+      -2430.13374, -15000); 
 
       Constants.ShooterConstants.SHOOTER_RPM_RIGHT = Math.max((-2.40765 * Math.pow(distance, 4))
       + (38.94472 * Math.pow(distance, 3))
       - (225.17963 * Math.pow(distance, 2))
       + (138.9699 * distance) 
-      - 2531.33326, -6000); 
+      - 2531.33326, -15000); 
 
     Constants.ShooterConstants.SHOOTER_RPM_CENTER = Math.max((-1.84547 * Math.pow(distance, 4))
       + (32.75767 * Math.pow(distance, 3))
       - (201.29209 * Math.pow(distance, 2))
       + (58.06248 * distance) 
-      - 2460.16313, -6000); 
+      - 2460.16313, -15000); 
 
       Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM = -Constants.ShooterConstants.SHOOTER_RPM_CENTER * 4.5 * 5/2;
       //To find the linear speed, the equation is RPM * Circumference, pi is not needed as it cancels out.
