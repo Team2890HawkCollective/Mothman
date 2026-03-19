@@ -129,15 +129,16 @@ public class ShooterSubsystem extends SubsystemBase {
         indexerStatus = true;
         enableShooter = true;
 
-        centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
-        leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
-        rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
+        //centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
+        //leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
+        //rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
     }
 
     public static void startupShooterMotorsRPMAuto(){
-        centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
-        leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
-        rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
+        enableShooter = true;
+        //centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
+        //leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
+        //rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
     }
 
         public static void setShooterMotorsRPMIdle(){
