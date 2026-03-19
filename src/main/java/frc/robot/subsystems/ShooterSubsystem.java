@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -32,6 +33,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 public class ShooterSubsystem extends SubsystemBase {
 
     public static boolean indexerStatus = false;
+    public static boolean enableShooter = false;
 
     private static SparkFlex centerShooterMotor = new SparkFlex(Constants.ShooterConstants.CENTER_SHOOTER_MOTOR_ID,
             MotorType.kBrushless);
@@ -57,9 +59,12 @@ public class ShooterSubsystem extends SubsystemBase {
     private static SparkClosedLoopController indexerAndRampMotorPIDController;
     public static SparkFlexConfig indexerAndRampMotorConfig = new SparkFlexConfig();
 
+    private static BangBangController bangBangController = new BangBangController();
+
     public ShooterSubsystem() {
 
         indexerStatus = false;
+        enableShooter = false;
 
         centerShooterMotorConfig
                 .voltageCompensation(12.0)
@@ -122,6 +127,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void setShooterMotorsRPM() {
         indexerStatus = true;
+        enableShooter = true;
+
         centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
         leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
         rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
@@ -134,6 +141,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
         public static void setShooterMotorsRPMIdle(){
+        enableShooter = false;
         indexerStatus = false;
         centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.IDLE_SHOOTER_RPM, ControlType.kVelocity);
         leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.IDLE_SHOOTER_RPM, ControlType.kVelocity);
@@ -283,6 +291,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void stopShooters() {
 
+        enableShooter = false;
+        indexerStatus = false;
         centerShooterMotor.set(0);
         leftShooterMotor.set(0);
         rightShooterMotor.set(0);
@@ -307,6 +317,26 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+
+        if(enableShooter == true)
+        {
+            if(leftShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_LEFT * .80)
+                leftShooterMotor.setVoltage(bangBangController.calculate(leftShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_LEFT));
+            else
+                leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
+
+            if(centerShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_CENTER * .80)
+                centerShooterMotor.setVoltage(bangBangController.calculate(centerShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_CENTER));
+            else
+                centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
+
+            if (rightShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_RIGHT * .80)
+                rightShooterMotor.setVoltage(bangBangController.calculate(rightShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_RIGHT));
+            else
+                rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
+
+
+        }
         setIndexerAndRampMotorRPM();
 
         SmartDashboard.putString("Shooter Velocity", "Left: " 
