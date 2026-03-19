@@ -41,7 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private static SparkFlex intakeRotatorMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_ID,
             MotorType.kBrushless);
 
-    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(5, 10);
+    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(6, 12);
     private final ProfiledPIDController intakeRotatorProfiledPIDController;
     private static TrapezoidProfile.State goalState = new TrapezoidProfile.State(
             Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE, 0);
@@ -154,7 +154,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public Command assistShooterCommand()
     {
       return runOnce(() -> goToPosition(Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE)).andThen(new WaitCommand(.4))
-      .andThen(goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)).andThen(new WaitCommand(.3));
+      .andThen(goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)).andThen(new WaitCommand(.5));
       }
      
 
