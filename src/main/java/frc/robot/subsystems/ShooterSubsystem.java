@@ -126,8 +126,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
     public void setShooterMotorsRPM() {
-        indexerStatus = true;
         enableShooter = true;
+        
 
         //centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
         //leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
@@ -220,6 +220,14 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setIndexerAndRampMotorRPM() {
+
+        if(leftShooterMotor.getEncoder().getVelocity() <= Constants.ShooterConstants.SHOOTER_RPM_LEFT * .95
+            && centerShooterMotor.getEncoder().getVelocity() <= Constants.ShooterConstants.SHOOTER_RPM_CENTER * .95
+            && rightShooterMotor.getEncoder().getVelocity() <= Constants.ShooterConstants.SHOOTER_RPM_RIGHT * .95)
+            {
+                indexerStatus = true;
+            }
+
         if (indexerStatus == true)
         {
 
@@ -311,6 +319,7 @@ public class ShooterSubsystem extends SubsystemBase {
         leftShooterMotor.set(0.4);
         rightShooterMotor.set(0.4);
     }
+    
     public Command reverseShooterCommand()
     {
         return runOnce(()-> reverseShooter());
@@ -321,21 +330,20 @@ public class ShooterSubsystem extends SubsystemBase {
 
         if(enableShooter == true)
         {
-            if(leftShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_LEFT * .80)
-                leftShooterMotor.setVoltage(bangBangController.calculate(leftShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_LEFT) * 12);
+            if(leftShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_LEFT*.95)
+                leftShooterMotor.set(bangBangController.calculate(leftShooterMotor.getEncoder().getVelocity() *-1, Constants.ShooterConstants.SHOOTER_RPM_LEFT *-1) *-1);
             else
-                leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
+              leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_LEFT, ControlType.kVelocity);
 
-            if(centerShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_CENTER * .80)
-                centerShooterMotor.setVoltage(bangBangController.calculate(centerShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_CENTER) * 12);
+            if(centerShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_CENTER*.95)
+                centerShooterMotor.set(bangBangController.calculate(centerShooterMotor.getEncoder().getVelocity() * -1, Constants.ShooterConstants.SHOOTER_RPM_CENTER*-1) *-1);
             else
-                centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
+               centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER, ControlType.kVelocity);
 
-            if (rightShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_RIGHT * .80)
-                rightShooterMotor.setVoltage(bangBangController.calculate(rightShooterMotor.getEncoder().getVelocity(), Constants.ShooterConstants.SHOOTER_RPM_RIGHT) * 12);
+            if (rightShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_RIGHT * .95)
+                rightShooterMotor.set(bangBangController.calculate(rightShooterMotor.getEncoder().getVelocity() *-1, Constants.ShooterConstants.SHOOTER_RPM_RIGHT*-1) *-1);
             else
-                rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
-
+               rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT, ControlType.kVelocity);
 
         }
         setIndexerAndRampMotorRPM();
