@@ -171,11 +171,11 @@ public final class Constants {
                 Rotation2d.fromDegrees(-90));
 
         public static final Pose2d RED_RIGHT_CLIMB_POSE = new Pose2d(15.35, 5, Rotation2d.fromDegrees(90));
-        public static final Pose2d RED_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(15.35, 5.72,
+        public static final Pose2d RED_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(15.4, 5.72,
                 Rotation2d.fromDegrees(90));
 
         public static final Pose2d RED_LEFT_CLIMB_POSE = new Pose2d(15.35, 3.6, Rotation2d.fromDegrees(-90));
-        public static final Pose2d RED_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(15.35, 3.1,
+        public static final Pose2d RED_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(15.4, 3.1,
                 Rotation2d.fromDegrees(-90));
 
         public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Back Left Camera");
