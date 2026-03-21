@@ -144,13 +144,12 @@ public class RobotContainer {
                 // Create the NamedCommands that will be used in PathPlanner
                 NamedCommands.registerCommand("test", Commands.print("I EXIST"));
                 NamedCommands.registerCommand("Shoot_Fuel_Command",
-                                m_ShooterSubsystem.setShooterMotorsRPMAutoCommand());
+                                m_ShooterSubsystem.shootFuelCommand());
                 NamedCommands.registerCommand("Startup_Shooter_Command", m_ShooterSubsystem.startupShooterMotorsRPMAutoCommand());
-                NamedCommands.registerCommand("Start_Indexer", m_ShooterSubsystem.setIndexerAndRampMotorRPMCommand());
                 NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)
-                                .andThen(m_IntakeSubsystem.startIntakeMotorCommand(
+                                .andThen(m_IntakeSubsystem.startIntakeWheelsCommand(
                                                 Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST)));
-                NamedCommands.registerCommand("Stop_Shooter_Command", m_ShooterSubsystem.stopShooterCommand().andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand())
+                NamedCommands.registerCommand("Stop_Shooter_Command",m_ShooterSubsystem.setShooterMotorsRPMIdleCommand()
                                 .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE)));               
                 NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
                 NamedCommands.registerCommand("Assist_Shooter",
@@ -218,16 +217,16 @@ public class RobotContainer {
                 Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
                                 driveDirectAngleKeyboard);
 
-                driverXbox.start().onTrue(m_IntakeSubsystem.stopIntakeMotorCommand());
+                driverXbox.start().onTrue(m_IntakeSubsystem.stopIntakeWheelsCommand());
                 driverXbox.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
                 driverXbox.leftTrigger().onTrue(m_IntakeSubsystem
-                                .startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST));
+                                .startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST));
                 driverXbox.rightBumper()
-                                .whileTrue(m_IntakeSubsystem.reverseIntakeMotorCommand()
+                                .whileTrue(m_IntakeSubsystem.reverseIntakeWheelsCommand()
                                                 .andThen(m_ShooterSubsystem.reverseIndexerAndRampMotorRPMCommand()))
                                                 //.andThen(m_ShooterSubsystem.reverseShooterCommand()))
-                                .onFalse(m_IntakeSubsystem.startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST)
+                                .onFalse(m_IntakeSubsystem.startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST)
                                                 .andThen(m_ShooterSubsystem.stopIndexerAndRampMotorCommand()));
                                                 //.andThen(m_ShooterSubsystem.setShooterMotorsRPMIdleCommand()));
                 // command for
@@ -237,7 +236,7 @@ public class RobotContainer {
                 // .andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
                 driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand()).repeatedly());
                 driverXbox.leftBumper().onTrue(m_IntakeSubsystem
-                                .startIntakeMotorCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
+                                .startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
                 // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,
                 // Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY).repeatedly());
 
@@ -268,13 +267,13 @@ public class RobotContainer {
                                 .onFalse(m_ShooterSubsystem.stopRightShooterCommand());
 
                 topButtons.axisGreaterThan(1, 0.3)
-                                .toggleOnTrue(m_IntakeSubsystem.rotateIntakeCommand(
-                                                Constants.IntakeConstants.INTAKE_MANUAL_SPEED * -5))
-                                .toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
+                                .toggleOnTrue(m_IntakeSubsystem.rotateIntakeManualCommand(
+                                                Constants.IntakeConstants.INTAKE_MANUAL_SPEED * 5))
+                                .toggleOnFalse(m_IntakeSubsystem.setUseArmRotationAutomaticStatusCommand(true));
                 topButtons.axisGreaterThan(1, -0.3)
                                 .toggleOnTrue(m_IntakeSubsystem
-                                                .rotateIntakeCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED))
-                                .toggleOnFalse(m_IntakeSubsystem.rotateIntakeCommand(0));
+                                                .rotateIntakeManualCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED *-1))
+                                .toggleOnFalse(m_IntakeSubsystem.setUseArmRotationAutomaticStatusCommand(true));
                 topButtons.axisGreaterThan(0, 0.5).onTrue(m_ClimberSubsystem.setClimberSpeedCommand(0.4))
                                 .onFalse(m_ClimberSubsystem.setClimberSpeedCommand(0));
                 topButtons.axisLessThan(0, -0.8).onTrue(m_ClimberSubsystem.setClimberSpeedCommand(-0.4))
@@ -299,11 +298,11 @@ public class RobotContainer {
                                 .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
 
                 bottomButtons.button(9)
-                                .onTrue(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly());
-                bottomButtons.button(3).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
-                bottomButtons.button(7).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-                bottomButtons.button(4).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-                bottomButtons.button(8).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+                                .whileTrue(m_IntakeSubsystem.assistShooterCommand().repeatedly());
+                //bottomButtons.button(3).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
+                //bottomButtons.button(7).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+                //bottomButtons.button(4).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+                //bottomButtons.button(8).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 
                 operatorXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE));
                 operatorXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE));
