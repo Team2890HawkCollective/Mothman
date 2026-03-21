@@ -268,7 +268,7 @@ public class RobotContainer {
 
                 topButtons.axisGreaterThan(1, 0.3)
                                 .toggleOnTrue(m_IntakeSubsystem.rotateIntakeManualCommand(
-                                                Constants.IntakeConstants.INTAKE_MANUAL_SPEED * 5))
+                                                Constants.IntakeConstants.INTAKE_MANUAL_SPEED * 3))
                                 .toggleOnFalse(m_IntakeSubsystem.setUseArmRotationAutomaticStatusCommand(true));
                 topButtons.axisGreaterThan(1, -0.3)
                                 .toggleOnTrue(m_IntakeSubsystem
@@ -283,17 +283,11 @@ public class RobotContainer {
                 topButtons.button(1)
                                 .onTrue(drivebase.driveToClimbPoseOffsetted(
                                                 Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE_OFFSETTED,
-                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED)
-                                                .andThen(drivebase.driveIntoClimbPose(
-                                                                Constants.TargetingConstants.BLUE_LEFT_CLIMB_POSE,
-                                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE)));
+                                                Constants.TargetingConstants.RED_LEFT_CLIMB_POSE_OFFSETTED));
                 topButtons.button(2)
                                 .onTrue(drivebase.driveToClimbPoseOffsetted(
                                                 Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE_OFFSETTED,
-                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED)
-                                                .andThen(drivebase.driveIntoClimbPose(
-                                                                Constants.TargetingConstants.BLUE_RIGHT_CLIMB_POSE,
-                                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE)));
+                                                Constants.TargetingConstants.RED_RIGHT_CLIMB_POSE_OFFSETTED));
                 topButtons.button(4).whileTrue(m_ShooterSubsystem.manualIndexerCommand())
                                 .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
 
@@ -304,9 +298,9 @@ public class RobotContainer {
                 //bottomButtons.button(4).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
                 //bottomButtons.button(8).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
 
-                operatorXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE));
-                operatorXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE));
-                operatorXbox.x().whileTrue(m_IntakeSubsystem.assistShooterCommand().repeatedly());
+                //operatorXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE));
+                //operatorXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE));
+                //operatorXbox.x().whileTrue(m_IntakeSubsystem.assistShooterCommand().repeatedly());
                 //.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE, Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE).repeatedly()).onFalse(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE));
 
 
