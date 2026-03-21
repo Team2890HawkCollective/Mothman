@@ -30,6 +30,7 @@ import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.Units.VoltsPerRadianPerSecond;
 
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.fasterxml.jackson.databind.RuntimeJsonMappingException;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 
@@ -48,15 +49,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private static ArmFeedforward intakeRotationFeedfoward = new ArmFeedforward(.75418, 1.1238, .023506, .043444);
 
-    SysIdRoutine routine = new SysIdRoutine(new SysIdRoutine.Config(),
+    /*SysIdRoutine routine = new SysIdRoutine(new SysIdRoutine.Config(),
             new SysIdRoutine.Mechanism(intakeRotatorMotor::setVoltage,
                     log -> log.motor("arm").voltage(Volts.of(intakeRotatorMotor.getAppliedOutput() * 12))
                             .angularPosition(Radians.of(intakeRotatorMotor.getEncoder().getPosition() * 2 * Math.PI))
                             .angularVelocity(RadiansPerSecond
                                     .of(intakeRotatorMotor.getEncoder().getVelocity() * 2 * Math.PI / 60)),
                     this, "armSysId"));
-
-    private static SparkClosedLoopController intakeRotatorPIDController;
+*/
+    //private static SparkClosedLoopController intakeRotatorPIDController;
     public static SparkFlexConfig intakeRotatorConfig = new SparkFlexConfig();
 
     private static SparkClosedLoopController intakeWheelsMotorPIDController;
@@ -65,6 +66,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public static DutyCycleEncoder intakeRotatorEncoder = new DutyCycleEncoder(1);
 
     private static double encoderValue = intakeRotatorEncoder.get();
+
+    public static boolean useArmRotationAutomaticStatus = true;
 
     public IntakeSubsystem() {
         intakeRotatorProfiledPIDController = new ProfiledPIDController(
@@ -96,7 +99,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeRotatorMotor.configure(intakeRotatorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
 
-        intakeRotatorPIDController = intakeRotatorMotor.getClosedLoopController();
+        //intakeRotatorPIDController = intakeRotatorMotor.getClosedLoopController();
 
         intakeWheelsMotorConfig.closedLoop.pid(Constants.IntakeConstants.INTAKE_MOTOR_P,
                 Constants.IntakeConstants.INTAKE_MOTOR_I,
@@ -117,38 +120,39 @@ public class IntakeSubsystem extends SubsystemBase {
         return runOnce(() -> goToPosition(goalPosition));
     }
 
-    public void rotateIntake(double speed) {
+    public void rotateIntakeManual(double speed) {
+        useArmRotationAutomaticStatus = false;
         intakeRotatorMotor.set(speed);
     }
 
-    public Command rotateIntakeCommand(double speed) {
-        return runOnce(() -> intakeRotatorMotor.set(speed));
+    public Command rotateIntakeManualCommand(double speed) {
+        return runOnce(() -> rotateIntakeManual(speed));
     }
 
-    public void startIntakeMotor(double speed) {
+    public void startIntakeMotorWheels(double speed) {
         intakeWheelsMotorPIDController.setSetpoint(speed,
                 ControlType.kVelocity);
     }
 
-    public void reverseIntakeMotor() {
+    public void reverseIntakeWheels() {
         intakeWheelsMotorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST * -1,
                 ControlType.kVelocity);
     }
 
-    public void stopIntakeMotor() {
+    public void stopIntakeWheels() {
         intakeWheelsMotor.set(0);
     }
 
-    public Command startIntakeMotorCommand(double speed) {
-        return runOnce(() -> startIntakeMotor(speed));
+    public Command startIntakeWheelsCommand(double speed) {
+        return runOnce(() -> startIntakeMotorWheels(speed));
     }
 
-    public Command reverseIntakeMotorCommand() {
-        return runOnce(() -> reverseIntakeMotor());
+    public Command reverseIntakeWheelsCommand() {
+        return runOnce(() -> reverseIntakeWheels());
     }
 
-    public Command stopIntakeMotorCommand() {
-        return runOnce(() -> stopIntakeMotor());
+    public Command stopIntakeWheelsCommand() {
+        return runOnce(() -> stopIntakeWheels());
     }
 
     public Command assistShooterCommand()
@@ -162,7 +166,17 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeRotatorMotor.getEncoder().setPosition(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE);
     }
 
-    public void deployIntake() {
+    public static void setUseArmRotationAutomaticStatus(boolean status)
+    {
+        useArmRotationAutomaticStatus = status;
+    }
+
+    public Command setUseArmRotationAutomaticStatusCommand(boolean status)
+    {
+        return runOnce(()->setUseArmRotationAutomaticStatus(status));
+    }
+
+    /*public void deployIntake() {
         intakeRotatorPIDController.setSetpoint(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE,
                 ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
@@ -201,12 +215,17 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return routine.dynamic(direction);
-    }
+    }*/
 
     @Override
     public void periodic() {
         encoderValue = intakeRotatorMotor.getEncoder().getPosition();
-        intakeRotatorMotor.setVoltage(intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
+        
+        if(useArmRotationAutomaticStatus == true)
+        {
+            intakeRotatorMotor.setVoltage(intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
+        }
+        
                //+ intakeRotationFeedfoward.calculate(intakeRotatorProfiledPIDController.getSetpoint().position * 2 * Math.PI/12,
                        // intakeRotatorProfiledPIDController.getSetpoint().velocity));
         SmartDashboard.putNumber("Intake Rotator Motor Encoder", intakeRotatorMotor.getEncoder().getPosition());
