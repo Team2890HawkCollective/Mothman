@@ -230,9 +230,9 @@ public class IntakeSubsystem extends SubsystemBase {
                        // intakeRotatorProfiledPIDController.getSetpoint().velocity));
         SmartDashboard.putNumber("Intake Rotator Motor Encoder", intakeRotatorMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("Intake Rotator Throughbore Encoder Value", intakeRotatorEncoder.get());
-        SmartDashboard.putNumber("Intake Rotation Voltage", intakeRotatorProfiledPIDController.calculate(encoderValue, goalState)
-                + intakeRotationFeedfoward.calculate(intakeRotatorProfiledPIDController.getSetpoint().position * 2 * Math.PI/12,
-                        intakeRotatorProfiledPIDController.getSetpoint().velocity));
+        SmartDashboard.putNumber("Intake Rotation Voltage", intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
+               // + intakeRotationFeedfoward.calculate(intakeRotatorProfiledPIDController.getSetpoint().position * 2 * Math.PI/12,
+                       // intakeRotatorProfiledPIDController.getSetpoint().velocity));
         SmartDashboard.putNumber("Intake Rotation Goal Position: ", intakeRotatorProfiledPIDController.getGoal().position);
     }
 }
