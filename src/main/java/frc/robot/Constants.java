@@ -123,8 +123,11 @@ public final class Constants {
          * private static GenericEntry intakeRPM =
          * programmingTab.add("Desired Intake RPM", -1000)
          * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
-         */
-        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -7500; // always negative when intaking
+         
+         
+         
+        \*/
+        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -9000; // always negative when intaking
         public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -4000; // always negative when intaking
 
 
@@ -148,7 +151,7 @@ public final class Constants {
         public static final double INTAKE_MOTOR_D = 0.00005;
 
         public static final double INTAKE_COLLECT_ENCODER_VALUE = 0;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = 5;
+        public static final double INTAKE_MIDDLE_ENCODER_VALUE = 4;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = 7;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
@@ -207,11 +210,11 @@ public final class Constants {
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
                 new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(11.25), Units.inchesToMeters(27.8)),
-                new Rotation3d(0, Math.toRadians(8), Math.toRadians(15)));
+                new Rotation3d(0, Math.toRadians(8), Math.toRadians(11)));
 
         public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
                 new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(-11.25), Units.inchesToMeters(27.8)),
-                new Rotation3d(0, Math.toRadians(7), Math.toRadians(-15)));
+                new Rotation3d(0, Math.toRadians(7), Math.toRadians(-20)));
     }
 
     public static class ClimberConstants {
