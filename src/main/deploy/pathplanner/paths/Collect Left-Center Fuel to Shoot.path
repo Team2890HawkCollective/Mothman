@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.147034090909091,
-        "y": 5.282125000000001
+        "x": 5.576583184257603,
+        "y": 5.779230769230769
       },
       "isLocked": false,
       "linkedName": "Collect Fuel Left Waypoint"
     },
     {
       "anchor": {
-        "x": 1.9420930232558136,
-        "y": 5.975
+        "x": 1.9907692307692302,
+        "y": 5.973935599284436
       },
       "prevControl": {
-        "x": 1.9420930232558136,
-        "y": 8.188951568611856
+        "x": 2.266601073345259,
+        "y": 5.7305545617173514
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -37.82655703419307
+    "rotation": -36.92679512417481
   },
   "reversed": false,
   "folder": "Left Auto",

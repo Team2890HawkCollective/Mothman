@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.9420930232558136,
-        "y": 5.974
+        "x": 1.9907692307692302,
+        "y": 5.973935599284436
       },
       "prevControl": {
-        "x": 0.7089624329159208,
-        "y": 5.973935599284436
+        "x": 0.7576386404293374,
+        "y": 5.973871198568872
       },
       "nextControl": null,
       "isLocked": false,
@@ -59,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -37.82655703419307
+    "rotation": -36.92679512417481
   },
   "reversed": false,
   "folder": "Middle Shoot to Climb",

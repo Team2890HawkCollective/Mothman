@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9420930232558136,
-        "y": 5.975
+        "x": 1.9907692307692302,
+        "y": 5.973935599284436
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4391055456171733,
-        "y": 5.3573703041144904
+        "x": 1.48778175313059,
+        "y": 5.356305903398927
       },
       "isLocked": false,
       "linkedName": "Floor Intake to Shoot Waypoint"
@@ -48,7 +48,7 @@
   "folder": "Middle Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -37.82655703419307
+    "rotation": -36.92679512417481
   },
   "useDefaultConstraints": true
 }

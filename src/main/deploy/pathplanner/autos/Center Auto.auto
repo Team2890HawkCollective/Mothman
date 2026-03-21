@@ -31,12 +31,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Auto_Aim_To_Hub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Start_Indexer"
           }
         },
