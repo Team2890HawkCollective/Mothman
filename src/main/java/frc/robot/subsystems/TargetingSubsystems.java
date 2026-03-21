@@ -165,7 +165,7 @@ public class TargetingSubsystems extends SubsystemBase {
       + (27.27766 * Math.pow(distance, 3))
       - (154.79287 * Math.pow(distance, 2))
       - (34.29619 * distance) 
-      -2430.13374, -15000); 
+      -2400.13374, -15000); 
 
       Constants.ShooterConstants.SHOOTER_RPM_RIGHT = Math.max((-2.40765 * Math.pow(distance, 4))
       + (38.94472 * Math.pow(distance, 3))
