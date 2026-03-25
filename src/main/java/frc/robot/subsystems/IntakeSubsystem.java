@@ -43,7 +43,11 @@ public class IntakeSubsystem extends SubsystemBase {
             MotorType.kBrushless);
 
     private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(8, 10);
+    private final TrapezoidProfile.Constraints m_AssistConstraints = new TrapezoidProfile.Constraints(2, 2);
+
     private final ProfiledPIDController intakeRotatorProfiledPIDController;
+    //private final ProfiledPIDController intakeAssistRotatorProfiledPIDController;
+
     private static TrapezoidProfile.State goalState = new TrapezoidProfile.State(
             Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE, 0);
 
@@ -78,6 +82,8 @@ public class IntakeSubsystem extends SubsystemBase {
                 0.02);
         intakeRotatorProfiledPIDController.setTolerance(0.15);
         intakeRotatorProfiledPIDController.setGoal(goalState);
+
+
 
         intakeRotatorConfig.closedLoop
                 // Slot 0
@@ -130,8 +136,9 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void startIntakeMotorWheels(double speed) {
+        //intakeWheelsMotor.set(speed);
         intakeWheelsMotorPIDController.setSetpoint(speed,
-                ControlType.kVelocity);
+               ControlType.kVelocity);
     }
 
     public void reverseIntakeWheels() {
@@ -157,8 +164,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public Command assistShooterCommand()
     {
-      return runOnce(() -> goToPosition(Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE)).andThen(new WaitCommand(.5))
-      .andThen(goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)).andThen(new WaitCommand(.4));
+      return runOnce(() -> goToPosition(Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE));
       }
      
 
@@ -228,7 +234,9 @@ public class IntakeSubsystem extends SubsystemBase {
         
                //+ intakeRotationFeedfoward.calculate(intakeRotatorProfiledPIDController.getSetpoint().position * 2 * Math.PI/12,
                        // intakeRotatorProfiledPIDController.getSetpoint().velocity));
-        SmartDashboard.putNumber("Intake Rotator Motor Encoder", intakeRotatorMotor.getEncoder().getPosition());
+        SmartDashboard.putNumber("Intake Rotator Motor Encoder Position", intakeRotatorMotor.getEncoder().getPosition());
+        SmartDashboard.putNumber("Intake Wheels Motor Encoder RPM", intakeRotatorMotor.getEncoder().getVelocity());
+
         SmartDashboard.putNumber("Intake Rotator Throughbore Encoder Value", intakeRotatorEncoder.get());
         SmartDashboard.putNumber("Intake Rotation Voltage", intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
                // + intakeRotationFeedfoward.calculate(intakeRotatorProfiledPIDController.getSetpoint().position * 2 * Math.PI/12,

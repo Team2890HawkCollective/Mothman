@@ -220,8 +220,7 @@ public class RobotContainer {
                 driverXbox.start().onTrue(m_IntakeSubsystem.stopIntakeWheelsCommand());
                 driverXbox.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
-                driverXbox.leftTrigger().onTrue(m_IntakeSubsystem
-                                .startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST));
+                driverXbox.leftTrigger().onTrue(m_IntakeSubsystem.startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST));
                 driverXbox.rightBumper()
                                 .whileTrue(m_IntakeSubsystem.reverseIntakeWheelsCommand()
                                                 .andThen(m_ShooterSubsystem.reverseIndexerAndRampMotorRPMCommand()))
@@ -234,7 +233,7 @@ public class RobotContainer {
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new
                 // WaitCommand(1.5)));
                 // .andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
-                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand()).repeatedly());
+                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand().repeatedly()));
                 driverXbox.leftBumper().onTrue(m_IntakeSubsystem
                                 .startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
                 // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,

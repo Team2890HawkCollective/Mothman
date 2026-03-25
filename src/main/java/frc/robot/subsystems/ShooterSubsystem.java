@@ -286,7 +286,7 @@ public class ShooterSubsystem extends SubsystemBase {
      */
 
     public Command shootFuelCommand() {
-        return runOnce(() -> setShooterMotorsRPM()).until(
+        return run(() -> setShooterMotorsRPM()).until(
                 () -> leftShooterMotor.getEncoder().getVelocity() <= Constants.ShooterConstants.SHOOTER_RPM_LEFT * .95
                         && centerShooterMotor.getEncoder().getVelocity() <= Constants.ShooterConstants.SHOOTER_RPM_CENTER * .95
                         && rightShooterMotor.getEncoder().getVelocity() <= Constants.ShooterConstants.SHOOTER_RPM_RIGHT * .95)
@@ -320,7 +320,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
+        setIndexerAndRampMotorRPM();
         if (enableShooter == true) {
             if (leftShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_LEFT * .95)
                 leftShooterMotor.set(bangBangController.calculate(leftShooterMotor.getEncoder().getVelocity() * -1,
@@ -344,7 +344,6 @@ public class ShooterSubsystem extends SubsystemBase {
                         ControlType.kVelocity);
 
         }
-        setIndexerAndRampMotorRPM();
 
         SmartDashboard.putString("Shooter Velocity", "Left: "
                 + leftShooterMotor.getEncoder().getVelocity()

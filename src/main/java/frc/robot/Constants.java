@@ -43,7 +43,7 @@ public final class Constants {
     public static final double ROBOT_MASS = 115 * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
-    public static final double MAX_SPEED = Units.feetToMeters(14.5);
+    public static final double MAX_SPEED = Units.feetToMeters(19.2);
     // Maximum speed of the robot in meters per second, used to limit acceleration.
 
     // public static final class AutonConstants
@@ -166,19 +166,19 @@ public final class Constants {
 
     public static class TargetingConstants {
         public static final Pose2d BLUE_LEFT_CLIMB_POSE = new Pose2d(1.14, 4.25, Rotation2d.fromDegrees(90));
-        public static final Pose2d BLUE_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(1.14, 5.0,
+        public static final Pose2d BLUE_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(1.20, 5.0,
                 Rotation2d.fromDegrees(90));
 
         public static final Pose2d BLUE_RIGHT_CLIMB_POSE = new Pose2d(1.14, 2.046, Rotation2d.fromDegrees(-90));
-        public static final Pose2d BLUE_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(1.14, 3.25,
+        public static final Pose2d BLUE_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(1.20, 3.25,
                 Rotation2d.fromDegrees(-90));
 
         public static final Pose2d RED_RIGHT_CLIMB_POSE = new Pose2d(15.35, 5, Rotation2d.fromDegrees(90));
-        public static final Pose2d RED_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(15.4, 5.72,
+        public static final Pose2d RED_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(15.34, 5.72,
                 Rotation2d.fromDegrees(90));
 
         public static final Pose2d RED_LEFT_CLIMB_POSE = new Pose2d(15.35, 3.6, Rotation2d.fromDegrees(-90));
-        public static final Pose2d RED_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(15.4, 3.1,
+        public static final Pose2d RED_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(15.34, 3.1,
                 Rotation2d.fromDegrees(-90));
 
         public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Back Left Camera");
@@ -202,7 +202,7 @@ public final class Constants {
         public static final Transform3d ROBOT_TO_BACK_LEFT_CAM = new Transform3d(
                 new Translation3d(-Units.inchesToMeters(12.75), Units.inchesToMeters(6.25),
                         Units.inchesToMeters(13.1875)),
-                new Rotation3d(0, 0, Math.toRadians(195)));
+                new Rotation3d(0, 0, Math.toRadians(200)));
 
         public static final Transform3d ROBOT_TO_BACK_RIGHT_CAM = new Transform3d(
                 new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.25), Units.inchesToMeters(14)),
@@ -210,11 +210,11 @@ public final class Constants {
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
                 new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(11.25), Units.inchesToMeters(27.8)),
-                new Rotation3d(0, Math.toRadians(8), Math.toRadians(11)));
+                new Rotation3d(0, Math.toRadians(2), Math.toRadians(15)));
 
         public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
                 new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(-11.25), Units.inchesToMeters(27.8)),
-                new Rotation3d(0, Math.toRadians(7), Math.toRadians(-20)));
+                new Rotation3d(0, Math.toRadians(2), Math.toRadians(-15)));
     }
 
     public static class ClimberConstants {
