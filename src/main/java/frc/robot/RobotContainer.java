@@ -146,7 +146,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Shoot_Fuel_Command",
                                 m_ShooterSubsystem.shootFuelCommand());
                 NamedCommands.registerCommand("Startup_Shooter_Command", m_ShooterSubsystem.startupShooterMotorsRPMAutoCommand());
-                NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)
+                NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_DEPLOY_ENCODER_VALUE)
                                 .andThen(m_IntakeSubsystem.startIntakeWheelsCommand(
                                                 Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST)));
                 NamedCommands.registerCommand("Stop_Shooter_Command",m_ShooterSubsystem.setShooterMotorsRPMIdleCommand()
@@ -233,7 +233,7 @@ public class RobotContainer {
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new
                 // WaitCommand(1.5)));
                 // .andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
-                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand().repeatedly()));
+                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand()));
                 driverXbox.leftBumper().onTrue(m_IntakeSubsystem
                                 .startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
                 // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,
@@ -245,13 +245,13 @@ public class RobotContainer {
                 // driverXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_RETRACT));
                 // driverXbox.povLeft().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE));
 
-                driverXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE));
+                driverXbox.povDown().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_DEPLOY_ENCODER_VALUE));
                 driverXbox.povUp().onTrue(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE));
                 // driverXbox.povRight().whileTrue(m_TargetingSubsystems.aimAtHubPose(drivebase,
                 // driverXbox));
 
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
-                driverXbox.x().onTrue(m_ShooterSubsystem.setShooterMotorsRPMIdleCommand().andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_COLLECT_ENCODER_VALUE)));
+                driverXbox.x().onTrue(m_ShooterSubsystem.setShooterMotorsRPMIdleCommand().andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_DEPLOY_ENCODER_VALUE)));
                 // .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY)));
                 // driverXbox.a().whileTrue(aimAtHopperCommand(() -> -driverXbox.getLeftY(),
                 // () -> -driverXbox.getLeftX()));
@@ -291,7 +291,7 @@ public class RobotContainer {
                                 .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
 
                 bottomButtons.button(9)
-                                .whileTrue(m_IntakeSubsystem.assistShooterCommand().repeatedly());
+                                .onTrue(m_IntakeSubsystem.assistShooterCommand());
                 //bottomButtons.button(3).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
                 //bottomButtons.button(7).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
                 //bottomButtons.button(4).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));

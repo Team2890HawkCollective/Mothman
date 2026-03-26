@@ -150,8 +150,8 @@ public final class Constants {
         public static final double INTAKE_MOTOR_I = 0;
         public static final double INTAKE_MOTOR_D = 0.00005;
 
-        public static final double INTAKE_COLLECT_ENCODER_VALUE = 0;
-        public static final double INTAKE_MIDDLE_ENCODER_VALUE = 4;
+        public static final double INTAKE_DEPLOY_ENCODER_VALUE = 0;
+        public static final double INTAKE_ASSIST_ENCODER_VALUE = 5;
         public static final double INTAKE_RETRACT_ENCODER_VALUE = 7;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;

@@ -17,20 +17,25 @@ import frc.robot.Constants;
 public class ClimberSubsystem extends SubsystemBase {
   // private static TalonFX climberMotor = new
   // TalonFX(Constants.ClimberConstants.CLIMB_MOTOR_ID);
-  private static SparkFlex climberMotor = new SparkFlex(Constants.ClimberConstants.CLIMB_MOTOR_ID,
+  private static SparkFlex climberMotor = new SparkFlex(Constants.ClimberConstants.CLIMB_MOTOR_ID, //makes the motor inside of code
       MotorType.kBrushless);
-  private static SparkClosedLoopController climberMotorPIDController;
-  public static SparkFlexConfig climberMotorConfig = new SparkFlexConfig();
+
+  private static SparkClosedLoopController climberMotorPIDController; //creates a PID controller without initialization
+
+  private static SparkFlexConfig climberMotorConfig = new SparkFlexConfig(); //creates a config object that we will configure inside constructor
 
   public ClimberSubsystem() {
-    climberMotorConfig.closedLoop.pid(Constants.ClimberConstants.CLIMBER_PID_P,
+    climberMotorConfig.closedLoop.pid(Constants.ClimberConstants.CLIMBER_PID_P, //PID is a way on how to tell the robot to move
         Constants.ClimberConstants.CLIMBER_PID_I,
-        Constants.ClimberConstants.CLIMBER_PID_D);
-    climberMotorConfig.smartCurrentLimit(80);
-    climberMotorConfig.openLoopRampRate(0);
+        Constants.ClimberConstants.CLIMBER_PID_D); //creates PID values inside of our config object by calling constants
+
+    climberMotorConfig.smartCurrentLimit(80); //set max voltage limit on the motor
+    climberMotorConfig.openLoopRampRate(0); //time it takes to accelerate from 0 speed to desired/max speed
     climberMotorConfig.closedLoopRampRate(0);
-    climberMotor.configure(climberMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
+
+    climberMotor.configure(climberMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters, //apply the configs we initialized in lines above to the actual motor itself
         com.revrobotics.PersistMode.kNoPersistParameters);
+
     climberMotorPIDController = climberMotor.getClosedLoopController();
   }
 
@@ -41,6 +46,7 @@ public class ClimberSubsystem extends SubsystemBase {
   public Command setClimberSpeedCommand(double speed) {
     return runOnce(() -> setClimberSpeed(speed));
   }
+
   public void liftRobot() {
     climberMotorPIDController.setSetpoint(Constants.ClimberConstants.CLIMBER_LIFTED_SETPOINT_VALUE, ControlType.kPosition);
   }
@@ -49,14 +55,13 @@ public class ClimberSubsystem extends SubsystemBase {
     climberMotorPIDController.setSetpoint(Constants.ClimberConstants.CLIMBER_LOWERED_SETPOINT_VALUE, ControlType.kPosition);
   }
 
-
   public void stopClimber() {
     climberMotor.set(0);
   }
 
   public Command liftRobotCommand() {
     return runOnce(() -> liftRobot());
-  }
+  } 
 
   public Command lowerRobotCommand() {
     return runOnce(() -> lowerRobot());
