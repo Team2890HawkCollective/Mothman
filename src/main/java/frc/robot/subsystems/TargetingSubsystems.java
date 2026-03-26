@@ -111,11 +111,12 @@ public class TargetingSubsystems extends SubsystemBase {
             Rotation2d angleDifference = PhotonUtils.getYawToPose(currentRobotPose,
                     Constants.TargetingConstants.allianceHubPose);
 
-            double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(), Constants.TargetingConstants.allianceHubPose.getRotation().getRadians());
+            double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(),
+                    Constants.TargetingConstants.allianceHubPose.getRotation().getRadians());
 
             angleSpeed = MathUtil.clamp(angleSpeed, -3.0, 3.0);
 
-            swerveDrive.drive(new Translation2d(driverXbox.getLeftY(), driverXbox.getLeftX()), angleSpeed,
+            swerveDrive.drive(new Translation2d(driverXbox.getLeftY()/2, driverXbox.getLeftX()/2), angleSpeed,
                     true);
         }, swerveDrive);
     }
@@ -140,7 +141,9 @@ public class TargetingSubsystems extends SubsystemBase {
         if (alliance.isPresent()) {
             if (alliance.get() == Alliance.Blue) {
                 hubThetaPose = new Rotation2d(
-                        Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getPose().getY(), Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getPose().getX()));
+                        Math.atan2(
+                                (Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getFieldVelocity().vyMetersPerSecond * 1.2) - swerveDrive.getPose().getY(),
+                                (Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getFieldVelocity().vxMetersPerSecond * 1.2) - swerveDrive.getPose().getX()));
 
                 Constants.TargetingConstants.allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_BLUE,
                         Constants.TargetingConstants.HUB_Y_POSE_BLUE, hubThetaPose);
@@ -148,8 +151,8 @@ public class TargetingSubsystems extends SubsystemBase {
 
             else {
                 hubThetaPose = new Rotation2d(
-                        Math.atan2(Constants.TargetingConstants.HUB_Y_POSE_RED - swerveDrive.getPose().getY(),
-                        Constants.TargetingConstants.HUB_X_POSE_RED - swerveDrive.getPose().getX()));
+                        Math.atan2((Constants.TargetingConstants.HUB_Y_POSE_RED - swerveDrive.getFieldVelocity().vyMetersPerSecond * 1.2) - swerveDrive.getPose().getY(),
+                                (Constants.TargetingConstants.HUB_X_POSE_RED - swerveDrive.getFieldVelocity().vxMetersPerSecond * 1.2) - swerveDrive.getPose().getX()));
                 Constants.TargetingConstants.allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_RED,
                         Constants.TargetingConstants.HUB_Y_POSE_RED, hubThetaPose);
             }
@@ -157,40 +160,44 @@ public class TargetingSubsystems extends SubsystemBase {
 
     }
 
+    public static void updateShooterAndIndexerRPM(Pose2d currentRobotPose) {
+        double distance = PhotonUtils.getDistanceToPose(currentRobotPose,
+                Constants.TargetingConstants.allianceHubPose);
+        Constants.ShooterConstants.SHOOTER_RPM_LEFT = Math.max((-1.73146 * Math.pow(distance, 4))
+                + (27.27766 * Math.pow(distance, 3))
+                - (154.79287 * Math.pow(distance, 2))
+                - (34.29619 * distance)
+                - 2400.13374, -15000);
 
-      public static void updateShooterAndIndexerRPM(Pose2d currentRobotPose) {
-      double distance = PhotonUtils.getDistanceToPose(currentRobotPose,
-      Constants.TargetingConstants.allianceHubPose);
-      Constants.ShooterConstants.SHOOTER_RPM_LEFT = Math.max((-1.73146 * Math.pow(distance, 4))
-      + (27.27766 * Math.pow(distance, 3))
-      - (154.79287 * Math.pow(distance, 2))
-      - (34.29619 * distance) 
-      -2400.13374, -15000); 
+        Constants.ShooterConstants.SHOOTER_RPM_RIGHT = Math.max((-2.40765 * Math.pow(distance, 4))
+                + (38.94472 * Math.pow(distance, 3))
+                - (225.17963 * Math.pow(distance, 2))
+                + (138.9699 * distance)
+                - 2531.33326, -15000);
 
-      Constants.ShooterConstants.SHOOTER_RPM_RIGHT = Math.max((-2.40765 * Math.pow(distance, 4))
-      + (38.94472 * Math.pow(distance, 3))
-      - (225.17963 * Math.pow(distance, 2))
-      + (138.9699 * distance) 
-      - 2531.33326, -15000); 
+        Constants.ShooterConstants.SHOOTER_RPM_CENTER = Math.max((-1.84547 * Math.pow(distance, 4))
+                + (32.75767 * Math.pow(distance, 3))
+                - (201.29209 * Math.pow(distance, 2))
+                + (58.06248 * distance)
+                - 2460.16313, -15000);
 
-    Constants.ShooterConstants.SHOOTER_RPM_CENTER = Math.max((-1.84547 * Math.pow(distance, 4))
-      + (32.75767 * Math.pow(distance, 3))
-      - (201.29209 * Math.pow(distance, 2))
-      + (58.06248 * distance) 
-      - 2460.16313, -15000); 
-
-      Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM = -Constants.ShooterConstants.SHOOTER_RPM_CENTER * 4.5 * 5/2;
-      //To find the linear speed, the equation is RPM * Circumference, pi is not needed as it cancels out.
-      }
-     
+        Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM = -Constants.ShooterConstants.SHOOTER_RPM_CENTER * 4.5 * 5
+                / 2;
+        // To find the linear speed, the equation is RPM * Circumference, pi is not
+        // needed as it cancels out.
+    }
 
     @Override
     public void periodic() {
         alliance = DriverStation.getAlliance();
         SmartDashboard.putString("Target Hub Pose",
-                Constants.TargetingConstants.allianceHubPose.getX() + " " + Constants.TargetingConstants.allianceHubPose.getY() + " " + Constants.TargetingConstants.allianceHubPose.getRotation());
+                Constants.TargetingConstants.allianceHubPose.getX() + " "
+                        + Constants.TargetingConstants.allianceHubPose.getY() + " "
+                        + Constants.TargetingConstants.allianceHubPose.getRotation());
 
-        SmartDashboard.putString("Hub Pose", "x: " + Constants.TargetingConstants.allianceHubPose.getMeasureX() + "  y: " + Constants.TargetingConstants.allianceHubPose.getY()
-                + "  angle: " + Constants.TargetingConstants.allianceHubPose.getRotation());
+        SmartDashboard.putString("Hub Pose",
+                "x: " + Constants.TargetingConstants.allianceHubPose.getMeasureX() + "  y: "
+                        + Constants.TargetingConstants.allianceHubPose.getY()
+                        + "  angle: " + Constants.TargetingConstants.allianceHubPose.getRotation());
     }
 }
