@@ -42,14 +42,16 @@ public class IntakeSubsystem extends SubsystemBase {
     private static SparkFlex intakeRotatorMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_ID,
             MotorType.kBrushless);
 
-    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(8, 10);
-    private final TrapezoidProfile.Constraints m_AssistConstraints = new TrapezoidProfile.Constraints(2, 2);
+    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(8, 3);
+    private final TrapezoidProfile.Constraints m_AssistConstraints = new TrapezoidProfile.Constraints(1, .5);
 
     private final ProfiledPIDController intakeRotatorProfiledPIDController;
-    //private final ProfiledPIDController intakeAssistRotatorProfiledPIDController;
+    private final ProfiledPIDController assistShooterProfiledPIDController;
 
     private static TrapezoidProfile.State goalState = new TrapezoidProfile.State(
             Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE, 0);
+
+    private static TrapezoidProfile.State assistShooterState = new TrapezoidProfile.State(Constants.IntakeConstants.INTAKE_ASSIST_ENCODER_VALUE, 0);
 
     private static ArmFeedforward intakeRotationFeedfoward = new ArmFeedforward(.75418, 1.1238, .023506, .043444);
 
@@ -82,6 +84,12 @@ public class IntakeSubsystem extends SubsystemBase {
                 0.02);
         intakeRotatorProfiledPIDController.setTolerance(0.15);
         intakeRotatorProfiledPIDController.setGoal(goalState);
+
+        assistShooterProfiledPIDController = new ProfiledPIDController(
+            3, 0, .1, m_AssistConstraints, .02);
+
+        assistShooterProfiledPIDController.setTolerance(.15);
+                assistShooterProfiledPIDController.setGoal(assistShooterState);
 
 
 
@@ -120,10 +128,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void goToPosition(double goalPosition) {
         goalState = new TrapezoidProfile.State(goalPosition, 0);
+        assistShooterState = new TrapezoidProfile.State(goalPosition, 0);
+        assistShooterProfiledPIDController.reset(assistShooterState);
+        intakeRotatorMotor.setVoltage(intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
+
     }
 
     public Command goToPositionCommand(double goalPosition) {
-        return runOnce(() -> goToPosition(goalPosition));
+        return run(() -> goToPosition(goalPosition));
     }
 
     public void rotateIntakeManual(double speed) {
@@ -162,9 +174,18 @@ public class IntakeSubsystem extends SubsystemBase {
         return runOnce(() -> stopIntakeWheels());
     }
 
+    public void assistShooter()
+    {
+        goalState = new TrapezoidProfile.State(Constants.IntakeConstants.INTAKE_ASSIST_ENCODER_VALUE, 0);
+
+        assistShooterState = new TrapezoidProfile.State(Constants.IntakeConstants.INTAKE_ASSIST_ENCODER_VALUE, 0);
+
+        intakeRotatorMotor.setVoltage(assistShooterProfiledPIDController.calculate(encoderValue, assistShooterState));
+    }
+
     public Command assistShooterCommand()
     {
-      return runOnce(() -> goToPosition(Constants.IntakeConstants.INTAKE_MIDDLE_ENCODER_VALUE));
+      return run(() -> assistShooter());
       }
      
 
@@ -227,10 +248,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public void periodic() {
         encoderValue = intakeRotatorMotor.getEncoder().getPosition();
         
-        if(useArmRotationAutomaticStatus == true)
+        /*if(useArmRotationAutomaticStatus == true)
         {
             intakeRotatorMotor.setVoltage(intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
-        }
+        }*/
         
                //+ intakeRotationFeedfoward.calculate(intakeRotatorProfiledPIDController.getSetpoint().position * 2 * Math.PI/12,
                        // intakeRotatorProfiledPIDController.getSetpoint().velocity));
