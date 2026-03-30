@@ -44,7 +44,6 @@ public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
     private RobotContainer m_robotContainer;
-    private LEDSubsystem m_LedSubsystem;
     private ClimberSubsystem m_ClimberSubsystem;
     private ShooterSubsystem m_ShooterSubsystem;
 
@@ -71,7 +70,6 @@ public class Robot extends TimedRobot {
         // and put our
         // autonomous chooser on the dashboard.
 
-        m_LedSubsystem = new LEDSubsystem();
         m_robotContainer = new RobotContainer();
         m_ClimberSubsystem = new ClimberSubsystem();
         m_ShooterSubsystem = new ShooterSubsystem();
