@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -24,6 +25,8 @@ public class LEDSubsystem extends SubsystemBase {
   AddressableLED m_LED;
 
   AddressableLEDBuffer m_Buffer;
+
+  AddressableLEDBufferView m_bottomHalf = m_Buffer.createView(0, 12);
 
   LEDPattern hubActiveColor = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kTeal, Color.kMagenta);
   LEDPattern hubActiveBlinkPattern = hubActiveColor.breathe(Second.of(0.4));
@@ -43,11 +46,13 @@ public class LEDSubsystem extends SubsystemBase {
   LEDPattern rainbow = LEDPattern.rainbow(255, 128);
   LEDPattern rainbowScroll = rainbow.scrollAtRelativeSpeed(Percent.per(Second).of(100));
 
+  LEDPattern lockPattern = LEDPattern.solid(Color.kRed);
+  LEDPattern lockPatternBlink = lockPattern.blink(Second.of(.1));
+
   public LEDSubsystem() {
     m_LED = new AddressableLED(Constants.LEDConstants.LED_PWM_PORT);
     m_Buffer = new AddressableLEDBuffer(26);
     m_LED.setLength(m_Buffer.getLength());
-
     m_LED.setData(m_Buffer);
     m_LED.start();
   }
@@ -101,14 +106,12 @@ public class LEDSubsystem extends SubsystemBase {
     }
   }
 
-  public void setLEDHubActive() {
-    if (isHubActive) {
+  public void setLEDLocked(){
+    lockPatternBlink.applyTo(m_bottomHalf);
+  }
 
-    }
-
-    else {
-
-    }
+  public Command setLEDLockedCommand(){
+    return runOnce(() -> setLEDLocked());
   }
 
   public boolean isHubActive() {
