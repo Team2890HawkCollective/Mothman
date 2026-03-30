@@ -42,6 +42,7 @@ import java.util.function.DoubleSupplier;
 import javax.lang.model.util.ElementScanner14;
 
 import frc.robot.subsystems.TargetingSubsystems;
+import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -76,6 +77,7 @@ public class RobotContainer {
         private final TargetingSubsystems m_TargetingSubsystems = new TargetingSubsystems();
         private final ShooterSubsystem m_ShooterSubsystem = new ShooterSubsystem();
         private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+        private final LEDSubsystem m_LedSubsystem = new LEDSubsystem();
         /**
          * Converts driver input into a field-relative ChassisSpeeds that is controlled
          * by angular velocity.
@@ -252,6 +254,8 @@ public class RobotContainer {
 
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
                 driverXbox.x().onTrue(m_ShooterSubsystem.setShooterMotorsRPMIdleCommand().andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_DEPLOY_ENCODER_VALUE)));
+
+                driverXbox.b().whileTrue(drivebase.lockSwerveCommand().andThen(m_LedSubsystem.setLEDLockedCommand()));
                 // .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY)));
                 // driverXbox.a().whileTrue(aimAtHopperCommand(() -> -driverXbox.getLeftY(),
                 // () -> -driverXbox.getLeftX()));
