@@ -5,27 +5,21 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Deploy_Intake_Command"
+            "pathName": "Right Start to Over Bump"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Starting to HP"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
+            "pathName": "Right Middle Collect Fuel"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "HP to Hub"
+            "pathName": "Right Middle to Shoot"
           }
         },
         {
@@ -43,7 +37,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 8.0
+            "waitTime": 6.0
           }
         },
         {
@@ -61,19 +55,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Hub to side of Climb"
+            "pathName": "Right Middle Shoot to Climb Offset"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Side into Climb"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Lift_Robot"
           }
         }
       ]

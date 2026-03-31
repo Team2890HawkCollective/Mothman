@@ -26,7 +26,9 @@ public class LEDSubsystem extends SubsystemBase {
 
   AddressableLEDBuffer m_Buffer;
 
-  AddressableLEDBufferView m_bottomHalf = m_Buffer.createView(0, 12);
+  AddressableLEDBufferView m_bottomHalf;
+
+  private boolean isSwerveLocked = false;
 
   LEDPattern hubActiveColor = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kTeal, Color.kMagenta);
   LEDPattern hubActiveBlinkPattern = hubActiveColor.breathe(Second.of(0.4));
@@ -52,6 +54,7 @@ public class LEDSubsystem extends SubsystemBase {
   public LEDSubsystem() {
     m_LED = new AddressableLED(Constants.LEDConstants.LED_PWM_PORT);
     m_Buffer = new AddressableLEDBuffer(26);
+    m_bottomHalf = m_Buffer.createView(0, 12);
     m_LED.setLength(m_Buffer.getLength());
     m_LED.setData(m_Buffer);
     m_LED.start();
@@ -106,12 +109,21 @@ public class LEDSubsystem extends SubsystemBase {
     }
   }
 
-  public void setLEDLocked(){
+  public void setLEDSwerveLocked(){
+    isSwerveLocked = true;
     lockPatternBlink.applyTo(m_bottomHalf);
   }
 
-  public Command setLEDLockedCommand(){
-    return runOnce(() -> setLEDLocked());
+  public void setLEDLockedStatus(boolean status){
+    isSwerveLocked = status;
+  }
+
+  public Command setLEDLockedStatusCommand(boolean status){
+    return runOnce(()->setLEDLockedStatus(status));
+  }
+
+  public Command setLEDSwerveLockedCommand(){
+    return runOnce(() -> setLEDSwerveLocked());
   }
 
   public boolean isHubActive() {
@@ -177,9 +189,13 @@ public class LEDSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
     matchTime = DriverStation.getMatchTime();
     isHubActive = isHubActive();
-    setLEDPeriod();
+    if(isSwerveLocked == false)
+    {
+      setLEDPeriod();
+    }
 
     m_LED.setData(m_Buffer);
   }

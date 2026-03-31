@@ -121,6 +121,25 @@ public class TargetingSubsystems extends SubsystemBase {
         }, swerveDrive);
     }
 
+    public Command aimAtHubPoseAutonomousMode(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) {
+        return new RunCommand(() -> {
+            currentRobotPose = swerveDrive.getPose();
+
+            // Transform2d errorFromDesiredPose = desiredPose.minus(currentRobotPose);
+
+            Rotation2d angleDifference = PhotonUtils.getYawToPose(currentRobotPose,
+                    Constants.TargetingConstants.allianceHubPose);
+
+            double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(),
+                    Constants.TargetingConstants.allianceHubPose.getRotation().getRadians());
+
+            angleSpeed = MathUtil.clamp(angleSpeed, -3.0, 3.0);
+
+            swerveDrive.drive(new Translation2d(driverXbox.getLeftY()/2, driverXbox.getLeftX()/2), angleSpeed,
+                    true);
+        });
+    }
+
     Command photonAimAtAprilTag(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) {
         return new RunCommand(() -> {
             double rot = 0.0;

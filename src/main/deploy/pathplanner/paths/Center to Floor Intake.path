@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.828515205724508,
+        "x": 1.8285152057245082,
         "y": 5.7143291592128795
       },
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Middle Shoot to Climb",
+  "folder": "Left Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

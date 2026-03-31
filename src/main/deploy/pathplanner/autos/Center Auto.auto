@@ -31,12 +31,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Start_Indexer"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Assist_Shooter"
           }
         },

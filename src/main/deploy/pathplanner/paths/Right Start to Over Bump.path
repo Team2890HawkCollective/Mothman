@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5185568181818176,
-        "y": 7.2095
+        "x": 3.5597840909090905,
+        "y": 2.0251704545454547
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1273750000027687,
-        "y": 5.385193181820003
+        "x": 4.755082718087117,
+        "y": 2.2381121081612045
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.672920454548223,
-        "y": 5.477954545456365
+        "x": 5.6417613636363635,
+        "y": 2.3446818181818183
       },
       "prevControl": {
-        "x": 3.3539345896947985,
-        "y": 5.471848129415376
+        "x": 5.153687069900663,
+        "y": 2.7122439406247527
       },
       "nextControl": {
-        "x": 6.899193181820951,
-        "y": 5.488261363638184
+        "x": 6.476613636363636,
+        "y": 1.7159659090909098
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.734045454548223,
-        "y": 7.054897727274547
+        "x": 7.744352272727273,
+        "y": 1.0769431818181818
       },
       "prevControl": {
-        "x": 5.971579545454545,
-        "y": 7.271340909090909
+        "x": 6.816738636363636,
+        "y": 1.056329545454546
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Over Left Ramp Waypoint"
+      "linkedName": "Right-Middle Collect Fuel Waypoint"
     }
   ],
   "rotationTargets": [],
@@ -49,8 +49,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 10.0,
+    "maxAcceleration": 10.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -58,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Left Over Bump Auto",
+  "folder": "Right Over Bump Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": false
 }

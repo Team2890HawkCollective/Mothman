@@ -1,0 +1,88 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.9209999999999998,
+        "y": 2.3446818181818183
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.916132379248658,
+        "y": 5.4667627053179375
+      },
+      "isLocked": false,
+      "linkedName": "Right Shoot Position Waypoint"
+    },
+    {
+      "anchor": {
+        "x": 1.926,
+        "y": 5.962
+      },
+      "prevControl": {
+        "x": 1.9314391974304765,
+        "y": 3.9006363636363632
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Start Auto Aim",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Auto_Aim_To_Hub"
+        }
+      }
+    },
+    {
+      "name": "Shoot Fuel",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Shoot_Fuel_Command"
+        }
+      }
+    },
+    {
+      "name": "Assist Shooter",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Assist_Shooter"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.553000000000004
+  },
+  "reversed": false,
+  "folder": "Interior Auto",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 32.448269348413774
+  },
+  "useDefaultConstraints": false
+}

@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.9258676207513417,
-        "y": 2.469248658318426
+        "x": 1.926,
+        "y": 2.3446818181818183
       },
       "prevControl": {
-        "x": 1.5723142301580677,
-        "y": 2.115695267725152
+        "x": 1.572446609406726,
+        "y": 1.9911284275885444
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +46,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -54,7 +54,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 32.036968529863586
+    "rotation": 32.448269348413774
   },
   "reversed": false,
   "folder": "HP to Shoot to Climb",
@@ -62,5 +62,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

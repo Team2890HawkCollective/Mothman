@@ -151,15 +151,15 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_DEPLOY_ENCODER_VALUE)
                                 .andThen(m_IntakeSubsystem.startIntakeWheelsCommand(
                                                 Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST)));
-                NamedCommands.registerCommand("Stop_Shooter_Command",m_ShooterSubsystem.setShooterMotorsRPMIdleCommand()
-                                .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE)));               
+                NamedCommands.registerCommand("Stop_Shooter_Command",m_ShooterSubsystem.setShooterMotorsRPMIdleCommand());
+                NamedCommands.registerCommand("Retract_Intake_Command", m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE));               
                 NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
                 NamedCommands.registerCommand("Assist_Shooter",
-                                m_IntakeSubsystem.assistShooterCommand().repeatedly().withTimeout(8));
+                                m_IntakeSubsystem.assistShooterCommand());
                 NamedCommands.registerCommand("Lift_Robot", m_ClimberSubsystem.liftRobotCommand());
                 NamedCommands.registerCommand("Kill_All", killAllCommand());
                 NamedCommands.registerCommand("Auto_Aim_To_Hub",
-                                m_TargetingSubsystems.aimAtHubPose(drivebase, driverXbox).withTimeout(.5));
+                                m_TargetingSubsystems.aimAtHubPoseAutonomousMode(drivebase, driverXbox).repeatedly());
 
                 /*
                  * NamedCommands.registerCommand("PathPlan_To_Climb_Right_Offsetted",
@@ -255,7 +255,7 @@ public class RobotContainer {
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
                 driverXbox.x().onTrue(m_ShooterSubsystem.setShooterMotorsRPMIdleCommand().andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_DEPLOY_ENCODER_VALUE)));
 
-                driverXbox.b().whileTrue(drivebase.lockSwerveCommand().andThen(m_LedSubsystem.setLEDLockedCommand()));
+                driverXbox.b().whileTrue(drivebase.lockSwerveCommand().andThen(m_LedSubsystem.setLEDSwerveLockedCommand())).onFalse(m_LedSubsystem.setLEDLockedStatusCommand(false));
                 // .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY)));
                 // driverXbox.a().whileTrue(aimAtHopperCommand(() -> -driverXbox.getLeftY(),
                 // () -> -driverXbox.getLeftX()));

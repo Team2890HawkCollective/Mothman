@@ -47,10 +47,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.92679512417481
+    "rotation": -36.92679512417482
   },
   "reversed": false,
-  "folder": "Left Auto",
+  "folder": "Left Over Bump Auto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -90.0

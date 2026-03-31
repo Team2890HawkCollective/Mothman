@@ -51,7 +51,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 5.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -59,13 +59,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -36.92679512417481
+    "rotation": -36.92679512417482
   },
   "reversed": false,
-  "folder": "Middle Shoot to Climb",
+  "folder": "Left Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
