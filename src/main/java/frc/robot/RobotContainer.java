@@ -235,7 +235,7 @@ public class RobotContainer {
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new
                 // WaitCommand(1.5)));
                 // .andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
-                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand()).andThen(m_IntakeSubsystem.stopIntakeWheelsCommand()));
+                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand().andThen(m_IntakeSubsystem.startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW))));
                 driverXbox.leftBumper().onTrue(m_IntakeSubsystem
                                 .startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
                 // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,

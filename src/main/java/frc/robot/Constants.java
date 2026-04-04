@@ -128,7 +128,7 @@ public final class Constants {
          
         \*/
         public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -5000; // always negative when intaking
-        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -4000; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -3000; // always negative when intaking
 
 
         /*

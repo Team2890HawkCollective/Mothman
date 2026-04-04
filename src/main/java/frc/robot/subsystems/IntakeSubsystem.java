@@ -42,8 +42,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private static SparkFlex intakeRotatorMotor = new SparkFlex(Constants.IntakeConstants.INTAKE_ROTATOR_MOTOR_ID,
             MotorType.kBrushless);
 
-    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(8, 6);
-    private final TrapezoidProfile.Constraints m_AssistConstraints = new TrapezoidProfile.Constraints(10, .5);
+    private final TrapezoidProfile.Constraints m_Constraints = new TrapezoidProfile.Constraints(.1, .05);
+    private final TrapezoidProfile.Constraints m_AssistConstraints = new TrapezoidProfile.Constraints(8, .5);
 
     private final ProfiledPIDController intakeRotatorProfiledPIDController;
     private final ProfiledPIDController assistShooterProfiledPIDController;
@@ -78,12 +78,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public IntakeSubsystem() {
         intakeRotatorProfiledPIDController = new ProfiledPIDController(
-                3,
+                .001,
                 Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_I,
-                .1,
+                0.0001,
                 m_Constraints,
                 0.02);
-        intakeRotatorProfiledPIDController.setTolerance(0.15);
+        intakeRotatorProfiledPIDController.setTolerance(0.2);
         intakeRotatorProfiledPIDController.setGoal(goalState);
 
         assistShooterProfiledPIDController = new ProfiledPIDController(
@@ -94,7 +94,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 
 
-        intakeRotatorConfig.closedLoop
+        /*intakeRotatorConfig.closedLoop
                 // Slot 0
                 .p(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_P)
                 .i(Constants.IntakeConstants.IntakeRotatorPID.INTAKE_ROTATOR_I)
@@ -112,7 +112,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
         intakeRotatorConfig.smartCurrentLimit(70);
         intakeRotatorMotor.configure(intakeRotatorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
-                com.revrobotics.PersistMode.kNoPersistParameters);
+                com.revrobotics.PersistMode.kNoPersistParameters);*/
 
         //intakeRotatorPIDController = intakeRotatorMotor.getClosedLoopController();
 
@@ -178,7 +178,9 @@ public class IntakeSubsystem extends SubsystemBase {
     {
         useAssist = true;
         goalState = new TrapezoidProfile.State(Constants.IntakeConstants.INTAKE_ASSIST_ENCODER_VALUE, 0);
+        assistShooterProfiledPIDController.reset(goalState);
         intakeRotatorProfiledPIDController.reset(goalState);
+
         //intakeRotatorMotor.setVoltage(assistShooterProfiledPIDController.calculate(encoderValue, goalState));
     }
 
@@ -251,11 +253,13 @@ public class IntakeSubsystem extends SubsystemBase {
         
         if(useArmRotationAutomaticStatus == true)
         {
-            if (useAssist = true) {
-                intakeRotatorMotor.setVoltage(assistShooterProfiledPIDController.calculate(encoderValue, goalState));
+            if (useAssist = false) {
+            intakeRotatorMotor.setVoltage(intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
+
             }
             else {
-                intakeRotatorMotor.setVoltage(intakeRotatorProfiledPIDController.calculate(encoderValue, goalState));
+            intakeRotatorMotor.setVoltage(assistShooterProfiledPIDController.calculate(encoderValue, goalState));
+
             }
         }
         
@@ -269,5 +273,6 @@ public class IntakeSubsystem extends SubsystemBase {
                // + intakeRotationFeedfoward.calculate(intakeRotatorProfiledPIDController.getSetpoint().position * 2 * Math.PI/12,
                        // intakeRotatorProfiledPIDController.getSetpoint().velocity));
         SmartDashboard.putNumber("Intake Rotation Goal Position: ", intakeRotatorProfiledPIDController.getGoal().position);
+        SmartDashboard.putNumber("Intake Rotation Arm Velocity", intakeRotatorMotor.getEncoder().getVelocity());
     }
 }
