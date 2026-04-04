@@ -25,25 +25,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "HP to Hub"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "HP To Depot While Autoaiming"
+            "pathName": "HP to Depot"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Stop_Shooter_Command"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Deploy_Intake_Command"
           }
         },
         {
@@ -79,7 +67,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.5
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop_Shooter_Command"
           }
         },
         {

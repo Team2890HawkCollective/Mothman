@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.37,
+        "x": 0.45,
         "y": 0.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7235533905932736,
-        "y": 1.1035533905932733
+        "x": 1.0272674249959097,
+        "y": 0.968067938724254
       },
       "isLocked": false,
       "linkedName": "HP Waypoint"
@@ -17,18 +17,23 @@
     {
       "anchor": {
         "x": 1.926,
-        "y": 2.3446818181818183
+        "y": 2.4374431818181823
       },
       "prevControl": {
-        "x": 1.572446609406726,
-        "y": 1.9911284275885444
+        "x": 0.9993006634975812,
+        "y": 1.933336648195981
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Right Shoot Position Waypoint"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.33176100628930816,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
@@ -46,7 +51,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -54,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 32.448269348413774
+    "rotation": 30.75161312238385
   },
   "reversed": false,
   "folder": "HP to Shoot to Climb",
@@ -62,5 +67,5 @@
     "velocity": 0,
     "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

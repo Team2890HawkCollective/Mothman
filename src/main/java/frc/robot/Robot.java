@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-       // IntakeSubsystem.resetIntakeRotationEncoder();
+        //IntakeSubsystem.resetIntakeRotationEncoder();
         m_robotContainer.setMotorBrake(true);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         ShooterSubsystem.setShooterMotorsRPMIdle();
@@ -183,6 +183,7 @@ public class Robot extends TimedRobot {
         } else {
             CommandScheduler.getInstance().cancelAll();
         }
+        IntakeSubsystem.resetIntakeRotationEncoder();
     }
 
     /**

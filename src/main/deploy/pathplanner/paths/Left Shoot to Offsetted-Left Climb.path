@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9907692307692302,
+        "x": 1.539647727272727,
         "y": 5.973935599284436
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.48778175313059,
-        "y": 5.356305903398927
+        "x": 1.4742625629872832,
+        "y": 5.732637484307618
       },
       "isLocked": false,
       "linkedName": "Floor Intake to Shoot Waypoint"
@@ -20,21 +20,26 @@
         "y": 4.9
       },
       "prevControl": {
-        "x": 1.7211627906976743,
-        "y": 5.598103756708409
+        "x": 1.5000124729921618,
+        "y": 5.71977869031965
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Ofsetted-Left Climb Waypoint"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.3018867924528302,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 5.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -48,7 +53,7 @@
   "folder": "Left Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -36.92679512417482
+    "rotation": -31.553834428005594
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

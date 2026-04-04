@@ -43,7 +43,7 @@ public final class Constants {
     public static final double ROBOT_MASS = 115 * 0.453592; // 32lbs * kg per pound
     public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
     public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
-    public static final double MAX_SPEED = Units.feetToMeters(19.2);
+    public static final double MAX_SPEED = Units.feetToMeters(19.3);
     // Maximum speed of the robot in meters per second, used to limit acceleration.
 
     // public static final class AutonConstants
@@ -127,7 +127,7 @@ public final class Constants {
          
          
         \*/
-        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -9000; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -5000; // always negative when intaking
         public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -4000; // always negative when intaking
 
 
@@ -146,13 +146,13 @@ public final class Constants {
             public static final double INTAKE_ROTATOR_D = 0.03;
         }
 
-        public static final double INTAKE_MOTOR_P = 0.0001;
-        public static final double INTAKE_MOTOR_I = 0;
-        public static final double INTAKE_MOTOR_D = 0.00005;
+        public static final double INTAKE_WHEELS_P = 0.0001;
+        public static final double INTAKE_WHEELS_I = 0.000001;
+        public static final double INTAKE_WHEELS_D = 0;
 
         public static final double INTAKE_DEPLOY_ENCODER_VALUE = 0;
-        public static final double INTAKE_ASSIST_ENCODER_VALUE = 5;
-        public static final double INTAKE_RETRACT_ENCODER_VALUE = 7;
+        public static final double INTAKE_ASSIST_ENCODER_VALUE = 4.8;
+        public static final double INTAKE_RETRACT_ENCODER_VALUE = 6.2;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
         public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .49;
@@ -205,16 +205,16 @@ public final class Constants {
                 new Rotation3d(0, 0, Math.toRadians(200)));
 
         public static final Transform3d ROBOT_TO_BACK_RIGHT_CAM = new Transform3d(
-                new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.25), Units.inchesToMeters(14)),
+                new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.25), Units.inchesToMeters(13.1875)),
                 new Rotation3d(0, 0, Math.toRadians(-200)));
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(11.25), Units.inchesToMeters(27.8)),
-                new Rotation3d(0, Math.toRadians(2), Math.toRadians(15)));
+                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(11.25), Units.inchesToMeters(27)),
+                new Rotation3d(0, Math.toRadians(10), Math.toRadians(10)));
 
         public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(-11.25), Units.inchesToMeters(27.8)),
-                new Rotation3d(0, Math.toRadians(2), Math.toRadians(-15)));
+                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(-11.25), Units.inchesToMeters(27)),
+                new Rotation3d(0, Math.toRadians(10), Math.toRadians(-10)));
     }
 
     public static class ClimberConstants {

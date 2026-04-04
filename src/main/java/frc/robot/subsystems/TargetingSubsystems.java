@@ -135,7 +135,7 @@ public class TargetingSubsystems extends SubsystemBase {
 
             angleSpeed = MathUtil.clamp(angleSpeed, -3.0, 3.0);
 
-            swerveDrive.drive(new Translation2d(driverXbox.getLeftY()/2, driverXbox.getLeftX()/2), angleSpeed,
+            swerveDrive.drive(new Translation2d(), angleSpeed,
                     true);
         });
     }

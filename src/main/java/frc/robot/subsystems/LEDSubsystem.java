@@ -28,6 +28,10 @@ public class LEDSubsystem extends SubsystemBase {
 
   AddressableLEDBufferView m_bottomHalf;
 
+  AddressableLEDBufferView m_topHalf;
+
+  AddressableLEDBufferView m_wholeStrip;
+
   private boolean isSwerveLocked = false;
 
   LEDPattern hubActiveColor = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kTeal, Color.kMagenta);
@@ -55,6 +59,8 @@ public class LEDSubsystem extends SubsystemBase {
     m_LED = new AddressableLED(Constants.LEDConstants.LED_PWM_PORT);
     m_Buffer = new AddressableLEDBuffer(26);
     m_bottomHalf = m_Buffer.createView(0, 12);
+    m_topHalf = m_Buffer.createView(13, 25);
+    m_wholeStrip = m_Buffer.createView(0, 25);
     m_LED.setLength(m_Buffer.getLength());
     m_LED.setData(m_Buffer);
     m_LED.start();
@@ -63,54 +69,53 @@ public class LEDSubsystem extends SubsystemBase {
   private double matchTime;
   private boolean isHubActive;
 
-  public void setLEDPeriod() {
+  public void setLEDPeriod(AddressableLEDBufferView buffer) {
     if (DriverStation.isAutonomous()) {
-      allianceShiftPattern.applyTo(m_Buffer);
+      allianceShiftPattern.applyTo(buffer);
     }
 
     if (DriverStation.isTeleop()) {
       if (matchTime <= 140 && matchTime > 132) // transition
       {
-        transitionBlinkPattern.applyTo(m_Buffer);
+        transitionBlinkPattern.applyTo(buffer);
       }
 
       else if (matchTime <= 132 && matchTime > 130) {
-        hubInactiveBlinkPattern.applyTo(m_Buffer);
+        hubInactiveBlinkPattern.applyTo(buffer);
       }
 
       else if (matchTime <= 107 && matchTime > 105 && isHubActive == false) {
-        hubInactiveBlinkPattern.applyTo(m_Buffer);
+        hubInactiveBlinkPattern.applyTo(buffer);
       }
 
       else if (matchTime <= 82 && matchTime > 80 && isHubActive == false) {
-        hubInactiveBlinkPattern.applyTo(m_Buffer);
+        hubInactiveBlinkPattern.applyTo(buffer);
       }
 
       else if (matchTime <= 57 && matchTime > 55 && isHubActive == false) {
-        hubInactiveBlinkPattern.applyTo(m_Buffer);
+        hubInactiveBlinkPattern.applyTo(buffer);
       }
 
       else if (matchTime <= 32 && matchTime > 30 && isHubActive == false) {
-        hubInactiveBlinkPattern.applyTo(m_Buffer);
+        hubInactiveBlinkPattern.applyTo(buffer);
       }
 
       else if (matchTime <= 30) // endgame
       {
-        endGameBlinkPattern.applyTo(m_Buffer);
+        endGameBlinkPattern.applyTo(buffer);
       }
 
       else if (isHubActive == true) {
-        hubActiveBlinkPattern.applyTo(m_Buffer);
+        hubActiveBlinkPattern.applyTo(buffer);
       }
 
       else {
-        allianceShiftPattern.applyTo(m_Buffer);
+        allianceShiftPattern.applyTo(buffer);
       }
     }
   }
 
   public void setLEDSwerveLocked(){
-    isSwerveLocked = true;
     lockPatternBlink.applyTo(m_bottomHalf);
   }
 
@@ -122,9 +127,7 @@ public class LEDSubsystem extends SubsystemBase {
     return runOnce(()->setLEDLockedStatus(status));
   }
 
-  public Command setLEDSwerveLockedCommand(){
-    return runOnce(() -> setLEDSwerveLocked());
-  }
+
 
   public boolean isHubActive() {
     Optional<Alliance> alliance = DriverStation.getAlliance();
@@ -192,9 +195,13 @@ public class LEDSubsystem extends SubsystemBase {
 
     matchTime = DriverStation.getMatchTime();
     isHubActive = isHubActive();
-    if(isSwerveLocked == false)
-    {
-      setLEDPeriod();
+
+    if (isSwerveLocked == true) {
+      setLEDPeriod(m_topHalf);
+      setLEDSwerveLocked();
+    }
+    else {
+      setLEDPeriod(m_wholeStrip);
     }
 
     m_LED.setData(m_Buffer);

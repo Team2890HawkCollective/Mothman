@@ -207,7 +207,7 @@ public class SwerveSubsystem extends SubsystemBase {
                     new PPHolonomicDriveController(
                             // PPHolonomicController is the built in path following controller for holonomic
                             // drive trains
-                            new PIDConstants(3.6, 0.0, 0.0),
+                            new PIDConstants(4.25, 0.0, 0),
                             // Translation PID constants
                             new PIDConstants(3.675, 0.0, 0.00)
                     // Rotation PID constants

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.9209999999999998,
-        "y": 2.3446818181818183
+        "x": 0.45,
+        "y": 0.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.916132379248658,
-        "y": 5.4667627053179375
+        "x": 2.2438044547010203,
+        "y": 0.7982139870271865
       },
       "isLocked": false,
-      "linkedName": "Right Shoot Position Waypoint"
+      "linkedName": "HP Waypoint"
     },
     {
       "anchor": {
@@ -20,29 +20,31 @@
         "y": 5.962
       },
       "prevControl": {
-        "x": 1.9314391974304765,
-        "y": 3.9006363636363632
+        "x": 1.8180812126933228,
+        "y": 3.7301330623090814
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.13836477987421353,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 0.4088050314465409,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 0.7908805031446547,
+      "rotationDegrees": 90.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
-    {
-      "name": "Start Auto Aim",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Auto_Aim_To_Hub"
-        }
-      }
-    },
     {
       "name": "Shoot Fuel",
       "waypointRelativePos": 0,
@@ -53,21 +55,10 @@
           "name": "Shoot_Fuel_Command"
         }
       }
-    },
-    {
-      "name": "Assist Shooter",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Assist_Shooter"
-        }
-      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -76,13 +67,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.553000000000004
+    "rotation": 179.98194891726217
   },
   "reversed": false,
   "folder": "Interior Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 32.448269348413774
+    "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

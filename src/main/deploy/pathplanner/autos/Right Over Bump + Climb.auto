@@ -11,15 +11,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Right Middle Collect Fuel"
+            "name": "Deploy_Intake_Command"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Middle to Shoot"
+            "pathName": "Right Middle Collect Fuel"
           }
         },
         {

@@ -235,7 +235,7 @@ public class RobotContainer {
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new
                 // WaitCommand(1.5)));
                 // .andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
-                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand()));
+                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand()).andThen(m_IntakeSubsystem.stopIntakeWheelsCommand()));
                 driverXbox.leftBumper().onTrue(m_IntakeSubsystem
                                 .startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
                 // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,
@@ -253,9 +253,11 @@ public class RobotContainer {
                 // driverXbox));
 
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand());
-                driverXbox.x().onTrue(m_ShooterSubsystem.setShooterMotorsRPMIdleCommand().andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_DEPLOY_ENCODER_VALUE)));
+                driverXbox.x().onTrue(m_ShooterSubsystem.setShooterMotorsRPMIdleCommand()
+                        .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_DEPLOY_ENCODER_VALUE))
+                        .andThen((m_IntakeSubsystem.startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST))));
 
-                driverXbox.b().whileTrue(drivebase.lockSwerveCommand().andThen(m_LedSubsystem.setLEDSwerveLockedCommand())).onFalse(m_LedSubsystem.setLEDLockedStatusCommand(false));
+                driverXbox.b().whileTrue(drivebase.lockSwerveCommand().andThen(m_LedSubsystem.setLEDLockedStatusCommand(true))).onFalse(m_LedSubsystem.setLEDLockedStatusCommand(false));
                 // .andThen(m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_DEPLOY)));
                 // driverXbox.a().whileTrue(aimAtHopperCommand(() -> -driverXbox.getLeftY(),
                 // () -> -driverXbox.getLeftX()));

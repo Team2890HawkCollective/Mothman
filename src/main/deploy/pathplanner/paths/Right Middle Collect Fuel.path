@@ -3,58 +3,58 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.744352272727273,
-        "y": 1.0769431818181818
+        "x": 7.734045454545454,
+        "y": 0.9326477272727276
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.734045454545454,
-        "y": 2.0767045454545463
+        "x": 7.723738636363635,
+        "y": 1.932409090909092
       },
       "isLocked": false,
       "linkedName": "Right-Middle Collect Fuel Waypoint"
     },
     {
       "anchor": {
-        "x": 7.744352272727273,
-        "y": 3.4784318181818183
+        "x": 7.466068181818181,
+        "y": 3.5402727272727272
       },
       "prevControl": {
-        "x": 7.744352272727273,
-        "y": 2.8084886363636357
+        "x": 7.981382027764525,
+        "y": 3.9683796146743053
       },
       "nextControl": {
-        "x": 7.744352272727273,
-        "y": 3.72843181818182
+        "x": 5.4562386363636355,
+        "y": 1.8705681818181825
       },
       "isLocked": false,
       "linkedName": "Right-Middle End Collect Fuel Waypoint"
     },
     {
       "anchor": {
-        "x": 6.188022727272727,
-        "y": 3.4784318181818183
+        "x": 1.926,
+        "y": 2.4374431818181823
       },
       "prevControl": {
-        "x": 6.466862665198559,
-        "y": 3.473836430392212
+        "x": 2.2048399379258328,
+        "y": 2.432847794028576
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Right Shoot Position Waypoint"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.515723270440251,
+      "waypointRelativePos": 1.7547169811320777,
       "rotationDegrees": 90.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.010771992818671366,
-      "maxWaypointRelativePos": 1.2,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.8007181328545773,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 2.0,
@@ -66,11 +66,11 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.2,
+      "minWaypointRelativePos": 0.8904847396768395,
       "maxWaypointRelativePos": 2.0,
       "constraints": {
-        "maxVelocity": 5.0,
-        "maxAcceleration": 5.0,
+        "maxVelocity": 4.9,
+        "maxAcceleration": 10.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
         "nominalVoltage": 12.0,
@@ -90,7 +90,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 30.75161312238385
   },
   "reversed": false,
   "folder": "Right Over Bump Auto",
