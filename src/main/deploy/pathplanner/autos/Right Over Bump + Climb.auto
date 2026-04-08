@@ -25,6 +25,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Auto_Aim_To_Hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot_Fuel_Command"
           }
         },
@@ -37,7 +43,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 6.0
+            "waitTime": 4.0
           }
         },
         {
@@ -62,6 +68,12 @@
           "type": "path",
           "data": {
             "pathName": "Side into Climb"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Lift_Robot"
           }
         }
       ]

@@ -31,7 +31,25 @@
         {
           "type": "named",
           "data": {
+            "name": "Auto_Aim_To_Hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot_Fuel_Command"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Assist_Shooter"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 6.0
           }
         },
         {

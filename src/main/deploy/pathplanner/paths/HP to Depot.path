@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.45,
+        "x": 0.43,
         "y": 0.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2438044547010203,
-        "y": 0.7982139870271865
+        "x": 1.7876249999999996,
+        "y": 0.9841818181818189
       },
       "isLocked": false,
       "linkedName": "HP Waypoint"
     },
     {
       "anchor": {
-        "x": 1.926,
-        "y": 5.962
+        "x": 1.612,
+        "y": 5.79
       },
       "prevControl": {
-        "x": 1.8180812126933228,
-        "y": 3.7301330623090814
+        "x": 1.5760795454545453,
+        "y": 3.5402727272727272
       },
       "nextControl": null,
       "isLocked": false,
@@ -44,19 +44,7 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Shoot Fuel",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "Shoot_Fuel_Command"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
