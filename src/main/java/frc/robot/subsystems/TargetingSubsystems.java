@@ -161,8 +161,8 @@ public class TargetingSubsystems extends SubsystemBase {
             if (alliance.get() == Alliance.Blue) {
                 hubThetaPose = new Rotation2d(
                         Math.atan2(
-                                (Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getFieldVelocity().vyMetersPerSecond * 1.2) - swerveDrive.getPose().getY(),
-                                (Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getFieldVelocity().vxMetersPerSecond * 1.2) - swerveDrive.getPose().getX()));
+                                (Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getFieldVelocity().vyMetersPerSecond * 1.5) - swerveDrive.getPose().getY(),
+                                (Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getFieldVelocity().vxMetersPerSecond * 1.5) - swerveDrive.getPose().getX()));
 
                 Constants.TargetingConstants.allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_BLUE,
                         Constants.TargetingConstants.HUB_Y_POSE_BLUE, hubThetaPose);
