@@ -183,7 +183,6 @@ public class Robot extends TimedRobot {
         } else {
             CommandScheduler.getInstance().cancelAll();
         }
-        IntakeSubsystem.resetIntakeRotationEncoder();
     }
 
     /**
