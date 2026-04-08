@@ -159,7 +159,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Lift_Robot", m_ClimberSubsystem.liftRobotCommand());
                 NamedCommands.registerCommand("Kill_All", killAllCommand());
                 NamedCommands.registerCommand("Auto_Aim_To_Hub",
-                                m_TargetingSubsystems.aimAtHubPoseAutonomousMode(drivebase, driverXbox).repeatedly());
+                                m_TargetingSubsystems.aimAtHubPoseAutonomousMode(drivebase, driverXbox).andThen(new WaitCommand(1)).andThen(drivebase.lockSwerveCommand()).withTimeout(.1));
 
                 /*
                  * NamedCommands.registerCommand("PathPlan_To_Climb_Right_Offsetted",
@@ -235,7 +235,9 @@ public class RobotContainer {
                 // driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(new
                 // WaitCommand(1.5)));
                 // .andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
-                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand().andThen(m_IntakeSubsystem.assistShooterCommand().andThen(m_IntakeSubsystem.startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW))));
+                driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand()
+                .andThen(m_IntakeSubsystem.startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW))
+                .andThen(m_IntakeSubsystem.assistShooterCommand()));
                 driverXbox.leftBumper().onTrue(m_IntakeSubsystem
                                 .startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
                 // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,
