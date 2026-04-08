@@ -90,7 +90,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder).feedForward
                 .kS(Constants.ShooterConstants.SHOOTER_MOTOR_S)
                 .kV(Constants.ShooterConstants.SHOOTER_MOTOR_V);
-        leftShooterMotorConfig.smartCurrentLimit(60);
+        leftShooterMotorConfig.smartCurrentLimit(55);
         leftShooterMotor.configure(leftShooterMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         leftShooterMotorPIDController = leftShooterMotor.getClosedLoopController();
@@ -104,7 +104,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder).feedForward
                 .kS(Constants.ShooterConstants.SHOOTER_MOTOR_S)
                 .kV(Constants.ShooterConstants.SHOOTER_MOTOR_V);
-        rightShooterMotorConfig.smartCurrentLimit(60);
+        rightShooterMotorConfig.smartCurrentLimit(55);
         rightShooterMotor.configure(rightShooterMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         rightShooterMotorPIDController = rightShooterMotor.getClosedLoopController();
@@ -112,7 +112,7 @@ public class ShooterSubsystem extends SubsystemBase {
         indexerAndRampMotorConfig.closedLoop.pid(Constants.ShooterConstants.INDEXER_MOTOR_P,
                 0,
                 0);
-        indexerAndRampMotorConfig.smartCurrentLimit(60);
+        indexerAndRampMotorConfig.smartCurrentLimit(55);
         indexerAndRampMotor.configure(indexerAndRampMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         indexerAndRampMotorPIDController = indexerAndRampMotor.getClosedLoopController();
