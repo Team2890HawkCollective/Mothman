@@ -127,8 +127,8 @@ public final class Constants {
          
          
         \*/
-        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -5000; // always negative when intaking
-        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -3000; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -5500; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -1000; // always negative when intaking
 
 
         /*
@@ -151,8 +151,8 @@ public final class Constants {
         public static final double INTAKE_WHEELS_D = 0;
 
         public static final double INTAKE_DEPLOY_ENCODER_VALUE = 0;
-        public static final double INTAKE_ASSIST_ENCODER_VALUE = 4.8;
-        public static final double INTAKE_RETRACT_ENCODER_VALUE = 6.2;
+        public static final double INTAKE_ASSIST_ENCODER_VALUE = 6.2;
+        public static final double INTAKE_RETRACT_ENCODER_VALUE = 7.2;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
         public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .49;
@@ -206,15 +206,15 @@ public final class Constants {
 
         public static final Transform3d ROBOT_TO_BACK_RIGHT_CAM = new Transform3d(
                 new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.25), Units.inchesToMeters(13.1875)),
-                new Rotation3d(0, 0, Math.toRadians(-200)));
+                new Rotation3d(0, 0, Math.toRadians(-205)));
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(11.25), Units.inchesToMeters(27)),
-                new Rotation3d(0, Math.toRadians(10), Math.toRadians(10)));
+                new Translation3d(Units.inchesToMeters(1.5), Units.inchesToMeters(11.25), Units.inchesToMeters(27.1)),
+                new Rotation3d(0, Math.toRadians(15), Math.toRadians(12)));
 
         public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(1.3), Units.inchesToMeters(-11.25), Units.inchesToMeters(27)),
-                new Rotation3d(0, Math.toRadians(10), Math.toRadians(-10)));
+                new Translation3d(Units.inchesToMeters(1.5), Units.inchesToMeters(-11.25), Units.inchesToMeters(27.2)),
+                new Rotation3d(0, Math.toRadians(15), Math.toRadians(-8)));
     }
 
     public static class ClimberConstants {
