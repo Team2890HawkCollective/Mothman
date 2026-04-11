@@ -5,16 +5,13 @@
 package frc.robot;
 
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
 
 import com.pathplanner.lib.path.PathConstraints;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
@@ -74,7 +71,7 @@ public final class Constants {
                 .withWidget(BuiltInWidgets.kNumberBar).getEntry();
 
         public static double SHOOTER_RPM = -2700;
-        public static final double IDLE_SHOOTER_RPM = -1800;
+        public static final double IDLE_SHOOTER_RPM = -2000;
         public static final double AUTO_SHOOTER_RPM = -3000; //always negative to shoot
 
         public static void updateShooterRPM() {
@@ -96,9 +93,9 @@ public final class Constants {
         public static double SHOOTER_MOTOR_S = 0.2;
         public static double SHOOTER_MOTOR_V = 0.0015;
 
-        public static double INDEXER_MOTOR_P = 0.0001;
-        public static double INDEXER_MOTOR_I = 0;
-        public static double INDEXER_MOTOR_D = 0;
+        public static double INDEXER_MOTOR_P = 0.00008;
+        public static double INDEXER_MOTOR_I = 0.0;
+        public static double INDEXER_MOTOR_D = 0.00001;
 
         /*
          * private static GenericEntry indexerAndRampRPM =
@@ -106,7 +103,7 @@ public final class Constants {
          * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
          */
 
-        public static double INDEXER_AND_RAMP_MOTOR_RPM = 15000; //always positive when feeding into shooter
+        public static double INDEXER_AND_RAMP_MOTOR_RPM = 4500; //always positive when feeding into shooter
 
         // this method called in robot periodic so values updated in elastic are
         // constantly read and applied to RAMP_MOTOR_SPEED
@@ -127,8 +124,8 @@ public final class Constants {
          
          
         \*/
-        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -5500; // always negative when intaking
-        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -1000; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -6000; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -4000; // always negative when intaking
 
 
         /*
@@ -151,8 +148,8 @@ public final class Constants {
         public static final double INTAKE_WHEELS_D = 0;
 
         public static final double INTAKE_DEPLOY_ENCODER_VALUE = 0;
-        public static final double INTAKE_ASSIST_ENCODER_VALUE = 6.2;
-        public static final double INTAKE_RETRACT_ENCODER_VALUE = 7.2;
+        public static final double INTAKE_ASSIST_ENCODER_VALUE = 7;
+        public static final double INTAKE_RETRACT_ENCODER_VALUE = 7.4;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
         public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .49;
@@ -165,20 +162,20 @@ public final class Constants {
     // retrieves value from widget
 
     public static class TargetingConstants {
-        public static final Pose2d BLUE_LEFT_CLIMB_POSE = new Pose2d(1.14, 4.25, Rotation2d.fromDegrees(90));
-        public static final Pose2d BLUE_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(1.20, 5.0,
+        public static final Pose2d BLUE_LEFT_CLIMB_POSE = new Pose2d(1.4, 4.25, Rotation2d.fromDegrees(90));
+        public static final Pose2d BLUE_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(1.4, 5.0,
                 Rotation2d.fromDegrees(90));
 
         public static final Pose2d BLUE_RIGHT_CLIMB_POSE = new Pose2d(1.14, 2.046, Rotation2d.fromDegrees(-90));
-        public static final Pose2d BLUE_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(1.20, 3.25,
+        public static final Pose2d BLUE_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(1.17, 3.25,
                 Rotation2d.fromDegrees(-90));
 
         public static final Pose2d RED_RIGHT_CLIMB_POSE = new Pose2d(15.35, 5, Rotation2d.fromDegrees(90));
         public static final Pose2d RED_RIGHT_CLIMB_POSE_OFFSETTED = new Pose2d(15.34, 5.72,
                 Rotation2d.fromDegrees(90));
 
-        public static final Pose2d RED_LEFT_CLIMB_POSE = new Pose2d(15.35, 3.6, Rotation2d.fromDegrees(-90));
-        public static final Pose2d RED_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(15.34, 3.1,
+        public static final Pose2d RED_LEFT_CLIMB_POSE = new Pose2d(15.15, 3.6, Rotation2d.fromDegrees(-90));
+        public static final Pose2d RED_LEFT_CLIMB_POSE_OFFSETTED = new Pose2d(15.35, 3.1,
                 Rotation2d.fromDegrees(-90));
 
         public static final PhotonCamera ORANGE_PHOTON_CAM = new PhotonCamera("Back Left Camera");
@@ -200,21 +197,21 @@ public final class Constants {
         public static PathConstraints DRIVE_INTO_CLIMB_CONSTRAINTS = new PathConstraints(1.5, 3.0, 3.0, 6.0, 12.0);
 
         public static final Transform3d ROBOT_TO_BACK_LEFT_CAM = new Transform3d(
-                new Translation3d(-Units.inchesToMeters(12.75), Units.inchesToMeters(6.25),
+                new Translation3d(-Units.inchesToMeters(12.75), Units.inchesToMeters(6.4),
                         Units.inchesToMeters(13.1875)),
                 new Rotation3d(0, 0, Math.toRadians(200)));
 
         public static final Transform3d ROBOT_TO_BACK_RIGHT_CAM = new Transform3d(
-                new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.25), Units.inchesToMeters(13.1875)),
+                new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.4), Units.inchesToMeters(13.1875)),
                 new Rotation3d(0, 0, Math.toRadians(-205)));
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(1.5), Units.inchesToMeters(11.25), Units.inchesToMeters(27.1)),
-                new Rotation3d(0, Math.toRadians(15), Math.toRadians(12)));
+                new Translation3d(Units.inchesToMeters(2.5), Units.inchesToMeters(11.5), Units.inchesToMeters(27.1)),
+                new Rotation3d(0, Math.toRadians(12.5), Math.toRadians(10)));
 
         public static final Transform3d ROBOT_TO_FRONT_RIGHT_CAM = new Transform3d(
-                new Translation3d(Units.inchesToMeters(1.5), Units.inchesToMeters(-11.25), Units.inchesToMeters(27.2)),
-                new Rotation3d(0, Math.toRadians(15), Math.toRadians(-8)));
+                new Translation3d(Units.inchesToMeters(2.5), Units.inchesToMeters(-11.5), Units.inchesToMeters(27.2)),
+                new Rotation3d(0, Math.toRadians(12), Math.toRadians(-10)));
     }
 
     public static class ClimberConstants {
