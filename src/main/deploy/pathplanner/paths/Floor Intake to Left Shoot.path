@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.53,
-        "y": 5.85
+        "x": 0.45,
+        "y": 5.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4773295454545456,
-        "y": 6.0739090909090905
+        "x": 3.397329545454545,
+        "y": 6.123909090909091
       },
       "isLocked": false,
       "linkedName": "Floor Intake Fuel Waypoint"

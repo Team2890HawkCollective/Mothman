@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.43,
-        "y": 0.75
+        "x": 0.5,
+        "y": 0.66
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9424659090909089,
-        "y": 1.2830795454545454
+        "x": 1.1257499422202972,
+        "y": 0.9512338494153405
       },
       "isLocked": false,
       "linkedName": "HP Waypoint"
     },
     {
       "anchor": {
-        "x": 1.374738636363636,
-        "y": 2.282840909090909
+        "x": 2.0137613636363634,
+        "y": 2.3446818181818183
       },
       "prevControl": {
-        "x": 0.6585681818181812,
-        "y": 1.4892159090909085
+        "x": 0.9320676591673747,
+        "y": 1.6170645693018906
       },
       "nextControl": null,
       "isLocked": false,
@@ -59,7 +59,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 30.75161312238385
+    "rotation": 32.78153523718076
   },
   "reversed": false,
   "folder": "HP to Shoot to Climb",

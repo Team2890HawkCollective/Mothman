@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5473118549056075,
-        "y": 4.826098257345195
+        "x": 1.5400652654384017,
+        "y": 4.861816025862023
       },
       "isLocked": false,
       "linkedName": "Floor Intake to Shoot Waypoint"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.13,
-        "y": 4.9
+        "y": 5.25
       },
       "prevControl": {
-        "x": 1.8695798694980654,
-        "y": 4.742966770789613
+        "x": 1.7959885448367023,
+        "y": 5.389697333633103
       },
       "nextControl": null,
       "isLocked": false,

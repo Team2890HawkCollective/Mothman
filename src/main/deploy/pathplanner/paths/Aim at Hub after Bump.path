@@ -3,32 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.734045454545454,
-        "y": 0.9326477272727276
+        "x": 1.715,
+        "y": 2.262
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.723738636363635,
-        "y": 1.932409090909092
+        "x": 2.0299406955830164,
+        "y": 2.1867981867850528
       },
       "isLocked": false,
-      "linkedName": "Right-Middle Collect Fuel Waypoint"
-    },
-    {
-      "anchor": {
-        "x": 7.734045454545454,
-        "y": 4.148375000000001
-      },
-      "prevControl": {
-        "x": 7.739404828502776,
-        "y": 4.818296744665339
-      },
-      "nextControl": {
-        "x": 7.713431818181817,
-        "y": 1.5716704545454547
-      },
-      "isLocked": false,
-      "linkedName": "Right-Middle End Collect Fuel Waypoint"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -36,8 +20,8 @@
         "y": 2.262
       },
       "prevControl": {
-        "x": 2.802522727272726,
-        "y": 2.777340909090909
+        "x": 1.955486859168479,
+        "y": 2.1936913580337003
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,9 +33,9 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.8007181328545773,
+      "maxWaypointRelativePos": 0.4,
       "constraints": {
-        "maxVelocity": 0.8,
+        "maxVelocity": 0.5,
         "maxAcceleration": 2.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -61,8 +45,8 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8904847396768395,
-      "maxWaypointRelativePos": 2.0,
+      "minWaypointRelativePos": 0.45,
+      "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 4.9,
         "maxAcceleration": 10.0,
@@ -77,7 +61,7 @@
   "eventMarkers": [
     {
       "name": "Startup_Shooter_Command",
-      "waypointRelativePos": 1.5870736086175965,
+      "waypointRelativePos": 0.8,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -97,7 +81,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": 29.6095570781819
   },
   "reversed": false,
   "folder": "Right Over Bump Auto",

@@ -49,13 +49,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 6.0
+            "waitTime": 7.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Stop_Shooter_Command"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Deploy_Intake_Command"
           }
         },
         {

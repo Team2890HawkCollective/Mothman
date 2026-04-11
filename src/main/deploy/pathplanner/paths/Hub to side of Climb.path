@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.374738636363636,
-        "y": 2.282840909090909
+        "x": 2.0137613636363634,
+        "y": 2.3446818181818183
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.904892325970682,
-        "y": 2.1118308374280743
+        "x": 1.6674087084234137,
+        "y": 2.248420981610596
       },
       "isLocked": false,
       "linkedName": "Right Shoot Position Waypoint"
@@ -20,8 +20,8 @@
         "y": 2.046
       },
       "prevControl": {
-        "x": 1.599846310392954,
-        "y": 2.2170100716628345
+        "x": 1.6734367109191386,
+        "y": 2.121024337131669
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "HP to Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 30.75161312238385
+    "rotation": 32.78153523718076
   },
   "useDefaultConstraints": true
 }

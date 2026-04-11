@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.374738636363636,
-        "y": 2.282840909090909
+        "x": 2.0137613636363634,
+        "y": 2.3446818181818183
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.4779659090909083,
-        "y": 1.839215909090909
+        "x": 1.685461869589336,
+        "y": 1.9914141770498435
       },
       "isLocked": false,
       "linkedName": "Right Shoot Position Waypoint"
@@ -20,8 +20,8 @@
         "y": 2.046
       },
       "prevControl": {
-        "x": 1.9416136363636358,
-        "y": 2.3240681818181814
+        "x": 1.4300833325014666,
+        "y": 2.3143629647116084
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "Right Over Bump Auto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 30.75161312238385
+    "rotation": 32.78153523718076
   },
   "useDefaultConstraints": true
 }
