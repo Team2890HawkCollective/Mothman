@@ -14,11 +14,13 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -155,11 +157,15 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Retract_Intake_Command", m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_RETRACT_ENCODER_VALUE));               
                 NamedCommands.registerCommand("Lift_Robot_Command", m_ClimberSubsystem.liftRobotCommand());
                 NamedCommands.registerCommand("Assist_Shooter",
-                                m_IntakeSubsystem.assistShooterCommand());
+                                m_IntakeSubsystem.assistShooterShakeCommand().withTimeout(7));
                 NamedCommands.registerCommand("Lift_Robot", m_ClimberSubsystem.liftRobotCommand());
                 NamedCommands.registerCommand("Kill_All", killAllCommand());
                 NamedCommands.registerCommand("Auto_Aim_To_Hub",
-                                m_TargetingSubsystems.aimAtHubPoseAutonomousMode(drivebase, driverXbox).andThen(new WaitCommand(1)).andThen(drivebase.lockSwerveCommand()).withTimeout(.1));
+                                m_TargetingSubsystems.aimAtHubPoseAutonomousMode(drivebase, driverXbox));
+                                //.until(()-> drivebase.getPose().getRotation().getRadians() == TargetingSubsystems.hubThetaPose.getRadians() * .95)
+                                //.andThen(Commands.runOnce(()->drivebase.drive(new ChassisSpeeds(0,0,0)))));
+                                
+                                //.andThen(new WaitCommand(1)).andThen(drivebase.lockSwerveCommand()).withTimeout(.1));
 
                 /*
                  * NamedCommands.registerCommand("PathPlan_To_Climb_Right_Offsetted",
@@ -191,6 +197,8 @@ public class RobotContainer {
 
                 // Put the autoChooser on the SmartDashboard
                 SmartDashboard.putData("Auto Chooser", autoChooser);
+
+                RobotController.setBrownoutVoltage(6.5);
 
         }
 
@@ -236,8 +244,8 @@ public class RobotContainer {
                 // WaitCommand(1.5)));
                 // .andThen(m_IntakeSubsystem.assistFuelIntakeCommand().repeatedly()));
                 driverXbox.rightTrigger().onTrue(m_ShooterSubsystem.shootFuelCommand()
-                .andThen(m_IntakeSubsystem.startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW))
-                .andThen(m_IntakeSubsystem.assistShooterCommand()));
+                        .andThen(m_IntakeSubsystem.startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW))
+                        .andThen(m_IntakeSubsystem.assistShooterShakeCommand().repeatedly()));
                 driverXbox.leftBumper().onTrue(m_IntakeSubsystem
                                 .startIntakeWheelsCommand(Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_SLOW));
                 // driverXbox.rightBumper().onTrue(m_IntakeSubsystem.assistFuelIntakeCommand(Constants.IntakeConstants.INTAKE_THROUGHBORE_ENCODER_MIDDLE,
@@ -266,21 +274,20 @@ public class RobotContainer {
 
                 // driverXbox.b().whileTrue(m_TargetingSubsystems.aimAndRangeToPose(Constants.TargetingConstants.LEFT_CLIMB_POSE));
 
-                bottomButtons.button(12).whileTrue(m_ShooterSubsystem.testLeftShooterCommand())
-                                .onFalse(m_ShooterSubsystem.stopLeftShooterCommand());
-                bottomButtons.button(11).whileTrue(m_ShooterSubsystem.testCenterShooterCommand())
-                                .onFalse(m_ShooterSubsystem.stopCenterShooterCommand());
-                bottomButtons.button(10).whileTrue(m_ShooterSubsystem.testRightShooterCommand())
-                                .onFalse(m_ShooterSubsystem.stopRightShooterCommand());
+                bottomButtons.button(12).onTrue(m_ShooterSubsystem.mannualShooterCommand().andThen(m_IntakeSubsystem.assistShooterSlowLiftCommand()));
+               // bottomButtons.button(11).whileTrue(m_ShooterSubsystem.testCenterShooterCommand())
+                              //  .onFalse(m_ShooterSubsystem.stopCenterShooterCommand());
+                //bottomButtons.button(10).whileTrue(m_ShooterSubsystem.testRightShooterCommand())
+                     //           .onFalse(m_ShooterSubsystem.stopRightShooterCommand());
 
                 topButtons.axisGreaterThan(1, 0.3)
                                 .toggleOnTrue(m_IntakeSubsystem.rotateIntakeManualCommand(
                                                 Constants.IntakeConstants.INTAKE_MANUAL_SPEED * 3))
-                                .toggleOnFalse(m_IntakeSubsystem.setUseArmRotationAutomaticStatusCommand(true));
+                                .toggleOnFalse(m_IntakeSubsystem.resetTrapezoidalProfileCommand().andThen(m_IntakeSubsystem.setUseArmRotationAutomaticStatusCommand(true)));
                 topButtons.axisGreaterThan(1, -0.3)
                                 .toggleOnTrue(m_IntakeSubsystem
                                                 .rotateIntakeManualCommand(Constants.IntakeConstants.INTAKE_MANUAL_SPEED *-1))
-                                .toggleOnFalse(m_IntakeSubsystem.setUseArmRotationAutomaticStatusCommand(true));
+                                .toggleOnFalse(m_IntakeSubsystem.resetTrapezoidalProfileCommand().andThen(m_IntakeSubsystem.setUseArmRotationAutomaticStatusCommand(true)));
                 topButtons.axisGreaterThan(0, 0.5).onTrue(m_ClimberSubsystem.setClimberSpeedCommand(0.4))
                                 .onFalse(m_ClimberSubsystem.setClimberSpeedCommand(0));
                 topButtons.axisLessThan(0, -0.8).onTrue(m_ClimberSubsystem.setClimberSpeedCommand(-0.4))
@@ -299,7 +306,9 @@ public class RobotContainer {
                                 .onFalse(m_ShooterSubsystem.stopIndexerAndRampMotorCommand());
 
                 bottomButtons.button(9)
-                                .onTrue(m_IntakeSubsystem.assistShooterCommand());
+                                .onTrue(m_IntakeSubsystem.assistShooterShakeCommand().repeatedly());
+                bottomButtons.button(10).onTrue(m_IntakeSubsystem.assistShooterSlowLiftCommand());
+
                 //bottomButtons.button(3).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward));
                 //bottomButtons.button(7).whileTrue(m_IntakeSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse));
                 //bottomButtons.button(4).whileTrue(m_IntakeSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
