@@ -46,8 +46,8 @@ public class LEDSubsystem extends SubsystemBase {
   LEDPattern transitionColor = LEDPattern.gradient(LEDPattern.GradientType.kContinuous, Color.kTeal, Color.kMagenta);
   LEDPattern transitionBlinkPattern = transitionColor.blink(Second.of(0.2));
 
-  LEDPattern endGameColor = LEDPattern.solid(Color.kCoral);
-  LEDPattern endGameBlinkPattern = endGameColor.blink(Second.of(0.2));
+  LEDPattern endGameColor = LEDPattern.solid(Color.kAquamarine);
+  LEDPattern endGameBlinkPattern = endGameColor.blink(Second.of(0.175));
 
   LEDPattern rainbow = LEDPattern.rainbow(255, 128);
   LEDPattern rainbowScroll = rainbow.scrollAtRelativeSpeed(Percent.per(Second).of(100));
