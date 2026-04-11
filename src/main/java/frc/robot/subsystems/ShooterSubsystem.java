@@ -1,34 +1,19 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-import java.util.function.BooleanSupplier;
 
-import com.ctre.phoenix.motorcontrol.ControlFrame;
-import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.swerve.utility.WheelForceCalculator.Feedforwards;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.FeedbackSensor;
-import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkFlexConfig;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
 public class ShooterSubsystem extends SubsystemBase {
 
@@ -90,7 +75,7 @@ public class ShooterSubsystem extends SubsystemBase {
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder).feedForward
                 .kS(Constants.ShooterConstants.SHOOTER_MOTOR_S)
                 .kV(Constants.ShooterConstants.SHOOTER_MOTOR_V);
-        leftShooterMotorConfig.smartCurrentLimit(55);
+        leftShooterMotorConfig.smartCurrentLimit(60);
         leftShooterMotor.configure(leftShooterMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         leftShooterMotorPIDController = leftShooterMotor.getClosedLoopController();
@@ -104,15 +89,16 @@ public class ShooterSubsystem extends SubsystemBase {
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder).feedForward
                 .kS(Constants.ShooterConstants.SHOOTER_MOTOR_S)
                 .kV(Constants.ShooterConstants.SHOOTER_MOTOR_V);
-        rightShooterMotorConfig.smartCurrentLimit(55);
+        rightShooterMotorConfig.smartCurrentLimit(60);
         rightShooterMotor.configure(rightShooterMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         rightShooterMotorPIDController = rightShooterMotor.getClosedLoopController();
 
         indexerAndRampMotorConfig.closedLoop.pid(Constants.ShooterConstants.INDEXER_MOTOR_P,
-                0,
-                0);
-        indexerAndRampMotorConfig.smartCurrentLimit(55);
+                Constants.ShooterConstants.INDEXER_MOTOR_I,
+                Constants.ShooterConstants.INDEXER_MOTOR_D);
+        indexerAndRampMotorConfig.openLoopRampRate(.1);
+        indexerAndRampMotorConfig.smartCurrentLimit(60);
         indexerAndRampMotor.configure(indexerAndRampMotorConfig, com.revrobotics.ResetMode.kNoResetSafeParameters,
                 com.revrobotics.PersistMode.kNoPersistParameters);
         indexerAndRampMotorPIDController = indexerAndRampMotor.getClosedLoopController();
@@ -145,6 +131,22 @@ public class ShooterSubsystem extends SubsystemBase {
         centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.IDLE_SHOOTER_RPM, ControlType.kVelocity);
         leftShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.IDLE_SHOOTER_RPM, ControlType.kVelocity);
         rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.IDLE_SHOOTER_RPM, ControlType.kVelocity);
+    }
+
+        public static void mannualShoot() {
+
+        centerShooterMotorPIDController.setSetpoint(-2725,
+            ControlType.kVelocity);
+         leftShooterMotorPIDController.setSetpoint(-2755,
+         ControlType.kVelocity);
+         rightShooterMotorPIDController.setSetpoint(-2700,
+         ControlType.kVelocity);
+    }
+
+
+    public Command mannualShooterCommand()
+    {
+        return run(()->mannualShoot()).until(()->centerShooterMotor.getEncoder().getVelocity() <= -2700).andThen(manualIndexerCommand());
     }
 
     public Command setShooterMotorsRPMIdleCommand() {
@@ -222,8 +224,10 @@ public class ShooterSubsystem extends SubsystemBase {
                             * .70
                     && rightShooterMotor.getEncoder().getVelocity() <= Constants.ShooterConstants.SHOOTER_RPM_RIGHT
                             * .70) {
-                indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM,
-                        ControlType.kVelocity);
+                //indexerAndRampMotorPIDController.//setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM,
+                     //   ControlType.kVelocity);
+
+                indexerAndRampMotor.setVoltage(10);
             } else
                 stopIndexerAndRampMotor();
 
@@ -232,8 +236,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void manualIndexer() {
         useIndexerAutomaticStatus = false;
-        indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM,
-                ControlType.kVelocity);
+        indexerAndRampMotor.setVoltage(10);
+        /* indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM,
+                ControlType.kVelocity); */
     }
 
     public Command manualIndexerCommand() {
@@ -242,8 +247,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public void reverseIndexerAndRampMotorRPM() {
         useIndexerAutomaticStatus = false;
-        indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM * -1,
-                ControlType.kVelocity);
+        indexerAndRampMotor.setVoltage(-10);
+        /* indexerAndRampMotorPIDController.setSetpoint(Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM * -1,
+                ControlType.kVelocity); */
     }
 
     public Command reverseIndexerAndRampMotorRPMCommand() {
