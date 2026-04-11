@@ -1,58 +1,41 @@
 package frc.robot.subsystems;
 
-import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.DoubleSupplier;
 
-import org.dyn4j.geometry.Rotation;
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
+
 import org.photonvision.PhotonUtils;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonTrackedTarget;
+
 
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.PathPoint;
-import com.pathplanner.lib.path.RotationTarget;
+
 import com.pathplanner.lib.path.Waypoint;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardComponent;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.RobotContainer;
-import frc.robot.Constants;
+
 
 public class TargetingSubsystems extends SubsystemBase {
 
-    PIDController photonAimPIDController = new PIDController(5, 0.01, 0);
+    PIDController photonAimPIDController = new PIDController(10, 0.01, 0);
 
     public static Rotation2d hubThetaPose = new Rotation2d();
     public static Optional<Alliance> alliance = DriverStation.getAlliance();
@@ -127,8 +110,6 @@ public class TargetingSubsystems extends SubsystemBase {
 
             // Transform2d errorFromDesiredPose = desiredPose.minus(currentRobotPose);
 
-            Rotation2d angleDifference = PhotonUtils.getYawToPose(currentRobotPose,
-                    Constants.TargetingConstants.allianceHubPose);
 
             double angleSpeed = photonAimPIDController.calculate(currentRobotPose.getRotation().getRadians(),
                     Constants.TargetingConstants.allianceHubPose.getRotation().getRadians());
@@ -137,7 +118,7 @@ public class TargetingSubsystems extends SubsystemBase {
 
             swerveDrive.drive(new Translation2d(), angleSpeed,
                     true);
-        });
+        }).until(() -> Math.abs(hubThetaPose.getRadians() - swerveDrive.getPose().getRotation().getRadians()) <= .2).andThen(() -> swerveDrive.drive(new ChassisSpeeds(0,0,0)));
     }
 
     Command photonAimAtAprilTag(SwerveSubsystem swerveDrive, CommandXboxController driverXbox) {
@@ -161,8 +142,8 @@ public class TargetingSubsystems extends SubsystemBase {
             if (alliance.get() == Alliance.Blue) {
                 hubThetaPose = new Rotation2d(
                         Math.atan2(
-                                (Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getFieldVelocity().vyMetersPerSecond * 1.5) - swerveDrive.getPose().getY(),
-                                (Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getFieldVelocity().vxMetersPerSecond * 1.5) - swerveDrive.getPose().getX()));
+                                (Constants.TargetingConstants.HUB_Y_POSE_BLUE - swerveDrive.getFieldVelocity().vyMetersPerSecond * 1.3) - swerveDrive.getPose().getY(),
+                                (Constants.TargetingConstants.HUB_X_POSE_BLUE - swerveDrive.getFieldVelocity().vxMetersPerSecond * 1.3) - swerveDrive.getPose().getX()));
 
                 Constants.TargetingConstants.allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_BLUE,
                         Constants.TargetingConstants.HUB_Y_POSE_BLUE, hubThetaPose);
@@ -170,8 +151,8 @@ public class TargetingSubsystems extends SubsystemBase {
 
             else {
                 hubThetaPose = new Rotation2d(
-                        Math.atan2((Constants.TargetingConstants.HUB_Y_POSE_RED - swerveDrive.getFieldVelocity().vyMetersPerSecond * 1.2) - swerveDrive.getPose().getY(),
-                                (Constants.TargetingConstants.HUB_X_POSE_RED - swerveDrive.getFieldVelocity().vxMetersPerSecond * 1.2) - swerveDrive.getPose().getX()));
+                        Math.atan2((Constants.TargetingConstants.HUB_Y_POSE_RED - swerveDrive.getFieldVelocity().vyMetersPerSecond * 1.3) - swerveDrive.getPose().getY(),
+                                (Constants.TargetingConstants.HUB_X_POSE_RED - swerveDrive.getFieldVelocity().vxMetersPerSecond * 1.3) - swerveDrive.getPose().getX()));
                 Constants.TargetingConstants.allianceHubPose = new Pose2d(Constants.TargetingConstants.HUB_X_POSE_RED,
                         Constants.TargetingConstants.HUB_Y_POSE_RED, hubThetaPose);
             }
@@ -186,22 +167,22 @@ public class TargetingSubsystems extends SubsystemBase {
                 + (27.27766 * Math.pow(distance, 3))
                 - (154.79287 * Math.pow(distance, 2))
                 - (34.29619 * distance)
-                - 2400.13374, -15000);
+                - 2510.13374, -15000);
 
         Constants.ShooterConstants.SHOOTER_RPM_RIGHT = Math.max((-2.40765 * Math.pow(distance, 4))
                 + (38.94472 * Math.pow(distance, 3))
                 - (225.17963 * Math.pow(distance, 2))
                 + (138.9699 * distance)
-                - 2531.33326, -15000);
+                - 2630.33326, -15000);
 
         Constants.ShooterConstants.SHOOTER_RPM_CENTER = Math.max((-1.84547 * Math.pow(distance, 4))
                 + (32.75767 * Math.pow(distance, 3))
                 - (201.29209 * Math.pow(distance, 2))
                 + (58.06248 * distance)
-                - 2460.16313, -15000);
+                - 2520.16313, -15000);
 
-        Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM = -Constants.ShooterConstants.SHOOTER_RPM_CENTER * 4.5 * 5
-                / 2;
+        //Constants.ShooterConstants.INDEXER_AND_RAMP_MOTOR_RPM = -Constants.ShooterConstants.SHOOTER_RPM_CENTER * 4.5 * 5
+         //       / 2;
         // To find the linear speed, the equation is RPM * Circumference, pi is not
         // needed as it cancels out.
     }
