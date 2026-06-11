@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.612,
-        "y": 5.85
+        "x": 3.580397727272727,
+        "y": 7.2095
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.1069659090909085,
-        "y": 5.8396931818181805
+        "x": 2.436340909090909,
+        "y": 6.910602272727273
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.251056818185183,
-        "y": 5.85
+        "x": 0.45,
+        "y": 5.9
       },
       "prevControl": {
-        "x": 1.580875000003365,
-        "y": 5.850374999998627
+        "x": 3.243147727273409,
+        "y": 5.807238636359328
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.761220825852782,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 2.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -45,7 +59,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Interior Auto",
+  "folder": "Left Shoot to Climb",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

@@ -23,12 +23,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Aim at Hub after Bump"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Auto_Aim_To_Hub"
@@ -44,12 +38,6 @@
           "type": "named",
           "data": {
             "name": "Assist_Shooter"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
           }
         },
         {

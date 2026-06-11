@@ -119,20 +119,22 @@ public final class Constants {
         /*
          * private static GenericEntry intakeRPM =
          * programmingTab.add("Desired Intake RPM", -1000)
-         * .withWidget(BuiltInWidgets.kNumberBar).getEntry();
-         
-         
-         
-        \*/
-        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -6000; // always negative when intaking
-        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -4000; // always negative when intaking
-
-
-        /*
+         * .withWidget(BuiltInWidgets.kNumberBar).getEntry(); 
+                /*
          * public static void updateIntakeWheelsRPM() {
          * INTAKE_WHEELS_MOTOR_RPM = intakeRPM.getDouble(-1000);
          * }
          */
+        //we can call numbers off elastic by creating a genericEntry object under the tab that you created at the top of this file
+        //then we add a numberbar/box object, and call getEntry()
+        //turn into static method and call in robotPeriodic (in robot) -- constants does not extend subsystembase so we cannot create an override periodic in here
+
+
+        public static double INTAKE_WHEELS_MOTOR_RPM_FAST = -6000; // always negative when intaking
+        public static double INTAKE_WHEELS_MOTOR_RPM_SLOW = -4000; // always negative when intaking
+
+
+
 
         public static final int INTAKE_WHEELS_MOTOR_ID = 50;
         public static final int INTAKE_ROTATOR_MOTOR_ID = 51;
@@ -149,7 +151,7 @@ public final class Constants {
 
         public static final double INTAKE_DEPLOY_ENCODER_VALUE = 0;
         public static final double INTAKE_ASSIST_ENCODER_VALUE = 7;
-        public static final double INTAKE_RETRACT_ENCODER_VALUE = 7.4;
+        public static final double INTAKE_RETRACT_ENCODER_VALUE = 7.3;
 
         public static final double INTAKE_THROUGHBORE_ENCODER_DEPLOY = .13;
         public static final double INTAKE_THROUGHBORE_ENCODER_RETRACT = .49;
@@ -199,11 +201,11 @@ public final class Constants {
         public static final Transform3d ROBOT_TO_BACK_LEFT_CAM = new Transform3d(
                 new Translation3d(-Units.inchesToMeters(12.75), Units.inchesToMeters(6.4),
                         Units.inchesToMeters(13.1875)),
-                new Rotation3d(0, 0, Math.toRadians(200)));
+                new Rotation3d(0, 0, Math.toRadians(195)));
 
         public static final Transform3d ROBOT_TO_BACK_RIGHT_CAM = new Transform3d(
                 new Translation3d(-Units.inchesToMeters(12.75), -Units.inchesToMeters(6.4), Units.inchesToMeters(13.1875)),
-                new Rotation3d(0, 0, Math.toRadians(-205)));
+                new Rotation3d(0, 0, Math.toRadians(-195)));
 
         public static final Transform3d ROBOT_TO_FRONT_LEFT_CAM = new Transform3d(
                 new Translation3d(Units.inchesToMeters(2.5), Units.inchesToMeters(11.5), Units.inchesToMeters(27.1)),

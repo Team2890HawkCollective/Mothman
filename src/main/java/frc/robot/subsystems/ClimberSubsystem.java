@@ -70,7 +70,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Climber Motor Encoder", climberMotor.getEncoder().getPosition());
+    SmartDashboard.putNumber("Climber Motor Encoder", climberMotor.getEncoder().getPosition()); //put encoder onto elastic
     SmartDashboard.putNumber("Climber motor power", climberMotor.get());
   }
 }

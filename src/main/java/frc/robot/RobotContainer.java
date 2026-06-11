@@ -149,7 +149,7 @@ public class RobotContainer {
                 NamedCommands.registerCommand("test", Commands.print("I EXIST"));
                 NamedCommands.registerCommand("Shoot_Fuel_Command",
                                 m_ShooterSubsystem.shootFuelCommand());
-                NamedCommands.registerCommand("Startup_Shooter_Command", m_ShooterSubsystem.startupShooterMotorsRPMAutoCommand());
+                NamedCommands.registerCommand("Startup_Shooter_Command", m_ShooterSubsystem.startupShooterMotorsRPMInAutonomousCommand());
                 NamedCommands.registerCommand("Deploy_Intake_Command", m_IntakeSubsystem.goToPositionCommand(Constants.IntakeConstants.INTAKE_DEPLOY_ENCODER_VALUE)
                                 .andThen(m_IntakeSubsystem.startIntakeWheelsCommand(
                                                 Constants.IntakeConstants.INTAKE_WHEELS_MOTOR_RPM_FAST)));

@@ -304,7 +304,7 @@ public class Vision {
   /**
    * Camera Enum to select each camera
    */
-  enum Cameras {
+  enum Cameras { //create cameras here
     /**
      * Back Left Camera
      */

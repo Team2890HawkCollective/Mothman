@@ -5,33 +5,27 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "Start to Over Left Ramp"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Deploy_Intake_Command"
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Left to Depot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Floor Intake to Left Shoot"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Start_Intake_Wheels"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Collect Left-Center Fuel"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Collect Left-Center Fuel to Shoot"
+            "name": "Auto_Aim_To_Hub"
           }
         },
         {
@@ -44,6 +38,18 @@
           "type": "named",
           "data": {
             "name": "Assist_Shooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop_Shooter_Command"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Deploy_Intake_Command"
           }
         },
         {

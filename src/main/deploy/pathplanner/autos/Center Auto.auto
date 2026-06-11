@@ -47,12 +47,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 7.0
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Stop_Shooter_Command"

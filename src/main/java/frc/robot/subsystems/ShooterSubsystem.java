@@ -20,6 +20,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public static boolean useIndexerAutomaticStatus = false;
     public static boolean enableShooter = false;
 
+    //create  motors
     private static SparkFlex centerShooterMotor = new SparkFlex(Constants.ShooterConstants.CENTER_SHOOTER_MOTOR_ID,
             MotorType.kBrushless);
 
@@ -32,6 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private static SparkFlex indexerAndRampMotor = new SparkFlex(Constants.ShooterConstants.INDEXER_MOTOR_ID,
             MotorType.kBrushless);
 
+    //create PID controllers and config objects
     private static SparkClosedLoopController centerShooterMotorPIDController;
     public static SparkFlexConfig centerShooterMotorConfig = new SparkFlexConfig();
 
@@ -115,7 +117,11 @@ public class ShooterSubsystem extends SubsystemBase {
         // ControlType.kVelocity);
     }
 
-    public static void startupShooterMotorsRPMAuto() {
+    public Command setShooterMotorsRPMAutoCommand() {
+        return runOnce(() -> setShooterMotorsRPM());
+    }
+
+    public static void startupShooterMotorsRPMInAutonomous() {
         enableShooter = true;
         // centerShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_CENTER,
         // ControlType.kVelocity);
@@ -123,6 +129,10 @@ public class ShooterSubsystem extends SubsystemBase {
         // ControlType.kVelocity);
         // rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.SHOOTER_RPM_RIGHT,
         // ControlType.kVelocity);
+    }
+
+    public Command startupShooterMotorsRPMInAutonomousCommand() {
+        return runOnce(() -> startupShooterMotorsRPMInAutonomous());
     }
 
     public static void setShooterMotorsRPMIdle() {
@@ -133,34 +143,26 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooterMotorPIDController.setSetpoint(Constants.ShooterConstants.IDLE_SHOOTER_RPM, ControlType.kVelocity);
     }
 
-        public static void mannualShoot() {
-
-        centerShooterMotorPIDController.setSetpoint(-2725,
-            ControlType.kVelocity);
-         leftShooterMotorPIDController.setSetpoint(-2755,
-         ControlType.kVelocity);
-         rightShooterMotorPIDController.setSetpoint(-2700,
-         ControlType.kVelocity);
+    public Command setShooterMotorsRPMIdleCommand() {
+        return runOnce(() -> setShooterMotorsRPMIdle())
+                .andThen(stopIndexerAndRampMotorCommand());
     }
 
+
+    public static void mannualShoot() {
+
+        centerShooterMotorPIDController.setSetpoint(-2725, ControlType.kVelocity);
+        leftShooterMotorPIDController.setSetpoint(-2755, ControlType.kVelocity);
+        rightShooterMotorPIDController.setSetpoint(-2700, ControlType.kVelocity);
+    }
 
     public Command mannualShooterCommand()
     {
         return run(()->mannualShoot()).until(()->centerShooterMotor.getEncoder().getVelocity() <= -2700).andThen(manualIndexerCommand());
     }
 
-    public Command setShooterMotorsRPMIdleCommand() {
-        return runOnce(() -> setShooterMotorsRPMIdle())
-                .andThen(stopIndexerAndRampMotorCommand());
-    }
-
-    public Command startupShooterMotorsRPMAutoCommand() {
-        return runOnce(() -> startupShooterMotorsRPMAuto());
-    }
-
-    public Command setShooterMotorsRPMAutoCommand() {
-        return runOnce(() -> setShooterMotorsRPM());
-    }
+    
+    
 
     // test individual motor code
     public void setLeftShooterMotorRPM() {
@@ -234,6 +236,11 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
+    public Command setIndexerAndRampMotorRPMCommand() {
+        return runOnce(() -> setIndexerAndRampMotorRPM());
+    }
+
+
     public void manualIndexer() {
         useIndexerAutomaticStatus = false;
         indexerAndRampMotor.setVoltage(10);
@@ -244,6 +251,7 @@ public class ShooterSubsystem extends SubsystemBase {
     public Command manualIndexerCommand() {
         return runOnce(() -> manualIndexer());
     }
+
 
     public void reverseIndexerAndRampMotorRPM() {
         useIndexerAutomaticStatus = false;
@@ -256,18 +264,16 @@ public class ShooterSubsystem extends SubsystemBase {
         return runOnce(() -> reverseIndexerAndRampMotorRPM());
     }
 
-    public Command setIndexerAndRampMotorRPMCommand() {
-        return runOnce(() -> setIndexerAndRampMotorRPM());
+    
+    public void stopIndexerAndRampMotor() {
+        useIndexerAutomaticStatus = false;
+        indexerAndRampMotor.set(0);
     }
 
     public Command stopIndexerAndRampMotorCommand() {
         return runOnce(() -> stopIndexerAndRampMotor());
     }
 
-    public void stopIndexerAndRampMotor() {
-        useIndexerAutomaticStatus = false;
-        indexerAndRampMotor.set(0);
-    }
 
     public void setIndexerStatusTrue() {
         useIndexerAutomaticStatus = true;
@@ -326,7 +332,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        setIndexerAndRampMotorRPM();
+
+        setIndexerAndRampMotorRPM(); //this will only run if the useIndexer boolean is true, which is tied to the shooter if method
+
+        //combine both bang bang (full power till reached 95% of RPM desired) and then switch to PID control for stabler maintainence
         if (enableShooter == true) {
             if (leftShooterMotor.getEncoder().getVelocity() >= Constants.ShooterConstants.SHOOTER_RPM_LEFT * .95)
                 leftShooterMotor.set(bangBangController.calculate(leftShooterMotor.getEncoder().getVelocity() * -1,
